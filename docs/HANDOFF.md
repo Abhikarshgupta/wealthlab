@@ -1,7 +1,7 @@
 # Multi-Agent Handoff Guide
 
 ## Overview
-This document describes the multi-agent workflow for parallel development of calculators in the Wealth Manager platform.
+This document describes the multi-agent workflow for parallel development of calculators in the WealthLab platform.
 
 ## Current Status
 - ✅ Core infrastructure complete
@@ -101,19 +101,19 @@ For parallel development using git worktrees:
 
 ```bash
 # Create worktree for PPF Calculator
-git worktree add ../wealth-mngr-ppf -b feature/ppf-calculator
+git worktree add ../wealthlab-ppf -b feature/ppf-calculator
 
 # Create worktree for FD Calculator
-git worktree add ../wealth-mngr-fd -b feature/fd-calculator
+git worktree add ../wealthlab-fd -b feature/fd-calculator
 
 # Create worktree for SIP Calculator
-git worktree add ../wealth-mngr-sip -b feature/sip-calculator
+git worktree add ../wealthlab-sip -b feature/sip-calculator
 
 # List all worktrees
 git worktree list
 
 # Remove worktree (after merging)
-git worktree remove ../wealth-mngr-ppf
+git worktree remove ../wealthlab-ppf
 ```
 
 ## Branching Strategy

@@ -14,7 +14,7 @@ const Header = () => {
             <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-blue-500 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">W</span>
             </div>
-            <span className="text-xl font-bold text-gray-800 dark:text-white">Wealth Manager</span>
+            <span className="text-xl font-bold text-gray-800 dark:text-white">WealthLab</span>
           </Link>
 
           {/* Navigation */}

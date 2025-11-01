@@ -1,5 +1,5 @@
 <!-- b8fc9a49-ccb7-4feb-bb79-aa1551582661 954a8486-694e-4b5b-b326-0bae34f7f013 -->
-# Wealth Manager Platform - Implementation Plan
+# WealthLab Platform - Implementation Plan
 
 ## Project Architecture
 

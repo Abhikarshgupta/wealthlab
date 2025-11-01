@@ -1,4 +1,4 @@
-# Wealth Manager Platform - Implementation Plan
+# WealthLab Platform - Implementation Plan
 
 ## Project Architecture
 

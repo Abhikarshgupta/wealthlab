@@ -2,7 +2,7 @@
 
 ## System Overview
 
-Wealth Manager is a comprehensive wealth management web application specifically designed for Indian retail investors. The application provides real-time investment calculators, goal-based financial planning, and multi-instrument corpus projection tools.
+WealthLab is a comprehensive wealth management web application specifically designed for Indian retail investors. The application provides real-time investment calculators, goal-based financial planning, and multi-instrument corpus projection tools.
 
 ## Technology Stack
 
