@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
 import { routes } from '@/routes/routes'
 import { investmentInfo } from '@/constants/investmentInfo'
 import SIPCalculator from '@/components/calculators/SIPCalculator/SIPCalculator'
@@ -11,6 +12,7 @@ import PPFCalculator from '@/components/calculators/PPFCalculator/PPFCalculator'
 import ELSSCalculator from '@/components/calculators/ELSSCalculator/ELSSCalculator'
 import SSYCalculator from '@/components/calculators/SSYCalculator/SSYCalculator'
 import EquityCalculator from '@/components/calculators/EquityCalculator/EquityCalculator'
+import ScrollToTop from '@/components/common/ScrollToTop'
 
 /**
  * CalculatorPage Component
@@ -20,6 +22,19 @@ import EquityCalculator from '@/components/calculators/EquityCalculator/EquityCa
  */
 const CalculatorPage = ({ calculatorType }) => {
   const navigate = useNavigate()
+
+  /**
+   * Scroll to top when calculator type changes
+   * Fixes issue where scroll position persists when navigating from calculator list
+   */
+  useEffect(() => {
+    if (calculatorType) {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      })
+    }
+  }, [calculatorType])
 
   // Calculator configuration with icons and details
   const calculators = [
@@ -159,25 +174,75 @@ const CalculatorPage = ({ calculatorType }) => {
   if (calculatorType) {
     switch (calculatorType) {
       case 'sip':
-        return <SIPCalculator />
+        return (
+          <>
+            <SIPCalculator />
+            <ScrollToTop />
+          </>
+        )
       case 'fd':
-        return <FDCalculator />
+        return (
+          <>
+            <FDCalculator />
+            <ScrollToTop />
+          </>
+        )
       case 'nsc':
-        return <NSCalculator />
+        return (
+          <>
+            <NSCalculator />
+            <ScrollToTop />
+          </>
+        )
       case 'sgb':
-        return <SGBCalculator />
+        return (
+          <>
+            <SGBCalculator />
+            <ScrollToTop />
+          </>
+        )
       case 'nps':
-        return <NPSCalculator />
+        return (
+          <>
+            <NPSCalculator />
+            <ScrollToTop />
+          </>
+        )
       case 'scss':
-        return <SCSSCalculator />
+        return (
+          <>
+            <SCSSCalculator />
+            <ScrollToTop />
+          </>
+        )
       case 'ppf':
-        return <PPFCalculator />
+        return (
+          <>
+            <PPFCalculator />
+            <ScrollToTop />
+          </>
+        )
       case 'elss':
-        return <ELSSCalculator />
+        return (
+          <>
+            <ELSSCalculator />
+            <ScrollToTop />
+          </>
+        )
       case 'ssy':
-        return <SSYCalculator />
+        return (
+          <>
+            <SSYCalculator />
+            <ScrollToTop />
+          </>
+        )
       case 'equity':
-        return <EquityCalculator />
+        return (
+          <>
+            <EquityCalculator />
+            <ScrollToTop />
+          </>
+        )
       default:
         // Fall through to card grid
         break
