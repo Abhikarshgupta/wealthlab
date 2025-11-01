@@ -1,0 +1,240 @@
+// Investment Information Constants
+// Contains detailed information about each investment instrument
+
+export const investmentInfo = {
+  ppf: {
+    name: 'Public Provident Fund (PPF)',
+    description: 'A long-term savings scheme backed by the Government of India with tax benefits.',
+    features: [
+      'Tax-exempt interest and maturity (EEE - Exempt, Exempt, Taxed on withdrawal)',
+      'Sovereign guarantee',
+      '15-year lock-in period',
+      'Can be extended in blocks of 5 years',
+      'Partial withdrawals allowed from 7th year',
+      'Loan facility available from 3rd to 6th year',
+    ],
+    taxBenefits: [
+      'Deduction under Section 80C up to ₹1.5 lakh',
+      'Interest earned is tax-free',
+      'Maturity amount is tax-free',
+    ],
+    eligibility: [
+      'Indian residents only',
+      'Individuals and HUFs',
+      'One account per person (can have account for minor)',
+    ],
+    lockInPeriod: '15 years',
+    minInvestment: '₹500 per year',
+    maxInvestment: '₹1.5 lakh per year',
+  },
+  fd: {
+    name: 'Fixed Deposit (FD)',
+    description: 'A time deposit offered by banks with fixed interest rate over a specified period.',
+    features: [
+      'Assured, fixed returns',
+      'Covered by DICGC up to ₹5 lakh',
+      'Flexible tenure options',
+      'Premature withdrawal allowed with penalty',
+    ],
+    taxBenefits: [
+      'Interest taxable as per income tax slab',
+      'TDS applicable if interest exceeds ₹40,000 (₹50,000 for senior citizens)',
+    ],
+    eligibility: [
+      'Any individual',
+      'Minors through guardian',
+      'Joint accounts allowed',
+    ],
+    lockInPeriod: 'Depends on chosen tenure',
+    minInvestment: 'Varies by bank (typically ₹1,000)',
+    maxInvestment: 'No limit',
+  },
+  sip: {
+    name: 'Systematic Investment Plan (SIP)',
+    description: 'Regular investments in mutual funds to average out market volatility.',
+    features: [
+      'Rupee-cost averaging',
+      'Disciplined investing',
+      'Flexible investment amounts',
+      'Can start with as low as ₹500',
+      'Step-up SIP options available',
+    ],
+    taxBenefits: [
+      'Equity funds: Long-term capital gains tax after 1 year (10% above ₹1 lakh)',
+      'Debt funds: Long-term capital gains tax after 3 years',
+      'ELSS SIPs qualify for Section 80C deduction',
+    ],
+    eligibility: [
+      'Any individual',
+      'Minors through guardian',
+      'NRIs allowed',
+    ],
+    lockInPeriod: 'No lock-in (except ELSS - 3 years)',
+    minInvestment: '₹500 per month',
+    maxInvestment: 'No limit',
+  },
+  ssy: {
+    name: 'Sukanya Samriddhi Yojana (SSY)',
+    description: 'A savings scheme exclusively for the girl child with attractive interest rates.',
+    features: [
+      'Exclusively for girl child',
+      'High fixed interest rate',
+      'EEE tax status (Exempt, Exempt, Exempt)',
+      'Account matures when girl child turns 21',
+      'Partial withdrawal allowed after 18 years for education/marriage',
+    ],
+    taxBenefits: [
+      'Deduction under Section 80C up to ₹1.5 lakh',
+      'Interest earned is tax-free',
+      'Maturity amount is tax-free',
+    ],
+    eligibility: [
+      'Girl child below 10 years',
+      'Parents or legal guardians can open',
+      'Maximum 2 accounts per parent (one per girl child)',
+    ],
+    lockInPeriod: 'Till girl child turns 21 years',
+    minInvestment: '₹250 per year',
+    maxInvestment: '₹1.5 lakh per year',
+  },
+  nsc: {
+    name: 'National Savings Certificate (NSC)',
+    description: 'A fixed income investment scheme with guaranteed returns.',
+    features: [
+      'Fixed interest rate',
+      'Compounded annually',
+      'Interest paid at maturity',
+      'Available at post offices',
+    ],
+    taxBenefits: [
+      'Deduction under Section 80C',
+      'Interest earned is taxable',
+      'Interest reinvested qualifies for deduction',
+    ],
+    eligibility: [
+      'Any individual',
+      'Minors through guardian',
+      'HUFs allowed',
+    ],
+    lockInPeriod: '5 years',
+    minInvestment: '₹1,000',
+    maxInvestment: 'No limit',
+  },
+  scss: {
+    name: 'Senior Citizens Savings Scheme (SCSS)',
+    description: 'A savings scheme exclusively for senior citizens with high interest rates.',
+    features: [
+      'Exclusively for senior citizens (60+ years)',
+      'High interest rate',
+      'Quarterly interest payments',
+      'Can be extended for 3 more years',
+    ],
+    taxBenefits: [
+      'Deduction under Section 80C up to ₹1.5 lakh',
+      'Interest taxable as per income tax slab',
+      'TDS applicable if interest exceeds ₹40,000',
+    ],
+    eligibility: [
+      'Age 60 years or above',
+      'Age 55+ years for retired defense personnel',
+      'Individual or joint account with spouse',
+    ],
+    lockInPeriod: '5 years (extendable)',
+    minInvestment: '₹1,000',
+    maxInvestment: '₹30 lakh',
+  },
+  sgb: {
+    name: 'Sovereign Gold Bonds (SGB)',
+    description: 'Government securities denominated in grams of gold with fixed interest.',
+    features: [
+      'Denominated in grams of gold',
+      'Fixed interest rate of 2.5% p.a.',
+      'Interest paid semi-annually',
+      'Capital appreciation linked to gold prices',
+      'Exit option after 5 years',
+    ],
+    taxBenefits: [
+      'Capital gains on redemption are tax-exempt',
+      'Interest taxable as per income tax slab',
+      'TDS applicable on interest',
+    ],
+    eligibility: [
+      'Any individual',
+      'HUFs, trusts, charitable institutions',
+      'NRIs not allowed',
+    ],
+    lockInPeriod: '8 years (exit option after 5 years)',
+    minInvestment: '1 gram of gold',
+    maxInvestment: '4 kg per person per financial year',
+  },
+  nps: {
+    name: 'National Pension System (NPS)',
+    description: 'A voluntary retirement savings scheme with tax benefits.',
+    features: [
+      'Long-term retirement planning',
+      'Tax benefits under Section 80C and 80CCD(1B)',
+      'Auto choice or active choice of asset allocation',
+      'Market-linked returns',
+    ],
+    taxBenefits: [
+      'Deduction under Section 80C up to ₹1.5 lakh',
+      'Additional deduction under Section 80CCD(1B) up to ₹50,000',
+      '60% withdrawal tax-free at maturity',
+      '40% withdrawal taxable',
+    ],
+    eligibility: [
+      'Any Indian citizen between 18-70 years',
+      'NRIs allowed',
+    ],
+    lockInPeriod: 'Till age 60 years',
+    minInvestment: '₹500 per contribution',
+    maxInvestment: 'No limit',
+  },
+  elss: {
+    name: 'Equity-Linked Savings Scheme (ELSS)',
+    description: 'Tax-saving mutual funds with equity exposure and 3-year lock-in.',
+    features: [
+      'Tax deduction under Section 80C',
+      'Equity exposure for potential high returns',
+      'Minimum 3-year lock-in period',
+      'Can invest via SIP or lumpsum',
+    ],
+    taxBenefits: [
+      'Deduction under Section 80C up to ₹1.5 lakh',
+      'Long-term capital gains tax after 1 year (10% above ₹1 lakh)',
+    ],
+    eligibility: [
+      'Any individual',
+      'HUFs allowed',
+    ],
+    lockInPeriod: '3 years',
+    minInvestment: '₹500',
+    maxInvestment: 'No limit',
+  },
+  equity: {
+    name: 'Direct Equity (Stocks)',
+    description: 'Direct investment in company shares listed on stock exchanges.',
+    features: [
+      'Direct ownership in companies',
+      'Potential for high returns',
+      'High risk',
+      'Dividend income',
+      'Capital appreciation',
+    ],
+    taxBenefits: [
+      'Long-term capital gains tax after 1 year (10% above ₹1 lakh)',
+      'Short-term capital gains tax at 15%',
+      'Dividend income taxable',
+    ],
+    eligibility: [
+      'Any individual',
+      'Minors through guardian',
+      'Need Demat account',
+    ],
+    lockInPeriod: 'No lock-in',
+    minInvestment: '1 share',
+    maxInvestment: 'No limit',
+  },
+}
+
+export default investmentInfo

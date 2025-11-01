@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-white dark:bg-gray-900 text-gray-800 dark:text-white transition-colors duration-200;
+    font-family: 'Inter', 'Roboto', 'Nunito', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  /* Only truly common/global components */
+  .card {
+    @apply bg-white dark:bg-gray-900 rounded-xl shadow-md p-6 md:p-8 border border-gray-200 dark:border-gray-700;
+  }
+  
+  .btn-primary {
+    @apply bg-green-500 dark:bg-green-600 text-white rounded-md px-4 py-2 font-semibold hover:bg-green-600 dark:hover:bg-green-700 transition-colors duration-200 shadow-sm hover:shadow-md;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white rounded-md px-4 py-2 font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200;
+  }
+}
