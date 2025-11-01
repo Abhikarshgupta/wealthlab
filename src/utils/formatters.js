@@ -4,7 +4,7 @@
  */
 
 /**
- * Format currency in Indian format
+ * Format currency in Indian format (rounded up, no decimals)
  * @param {number} amount - Amount to format
  * @param {boolean} showSymbol - Whether to show ₹ symbol
  * @returns {string} Formatted currency string
@@ -12,10 +12,13 @@
 export const formatCurrency = (amount, showSymbol = true) => {
   if (amount === null || amount === undefined || isNaN(amount)) return showSymbol ? '₹0' : '0'
   
+  // Round up to nearest integer (no decimals)
+  const roundedAmount = Math.ceil(amount)
+  
   const formatted = new Intl.NumberFormat('en-IN', {
-    maximumFractionDigits: 2,
-    minimumFractionDigits: 2,
-  }).format(amount)
+    maximumFractionDigits: 0,
+    minimumFractionDigits: 0,
+  }).format(roundedAmount)
   
   return showSymbol ? `₹${formatted}` : formatted
 }

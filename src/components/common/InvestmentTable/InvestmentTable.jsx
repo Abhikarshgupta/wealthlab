@@ -3,7 +3,7 @@ import { formatCurrency } from '@/utils/formatters'
 /**
  * InvestmentTable - Year-wise breakdown table with premium styling
  * @param {Object} props
- * @param {Array} props.data - Table data [{ year, openingBalance, investment, interest, closingBalance }]
+ * @param {Array} props.data - Table data [{ year, openingBalance, investment, interest, closingBalance }] or [{ year, label, ... }]
  * @param {string} props.title - Table title
  */
 const InvestmentTable = ({ 
@@ -19,6 +19,10 @@ const InvestmentTable = ({
   const totalInterest = data.reduce((sum, row) => sum + (row.interest || 0), 0)
   const finalBalance = data[data.length - 1]?.closingBalance || 0
 
+  // Determine if this is monthly or yearly breakdown
+  const isMonthly = data.length > 0 && data[0].label && data[0].label.startsWith('Month')
+  const periodLabel = isMonthly ? 'Period' : 'Year'
+
   return (
     <div className={`${className}`}>
       <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
@@ -29,7 +33,7 @@ const InvestmentTable = ({
           <thead className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
             <tr>
               <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                Year
+                {periodLabel}
               </th>
               <th className="px-6 py-4 text-right text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                 Opening Balance
@@ -52,7 +56,7 @@ const InvestmentTable = ({
                 className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
               >
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900 dark:text-white">
-                  {row.year}
+                  {row.label || row.year}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-700 dark:text-gray-300 font-mono tabular-nums">
                   {formatCurrency(row.openingBalance || 0)}

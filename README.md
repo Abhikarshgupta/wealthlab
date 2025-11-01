@@ -1,16 +1,86 @@
-# React + Vite
+# Wealth Manager
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A comprehensive financial planning and investment calculator application built with React and Vite.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Multiple investment calculators (SIP, SGB, FD, NSC, etc.)
+- Real-time gold price fetching via GoldAPI.io
+- Goal planning and corpus calculation
+- Dark mode support
+- Responsive design
 
-## React Compiler
+## Setup
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Environment Variables
 
-## Expanding the ESLint configuration
+Create a `.env.local` file in the root directory with the following:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```env
+VITE_GOLDAPI_KEY=your-goldapi-key-here
+```
+
+To get your GoldAPI.io API key:
+1. Sign up at https://www.goldapi.io/
+2. Copy your API key from the dashboard
+3. Add it to `.env.local` file
+
+**Note:** The `.env.local` file is gitignored and won't be committed to version control.
+
+### Installation
+
+```bash
+npm install
+```
+
+### Development
+
+```bash
+npm run dev
+```
+
+### Build
+
+```bash
+npm run build
+```
+
+## Gold Price API
+
+The application uses GoldAPI.io for fetching real-time gold prices. The API has rate limiting:
+- **Rate Limit**: Once per user per 24 hours (stored in localStorage)
+- **Fallback**: If API fails or rate limit is reached, uses fallback price (₹6,500/gram)
+- **Caching**: API responses are cached for 1 hour
+
+The API key is stored in environment variables and supports fetching prices for:
+- Gold (XAU)
+- Silver (XAG)
+- Platinum (XPT)
+- Palladium (XPD)
+
+## Project Structure
+
+```
+src/
+├── components/
+│   ├── calculators/      # Individual calculator components
+│   └── common/          # Reusable UI components
+├── utils/
+│   ├── calculations.js  # Financial calculation functions
+│   ├── goldPriceService.js  # Gold price API integration
+│   └── formatters.js    # Formatting utilities
+└── store/              # Zustand state management
+```
+
+## Technologies
+
+- React 19
+- Vite
+- TailwindCSS
+- React Hook Form
+- Zustand
+- Highcharts
+
+## License
+
+MIT

@@ -29,7 +29,7 @@ const InputField = forwardRef(({
       )}
       <div className="relative">
         {showCurrency && (
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 dark:text-gray-400 font-medium">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600 dark:text-gray-400 font-medium pointer-events-none">
             ₹
           </span>
         )}
@@ -38,7 +38,7 @@ const InputField = forwardRef(({
           type={type}
           className={`
             input-field w-full
-            ${showCurrency ? 'pl-8' : 'pl-3'}
+            ${showCurrency ? 'pl-10' : 'pl-3'}
             ${error ? 'border-red-500 dark:border-red-500 focus:ring-red-500 dark:focus:ring-red-500' : ''}
           `}
           placeholder={placeholder}

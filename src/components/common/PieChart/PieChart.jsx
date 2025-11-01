@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import { useTheme } from '@/contexts/ThemeContext'
@@ -18,7 +19,7 @@ const PieChart = ({
   const { theme } = useTheme()
   const isDark = theme === 'dark'
 
-  const options = {
+  const options = useMemo(() => ({
     chart: {
       type: 'pie',
       backgroundColor: 'transparent',
@@ -83,7 +84,7 @@ const PieChart = ({
     credits: {
       enabled: false,
     },
-  }
+  }), [data, title, height, isDark])
 
   return (
     <div className={`${className}`}>
