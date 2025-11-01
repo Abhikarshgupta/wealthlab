@@ -12,6 +12,85 @@ Goal Planning is a critical feature that bridges individual calculators with hol
 
 ---
 
+## Educational UX Design Principles
+
+### Core Philosophy
+
+Goal Planning should be **both a calculator and a teacher**. The feature must educate users about financial planning concepts while guiding them through decision-making. Each question should build naturally from the previous one, creating a logical progression that builds financial literacy.
+
+### Key Principles
+
+#### 1. Progressive Disclosure
+- **Key decisions** presented as primary steps/questions
+- **Detailed configurations** available as expandable sections
+- Each step reveals only what's necessary at that moment
+- Advanced options accessible but not overwhelming
+
+#### 2. Contextual Learning
+- **Side panel** updates dynamically based on current step/question
+- Information presented **when relevant**, not all at once
+- Each question includes context about why it matters
+- Examples specific to user's current selections
+
+#### 3. Adaptive Educational Depth
+- **Default**: Simple, clear explanations
+- **On-demand**: Deeper educational content available via expandable sections
+- **What/How/Why** structure for all educational content:
+  - **What?** - Definition/Concept (simple explanation)
+  - **How?** - Mechanism/Process (step-by-step)
+  - **Why?** - Rationale/Impact (real-world implications)
+
+#### 4. Impact Visualization
+- **Real-time preview** panel showing how choices affect outcomes
+- **Before/After comparisons** for key decisions
+- Visual indicators (arrows, color coding) for changes
+- **Desktop**: Side-by-side layout (form + impact preview)
+- **Mobile**: Drawer/slide-out panel for impact preview
+
+#### 5. Examples at Every Step
+- Real-world scenarios illustrating concepts
+- Multiple user personas (different income levels, ages, goals)
+- Edge cases explained with examples
+- Indian financial context (tax implications, instruments, regulations)
+
+#### 6. Low Cognitive Load
+- One primary decision per screen/section
+- Related inputs grouped logically
+- Clear visual hierarchy
+- Natural language explanations
+- No financial jargon without explanation
+
+### Educational Content Format
+
+All educational content follows this structure:
+
+```markdown
+### [Concept Name]
+
+**What?**
+- Brief definition (1-2 sentences)
+- Simple explanation
+
+**How?**
+- Step-by-step mechanism
+- Visual aids if needed
+
+**Why?**
+- Impact on goal achievement
+- Real-world implications
+
+**Example:**
+- Scenario 1: [User persona A]
+- Scenario 2: [User persona B]
+- Edge case scenario
+
+**Common Mistakes:**
+- Mistake 1 and why it's wrong
+- Mistake 2 and correction
+```
+
+---
+
 ## Question 1: Goal Types & Categorization
 
 ### Current Options
@@ -85,7 +164,13 @@ Goal Planning is a critical feature that bridges individual calculators with hol
 - **Affects Question 11:** Different visualizations per goal type
 
 ### Recommended Approach
-**Hybrid: Start with Option B (Predefined Types) + Generic Fallback**
+**Option B (Predefined Types) - Single Goal Focus**
+
+**Decision Rationale:**
+- **Single Goal Focus**: Users focus on one goal at a time to reduce cognitive load
+- **Clubbing Everything Together**: Would increase cognitive load and make it difficult for end users
+- **Multi-Goal Planning**: Reserved for future phase (Phase 2+)
+- **Better User Experience**: One goal allows users to concentrate on specific financial planning without distractions
 
 **Phase 1 MVP:**
 - Retirement (age-based calculations)
@@ -98,12 +183,129 @@ Goal Planning is a critical feature that bridges individual calculators with hol
 - Vacation/Travel
 - Marriage
 - Custom goal types
+- **Multi-Goal Planning**: Dashboard with multiple goals, priority ranking, resource allocation
 
 **Rationale:**
 - Provides structure while maintaining flexibility
 - Allows goal-specific optimizations
 - Better user guidance
-- Can start simple and expand
+- Reduced cognitive load (one goal at a time)
+- Can start simple and expand to multi-goal later
+
+### Educational Content Structure
+
+#### What?
+**Goal Types** categorize your financial objectives based on their nature, timeline, and financial characteristics. Different goals have different requirements for risk, timeline, and tax optimization.
+
+#### How?
+- Goal types are predefined categories (Retirement, Child Education, House Purchase, etc.)
+- Each type has specific rules: inflation rates, recommended instruments, timeline flexibility
+- System uses goal type to optimize calculations and recommendations
+
+#### Why?
+- **Tax Optimization**: Retirement goals benefit from Section 80C/80CCD instruments (PPF, NPS, ELSS)
+- **Timeline Matching**: Education goals need fixed timelines; retirement can be flexible
+- **Risk Alignment**: Emergency funds need low risk; retirement can take higher risk
+- **Inflation Accuracy**: Education costs inflate at 8-10% vs general 6%
+
+#### Example Scenarios
+
+**Scenario 1: Retirement Goal**
+- User: Age 30, wants to retire at 60
+- Goal Type: Retirement
+- System: Uses 6% inflation, 30-year timeline, recommends NPS/PPF/ELSS for tax benefits
+- Expected Return: 10-12% (long-term, can take risk)
+
+**Scenario 2: Child Education**
+- User: Girl child age 5, wants ₹50L for college in 15 years
+- Goal Type: Child Education
+- System: Uses 8% inflation (education-specific), recommends SSY (if eligible), ELSS
+- Expected Return: 12-14% (medium-term, balanced risk)
+
+**Scenario 3: House Purchase**
+- User: Age 35, wants ₹1Cr for house in 5 years
+- Goal Type: House Purchase
+- System: Uses 6% inflation, shorter timeline, recommends balanced approach
+- Expected Return: 8-10% (short-term, lower risk)
+
+#### Common Mistakes
+- **Mistake**: Selecting "Generic" for retirement (misses tax benefits)
+- **Correction**: Always select specific goal type if applicable
+- **Mistake**: Using same inflation rate for all goals
+- **Correction**: System adjusts automatically based on goal type
+
+### Contextual Side Panel Content
+
+**When User Selects Goal Type:**
+
+**For Retirement:**
+- **What?** Retirement planning builds wealth over 20-40 years
+- **Why?** Long timeline allows higher risk = higher returns
+- **Tax Benefits**: Section 80C (₹1.5L), Section 80CCD(1B) (₹50K additional for NPS)
+- **Example**: "If you're 30 and invest ₹50K/month in NPS+ELSS, you'll have ₹5Cr+ at 60"
+- **Common Mistake**: Waiting until 50 to start retirement planning
+
+**For Child Education:**
+- **What?** Education costs rise faster than general inflation
+- **Why?** Education inflation is 8-10% vs general 6%
+- **Tax Benefits**: SSY provides Section 80C + tax-free withdrawal
+- **Example**: "₹50L needed in 15 years actually requires ₹20L today at 8% inflation"
+- **Common Mistake**: Underestimating education inflation
+
+**For House Purchase:**
+- **What?** House purchase typically has shorter timeline (5-10 years)
+- **Why?** Shorter timeline = lower risk tolerance = balanced allocation
+- **Tax Benefits**: Limited (no specific tax-saving instruments)
+- **Example**: "For ₹1Cr house in 5 years, you need ₹28K/month SIP at 10% returns"
+- **Common Mistake**: Taking too much risk for short-term goal
+
+### Impact Visualization Requirements
+
+**Real-time Preview:**
+- As user selects goal type, show:
+  - Default inflation rate (e.g., "Education: 8%" vs "Retirement: 6%")
+  - Recommended instruments (e.g., "SSY, ELSS" for education)
+  - Expected timeline impact (e.g., "Retirement: Flexible timeline")
+
+**Before/After Comparison:**
+- Show impact of selecting different goal types:
+  - "With Retirement goal: ₹5Cr corpus in 30 years"
+  - "With Generic goal: ₹4.5Cr corpus (misses tax benefits)"
+
+**Visual Indicators:**
+- Color-coded badges for goal types
+- Icons representing goal characteristics
+- Tooltips showing key differences
+
+### Mobile Considerations
+
+- Goal type selection: Large, touch-friendly radio buttons or cards
+- Side panel: Slide-out drawer on mobile
+- Examples: Scrollable cards or accordion
+- Impact preview: Collapsible section below form
+
+### UX Implementation Notes
+
+**Side Panel Content:**
+- Updates when user hovers/selects goal type
+- Shows "What/How/Why" for selected type
+- Includes example calculation
+- Lists common mistakes
+
+**Impact Visualization:**
+- Real-time preview updates as type changes
+- Shows projected corpus difference
+- Highlights tax benefits if applicable
+
+**Examples:**
+- 3-4 scenarios per goal type
+- Different user personas (age, income levels)
+- Indian context (tax slabs, instruments)
+
+**Progressive Disclosure:**
+- Primary: Goal type selector (radio buttons/cards)
+- Secondary: Expandable "Learn More" for each type
+- Advanced: Custom goal type option (if needed)
 
 ---
 
@@ -160,6 +362,13 @@ Goal Planning is a critical feature that bridges individual calculators with hol
 ### Recommended Approach
 **Option B (Auto-Determined) with Visual Indicator**
 
+**Decision Rationale:**
+- **Auto-Determination**: System automatically calculates urgency from timeline
+- **Reduces Cognitive Load**: Users don't need to understand urgency levels
+- **Prevents Errors**: Avoids conflicts between user-set urgency and timeline (e.g., "High urgency" for 20-year goal)
+- **Financial Accuracy**: Urgency aligns with financial reality (short timeline = high urgency)
+- **Manual Override**: Available in advanced settings for expert users who need it
+
 **Algorithm:**
 ```
 if (timeHorizon < 3 years) → High Urgency
@@ -168,14 +377,90 @@ else → Low Urgency
 ```
 
 **Display:**
-- Show calculated urgency badge
+- Show calculated urgency badge with color coding (Red=High, Yellow=Medium, Green=Low)
 - Explain reasoning: "Your goal is 5 years away, so this is a medium-urgency goal"
-- Allow manual override if needed (advanced users)
+- Allow manual override if needed (advanced users, in settings)
 
 **Rationale:**
 - Reduces user errors
 - Aligns urgency with financial reality
 - Can still allow override for edge cases
+- Better user experience (less cognitive load)
+
+### Educational Content Structure
+
+#### What?
+**Urgency** determines how quickly you need to achieve your goal and affects your risk tolerance. It's automatically calculated based on your time horizon.
+
+#### How?
+- System calculates urgency from timeline:
+  - < 3 years = High urgency (can't take much risk)
+  - 3-7 years = Medium urgency (balanced approach)
+  - > 7 years = Low urgency (can take higher risk)
+- Urgency affects recommended risk profile and investment strategy
+
+#### Why?
+- **High Urgency**: Short timeline means you can't recover from market downturns → Lower risk → Lower returns
+- **Low Urgency**: Long timeline allows riding out market volatility → Higher risk → Higher returns
+- **Example Impact**: ₹50L goal in 2 years requires ₹2L/month (high urgency, low risk). Same goal in 15 years requires ₹8K/month (low urgency, high risk)
+
+#### Example Scenarios
+
+**Scenario 1: High Urgency (2 years)**
+- Goal: ₹50L for house down payment
+- Timeline: 2 years
+- Urgency: High
+- Recommended: FD, Debt funds (7-8% returns)
+- Risk: Low (can't afford volatility)
+
+**Scenario 2: Medium Urgency (5 years)**
+- Goal: ₹50L for child's education
+- Timeline: 5 years
+- Urgency: Medium
+- Recommended: Balanced (60% equity, 40% debt)
+- Risk: Medium (some volatility acceptable)
+
+**Scenario 3: Low Urgency (20 years)**
+- Goal: ₹5Cr for retirement
+- Timeline: 20 years
+- Urgency: Low
+- Recommended: Equity-heavy (80% equity, 20% debt)
+- Risk: High (time to recover from downturns)
+
+#### Common Mistakes
+- **Mistake**: Manually setting "High urgency" for 20-year retirement goal
+- **Correction**: Let system auto-calculate; urgency should match timeline
+- **Mistake**: Ignoring urgency and taking high risk for short-term goals
+- **Correction**: High urgency = lower risk tolerance
+
+### Contextual Side Panel Content
+
+**When Timeline is Entered:**
+- **What?** Urgency is calculated automatically from your timeline
+- **How?** System uses time-based algorithm to determine urgency level
+- **Why?** Urgency affects risk tolerance and investment recommendations
+- **Impact**: Shows how urgency affects recommended risk profile
+- **Example**: "With 5-year timeline, you have medium urgency. This means balanced risk (60% equity, 40% debt) is appropriate."
+
+### Impact Visualization Requirements
+
+- Show urgency badge with explanation as timeline changes
+- Visual indicator: Color-coded urgency (Red=High, Yellow=Medium, Green=Low)
+- Show impact on recommended risk profile when urgency changes
+- Example: "Changing timeline from 2 to 10 years changes urgency from High to Low, allowing higher risk investments"
+
+### Mobile Considerations
+
+- Urgency badge displayed prominently above form
+- Tooltip accessible via tap on mobile
+- Impact preview in collapsible section
+
+### UX Implementation Notes
+
+- Show calculated urgency badge with explanation
+- Explain reasoning: "Your goal is 5 years away, so this is a medium-urgency goal"
+- Allow manual override in advanced settings (for expert users)
+- Visual feedback when urgency changes based on timeline input
 
 ---
 
@@ -239,31 +524,121 @@ else → Low Urgency
 - **Affects Question 9:** Current savings reduces required SIP
 
 ### Recommended Approach
-**Hybrid: Option A (Auto-Allocate) with Option B (Manual Override)**
+**Two-Flow Approach: User Choice - Simple or Comprehensive**
 
-**Default Flow:**
-1. User enters current savings amount
-2. System auto-allocates based on risk profile
-3. Show allocation breakdown visually
-4. Allow user to adjust percentages if desired
+**Decision Rationale:**
+- **Flow 1 (Phase 1 MVP)**: Simple approach - fresh start, no current savings allocation
+- **Flow 2 (Phase 2)**: Advanced approach - current savings allocation with auto-algorithm
+- **User Choice**: Both flows remain available - users choose based on their needs
+- **Cater to Different Users**: 
+  - **Flow 1 Users**: Starting fresh, want to focus on future planning only
+  - **Flow 2 Users**: Want re-allocation help and portfolio analysis
+- **Offline Flexibility**: Flow 1 users can manage current savings allocation offline using individual calculators
 
-**Display:**
+**Flow 1: Fresh Start (Available in Phase 1 & Phase 2)**
+- **Approach**: Assume savings already invested, only calculate future SIP needs
+- **User Experience**: Simple, clean form without allocation complexity
+- **Use Case**: 
+  - Users starting fresh with goal planning
+  - Users who want to focus on future planning without worrying about current savings optimization
+  - Users who prefer to manage current savings separately using individual calculators
+- **Implementation**: 
+  - Toggle or radio button: "Start Fresh" or "I want to focus on future planning"
+  - No current savings input fields
+  - No allocation sliders or percentages
+  - Only calculate required monthly SIP based on target corpus and timeline
+  - Focus on future investment strategy
+
+**Flow 2: Current Savings Allocation (Phase 2) - Option A**
+- **Approach**: Auto-allocate across instruments based on risk profile
+- **User Experience**: Advanced form with current savings input and auto-allocation
+- **Use Case**: 
+  - Users who want to optimize existing savings as part of goal planning
+  - Users seeking re-allocation help
+  - Users wanting portfolio analysis and recommendations
+- **Implementation**:
+  - Toggle or radio button: "Optimize Current Savings" or "Include existing savings"
+  - Current savings input field
+  - Auto-allocation algorithm based on risk profile
+  - Visual breakdown (pie chart or bar chart)
+  - Manual override available
+  - Tax optimization recommendations
+  - Portfolio analysis showing current vs recommended allocation
+
+**UI Implementation:**
+
+**Phase 1 MVP:**
 ```
-Current Savings: ₹5,00,000
-
-Recommended Allocation:
-├─ Equity/MF (60%): ₹3,00,000 → Expected Return: 12%
-├─ Debt (20%): ₹1,00,000 → Expected Return: 8%
-└─ Safe (20%): ₹1,00,000 → Expected Return: 7.1%
-
-[Edit Allocation] [Use Recommended]
+┌─────────────────────────────┐
+│ Goal Planning Form          │
+├─────────────────────────────┤
+│ Goal Type: [Selected]        │
+│ Target Amount: [Input]       │
+│ Timeline: [Input]            │
+│ Risk Profile: [Selected]     │
+│                             │
+│ Current Savings Approach:   │
+│ (○) Start Fresh             │ ← Selected by default
+│ ( ) Optimize Savings        │ ← Disabled, "Coming Soon"
+│                             │
+│ Monthly SIP: [Calculate]    │
+└─────────────────────────────┘
 ```
+
+**Phase 2:**
+```
+┌─────────────────────────────┐
+│ Goal Planning Form          │
+├─────────────────────────────┤
+│ Goal Type: [Selected]        │
+│ Target Amount: [Input]       │
+│ Timeline: [Input]            │
+│ Risk Profile: [Selected]     │
+│                             │
+│ Current Savings Approach:   │
+│ (○) Start Fresh             │ ← Active option
+│ ( ) Optimize Savings        │ ← Active option
+│                             │
+│ [If "Optimize Savings" selected:]
+│ Current Savings: [Input]   │
+│ Allocation: [Auto/Manual]   │
+│ [Visual Breakdown]          │
+│                             │
+│ Monthly SIP: [Calculate]    │
+└─────────────────────────────┘
+```
+
+**User Choice Mechanism:**
+- **Radio Buttons or Toggle**: "Start Fresh" vs "Optimize Current Savings"
+- **Default**: "Start Fresh" (Flow 1) for simplicity
+- **Visual Distinction**: Clear labels explaining each option
+- **Help Text**: 
+  - Flow 1: "Focus on future planning. Use individual calculators to optimize current savings separately."
+  - Flow 2: "Get recommendations for optimizing your existing savings allocation based on your risk profile."
 
 **Rationale:**
-- Provides guidance without being prescriptive
-- Allows expert users to customize
-- Reduces cognitive load for majority
-- Can show tax benefits of reallocation
+- **Flow 1 Benefits**:
+  - Simplest implementation
+  - Low cognitive load
+  - Users can focus on future planning
+  - Fastest to build and validate
+  - Can use existing calculators for current savings separately
+  - Appeals to users who want simplicity
+
+- **Flow 2 Benefits**:
+  - Comprehensive goal planning
+  - Optimizes existing savings
+  - More accurate recommendations
+  - Better tax optimization
+  - Portfolio analysis and re-allocation help
+  - Appeals to users who want complete picture
+
+- **Why Retain Both Flows**:
+  - Different user needs (simple vs comprehensive)
+  - User choice based on their situation
+  - Starting fresh users vs users with existing savings
+  - Flexibility: Users can switch between flows
+  - Both flows serve different use cases permanently
 
 ---
 
@@ -328,18 +703,41 @@ Recommended Allocation:
 - **Affects Question 8:** Tax calculations need accurate inflation
 
 ### Recommended Approach
-**Option C (Both Pre-Tax and Post-Tax) with Progressive Disclosure**
+**Option C (Both Pre-Tax and Post-Tax) - Ideal, but Option B (Pre-Tax Only) for Phase 1 MVP**
 
-**Implementation:**
-1. **Default View:** Pre-tax returns (matches calculators)
-2. **Expandable Section:** "View Tax-Adjusted Returns"
-3. **Tax Slab Selector:** Dropdown (5%, 10%, 15%, 20%, 30%, New Regime)
-4. **Show Both:**
-   - Pre-tax corpus: ₹50L
-   - Post-tax corpus (30% slab): ₹47L
-   - Tax saved: ₹3L
+**Decision Rationale:**
+- **Ideal Approach**: Option C provides comprehensive tax-aware planning
+- **Phase 1 MVP**: Start with Option B (Pre-Tax Only) to build POC faster
+- **Future Enhancement**: Build tax implementation in Phase 2+
+- **POC Focus**: Validate core goal planning functionality first, then add tax complexity
 
-**Tax Calculation Logic:**
+**Phase 1 MVP: Option B (Pre-Tax Only)**
+- **Implementation**: 
+  - Show pre-tax returns only
+  - Matches current calculator implementations
+  - Consistent with existing patterns
+  - Simplest implementation for POC
+- **Display**: 
+  - Pre-tax corpus: ₹50L
+  - No tax slab selector
+  - No tax-adjusted calculations
+- **Rationale**: 
+  - Fastest to build and validate
+  - Allows focus on core goal planning logic
+  - Reduces complexity for initial POC
+  - Can build tax implementation later
+
+**Phase 2+: Option C (Both Pre-Tax and Post-Tax)**
+- **Implementation**:
+  1. **Default View:** Pre-tax returns (matches Phase 1)
+  2. **Expandable Section:** "View Tax-Adjusted Returns"
+  3. **Tax Slab Selector:** Dropdown (5%, 10%, 15%, 20%, 30%, New Regime)
+  4. **Show Both:**
+     - Pre-tax corpus: ₹50L
+     - Post-tax corpus (30% slab): ₹47L
+     - Tax saved: ₹3L
+
+**Tax Calculation Logic (Phase 2+):**
 - PPF/SSY: Fully tax-free (no adjustment)
 - ELSS: Section 80C deduction + LTCG calculation
 - FD: Interest taxable as per slab
@@ -347,10 +745,10 @@ Recommended Allocation:
 - Equity: LTCG after 1 year
 
 **Rationale:**
-- Provides accuracy without overwhelming
-- Progressive disclosure maintains simplicity
-- Tax considerations are essential for Indian investors
-- Can default to pre-tax for consistency
+- **Phase 1**: Simplest implementation for POC validation
+- **Phase 2+**: Adds tax accuracy for comprehensive planning
+- **Progressive Enhancement**: Build core functionality first, add tax complexity later
+- **User Benefit**: Users get working tool quickly, tax features added incrementally
 
 ---
 
@@ -412,29 +810,43 @@ Recommended Allocation:
 - **Affects Question 9:** Shortfall recommendations need to consider all goals
 
 ### Recommended Approach
-**Option C (Start Single, Add Multi-Goal in Phase 2)**
+**Option A (Single Goal Per Session) - POC Focus**
 
-**Phase 1 MVP:**
-- Single goal planning
-- Get user feedback
-- Validate calculations
+**Decision Rationale:**
+- **POC Approach**: Building proof of concept, will improve in future
+- **Single Goal Focus**: One goal at a time reduces cognitive load
+- **Simplicity**: Simplest implementation for initial validation
+- **Future Enhancement**: Multi-goal support can be added later based on learnings
 
-**Phase 2 Enhancement:**
+**Phase 1 MVP: Single Goal Per Session**
+- **Implementation**:
+  - One form, one calculation
+  - State management straightforward
+  - User can plan multiple goals separately (create multiple goal plans)
+  - Each goal plan saved independently in localStorage
+- **User Experience**:
+  - User creates one goal plan per session
+  - Can create multiple goal plans over time (via Goal History)
+  - Each goal plan is independent
+  - No cross-goal resource allocation in Phase 1
+- **Rationale**:
+  - Simplest implementation for POC
+  - Allows validation of core functionality
+  - Reduces complexity and cognitive load
+  - Users can plan multiple goals by creating separate goal plans
+  - Will improve and add multi-goal features in future phases
+
+**Future Enhancement (Phase 2+): Multi-Goal Support**
 - Multiple goals dashboard
 - Priority ranking
 - Resource allocation algorithm
 - "SIP capacity: ₹50K/month → Allocate across goals"
+- Cross-goal optimization
 
-**Rationale:**
-- Validates core functionality first
-- Reduces initial complexity
-- Can design multi-goal with learnings
-- Common pattern: Start simple, expand
-
-**Technical Preparation:**
-- Design state structure to support multiple goals
-- Use goalPlanningStore with array of goals
-- Keep code extensible for Phase 2
+**Technical Note:**
+- Code structure should remain extensible
+- State management can be designed to support future multi-goal features
+- Current single-goal approach doesn't prevent future multi-goal addition
 
 ---
 
@@ -1005,6 +1417,117 @@ Annual Step-Up: 10% (Default)
 - Shows both nominal and real values
 - Engages users visually
 
+### Educational Visualizations
+
+**Annotated Charts:**
+- Each chart element includes tooltips explaining what it represents
+- Hover/tap on chart elements shows:
+  - What does this metric mean?
+  - How is it calculated?
+  - Why does it matter for your goal?
+
+**Interactive Tooltips:**
+- **Results Cards:**
+  - Target Corpus: "This is your goal amount in future value"
+  - Projected Corpus: "This is what you'll accumulate based on your inputs"
+  - Shortfall: "The gap between target and projected corpus"
+  - Monthly SIP Required: "How much you need to invest monthly"
+
+- **Pie Chart (Allocation):**
+  - Each segment shows: Instrument name, Percentage, Amount, Expected Return
+  - Tooltip: "Why this allocation? [Risk profile explanation]"
+
+- **Projection Graph:**
+  - Multiple lines: Invested Amount, Returns, Total Corpus
+  - Annotations at key points: "Year 5: Your investments start compounding significantly"
+  - Interactive: Hover shows exact values at each year
+
+- **Inflation Comparison:**
+  - Dual visualization: Nominal vs Real value
+  - Explanation: "Your ₹50L goal will have ₹35L purchasing power (in today's value)"
+  - Visual indicator showing purchasing power erosion
+
+**Comparison Modes:**
+- **Pre-tax vs Post-tax Comparison:**
+  - Toggle to switch views
+  - Side-by-side cards showing difference
+  - Explanation: "Post-tax corpus shows what you'll actually receive"
+
+- **With/Without Step-up SIP:**
+  - Slider to compare scenarios
+  - Visual difference: "With 10% step-up: ₹65L vs Without: ₹50L"
+  - Explanation: "Step-up SIP helps you keep pace with salary increases"
+
+- **Risk Profile Comparison:**
+  - Compare different risk profiles side-by-side
+  - Shows: Expected returns, Volatility, Recommended allocation
+  - Educational: "Higher risk = Higher returns but more volatility"
+
+**Impact Comparison Views:**
+- **Before/After Scenarios:**
+  - Side-by-side comparison when user changes inputs
+  - Visual indicators: ↑ (increase), ↓ (decrease), → (no change)
+  - Color coding: Green (positive impact), Red (negative impact)
+
+- **Scenario Slider:**
+  - Interactive slider to adjust key inputs
+  - Real-time updates showing impact
+  - Example: "Adjust timeline slider to see impact on required SIP"
+
+### Educational Visualization Requirements
+
+**Results Cards:**
+- Each card includes:
+  - Large number (primary metric)
+  - Label (what it represents)
+  - Info icon (ℹ️) linking to explanation
+  - Visual indicator (progress bar, trend arrow)
+
+**Pie Chart:**
+- Segments show:
+  - Color-coded by instrument type
+  - Percentage and amount labels
+  - Hover/tap shows detailed breakdown
+  - Legend with explanations
+
+**Projection Graph:**
+- Annotated with:
+  - Key milestones (e.g., "Year 10: Your corpus doubles")
+  - Educational markers (e.g., "Compounding effect visible here")
+  - Interactive tooltips at each data point
+
+**Inflation Comparison:**
+- Visual representation:
+  - Two bars: Nominal vs Real value
+  - Percentage difference highlighted
+  - Explanation: "Inflation reduces purchasing power by X%"
+
+### Mobile Considerations
+
+- Charts responsive: Stack vertically on mobile
+- Tooltips: Tap to show, tap outside to dismiss
+- Comparison views: Swipeable cards or tabs
+- Projection graph: Horizontal scroll on mobile
+- Impact preview: Collapsible section or drawer
+
+### UX Implementation Notes
+
+**Educational Visualizations:**
+- All charts include "What does this mean?" explanations
+- Interactive elements encourage exploration
+- Progressive disclosure: Basic view first, expandable details
+
+**Impact Comparison:**
+- Side-by-side layout on desktop
+- Drawer/modal on mobile
+- Clear visual indicators for changes
+- Smooth animations for transitions
+
+**Progressive Disclosure:**
+- Default view: Essential metrics only
+- Expandable: Detailed charts and comparisons
+- Advanced: Deep dive into calculations
+
 ---
 
 ## Question 12: Edge Case - Unrealistic Goals
@@ -1115,6 +1638,532 @@ Option 3: Increase Risk
 
 ---
 
+## Goal History & Local Storage
+
+### Feature Overview
+
+Enable users to save and manage multiple goal plans locally, allowing them to plan new goals or revisit and tweak existing goals. This feature provides persistence across sessions and enables users to work on multiple goal plans over time.
+
+### Core Requirements
+
+#### 1. Goal Plan Storage Structure
+
+**Storage Key:** `wealth-mngr-goal-plans` (localStorage)
+
+**Data Structure:**
+```javascript
+{
+  "goal-plans": [
+    {
+      "id": "retirement-2024-12-15T10-30-00", // Unique ID: goalName-timestamp
+      "name": "Retirement", // User-provided unique name
+      "createdAt": "2024-12-15T10:30:00Z",
+      "updatedAt": "2024-12-15T10:35:00Z",
+      "formData": {
+        "goalType": "retirement",
+        "targetCorpus": 50000000,
+        "timeHorizon": 30,
+        "riskProfile": "high",
+        "currentSavings": 500000,
+        "currentSavingsAllocation": {
+          "equity": 60,
+          "debt": 20,
+          "safe": 20
+        },
+        "monthlySIP": 20000,
+        "stepUpEnabled": true,
+        "stepUpPercentage": 10,
+        "taxSlab": "30",
+        "adjustInflation": true,
+        "customInflationRate": null
+      }
+      // Note: Results calculated real-time, not stored
+    }
+  ]
+}
+```
+
+#### 2. Goal Name Validation
+
+**Uniqueness Check:**
+- Validate against existing goal names in localStorage
+- Check performed on blur/change events
+
+**Duplicate Handling:**
+- Auto-append number if duplicate name detected
+- Example: "Retirement" → "Retirement 2" → "Retirement 3"
+- User sees warning: "A goal with this name exists. It will be saved as '[Name] 2'"
+
+**Validation Rules:**
+- Required field
+- Minimum length: 2 characters
+- Maximum length: 50 characters
+- Allowed characters: Letters, numbers, spaces, hyphens
+- No special characters except spaces and hyphens
+- Real-time validation feedback
+
+#### 3. Auto-Save Functionality
+
+**Trigger:** Every input change (debounced)
+
+**Debounce Delay:** 500ms (prevents excessive localStorage writes)
+
+**Save Scope:** Only form inputs (not calculated results - calculations are real-time)
+
+**Save Indicator:**
+- **Saving**: Subtle spinner or "Saving..." text
+- **Saved**: Checkmark icon or "Saved" badge
+- **Error**: Warning icon with retry option
+
+**Error Handling:**
+- Graceful fallback if localStorage fails
+- Show user-friendly error message
+- Retry mechanism available
+
+#### 4. Goal Plan ID Generation
+
+**Format:** `{goalName}-{timestamp}`
+
+**Unique ID Generation:**
+- Generated on first save (when user enters goal name)
+- Timestamp format: `YYYY-MM-DDTHH-mm-ss` (ISO format, dashes for compatibility)
+- Example: "Retirement-2024-12-15T10-30-00"
+
+**Purpose:**
+- Used for retrieval and updates
+- Ensures uniqueness even if goal names are similar
+
+#### 5. Goal List UI
+
+**Landing Page Structure:**
+```
+┌─────────────────────────────────────┐
+│   Goal Planning                     │
+├─────────────────────────────────────┤
+│                                     │
+│   [Plan New Goal] Button (Primary)  │
+│   → Opens fresh form                │
+│                                     │
+│   ──────────────────────────────── │
+│                                     │
+│   Tweak Current Goals               │
+│   ──────────────────────────────── │
+│                                     │
+│   [Goal Card 1]                     │
+│   ├─ Goal Type: Retirement          │
+│   ├─ Target: ₹5Cr                  │
+│   ├─ Timeline: 30 years              │
+│   ├─ Risk: High                     │
+│   ├─ Last Updated: Dec 15, 2024    │
+│   └─ [Open] Button                  │
+│                                     │
+│   [Goal Card 2]                     │
+│   ├─ Goal Type: Child Education     │
+│   ├─ Target: ₹50L                  │
+│   ├─ Timeline: 15 years              │
+│   ├─ Risk: Medium                   │
+│   ├─ Last Updated: Dec 10, 2024     │
+│   └─ [Open] Button                  │
+│                                     │
+│   [Goal Card 3]                     │
+│   ...                               │
+└─────────────────────────────────────┘
+```
+
+**Goal Card Display:**
+- **Goal Type Badge**: Color-coded (Retirement, Education, etc.)
+- **Key Metrics**: Target corpus, Timeline, Risk profile
+- **Last Updated**: Relative time (e.g., "2 days ago", "Just now")
+- **Action**: [Open] button to load plan
+- **Visual Design**: Card-based layout with hover effects
+
+**Empty State:**
+- When no saved goals exist:
+  - Message: "You haven't created any goal plans yet"
+  - [Plan Your First Goal] button (prominent, primary style)
+
+#### 6. Form Pre-filling
+
+**When:** User clicks "Open" on a goal card
+
+**Behavior:**
+- Load form data from localStorage using goal ID
+- Pre-fill all form fields with saved data
+- Show header: "Editing: [Goal Name]"
+- Enable auto-save (updates existing goal, not creates new)
+- Recalculate results immediately with pre-filled data
+- Navigate to form view
+
+#### 7. New Goal Flow
+
+**When:** User clicks "Plan New Goal"
+
+**Behavior:**
+- Show fresh form
+- **Step 1**: Prompt for goal name (required, first input)
+- Validate uniqueness on blur
+- Auto-generate ID on first input change after name entry
+- Start auto-saving on subsequent inputs (debounced)
+- Show "Creating new goal plan..." indicator
+
+### Technical Implementation
+
+#### Local Storage Service
+
+**File:** `src/utils/goalPlanStorage.js`
+
+**Functions:**
+```javascript
+// Save a new goal plan
+saveGoalPlan(goalPlan)
+
+// Get a specific goal plan by ID
+getGoalPlan(id)
+
+// Get all saved goal plans
+getAllGoalPlans()
+
+// Update an existing goal plan
+updateGoalPlan(id, updates)
+
+// Generate unique goal name (handles duplicates)
+generateUniqueGoalName(baseName)
+
+// Delete goal plan (Future enhancement - Phase 3)
+deleteGoalPlan(id)
+```
+
+**Storage Management:**
+- Single key: `wealth-mngr-goal-plans`
+- Stores array of goal plan objects
+- Handles JSON serialization/deserialization
+- Error handling for localStorage limits
+
+#### Zustand Store Updates
+
+**File:** `src/store/goalPlanningStore.js`
+
+**New Fields:**
+- `goalPlanId`: Current goal plan ID (null for new goals)
+- `goalName`: Current goal plan name
+- `currentGoalPlan`: Full goal plan object (for editing)
+- `isNewGoal`: Boolean flag (true for new, false for editing)
+
+**New Actions:**
+```javascript
+// Load a goal plan from localStorage
+loadGoalPlan(id)
+
+// Create new goal plan
+createNewGoalPlan()
+
+// Auto-save (debounced)
+autoSaveGoalPlan()
+
+// Reset to new goal state
+resetToNewGoal()
+```
+
+**Auto-Save Implementation:**
+- Debounced function (500ms delay)
+- Saves only form inputs
+- Updates `updatedAt` timestamp
+- Handles both new and existing goals
+
+#### Component Structure
+
+```
+GoalPlanningPage/
+├─ GoalPlanningPage.jsx (Router - landing vs form)
+├─ GoalPlanningLanding.jsx (New - Landing page with goal list)
+├─ GoalPlanningForm.jsx (Form component)
+│  ├─ GoalNameInput.jsx (New - with uniqueness validation)
+│  ├─ AutoSaveIndicator.jsx (New - visual feedback)
+│  └─ [Existing form components]
+└─ GoalCard.jsx (New - Card component for goal list)
+```
+
+### UX Considerations
+
+#### Auto-Save Indicators
+
+**Visual Feedback:**
+- **Saving**: Subtle spinner icon or "Saving..." text in header
+- **Saved**: Checkmark icon or "Saved" badge (appears briefly after save)
+- **Error**: Warning icon with "Save failed" message and retry button
+
+**Placement:**
+- Top-right corner of form
+- Non-intrusive but visible
+- Auto-hide after 2 seconds for "Saved" state
+
+#### Goal Name Input
+
+**Placement:** First input in form (Step 1, before goal type selection)
+
+**Validation:**
+- Real-time feedback on blur
+- Show duplicate warning if name exists
+- Helper text: "This name helps you identify this goal plan"
+
+**Duplicate Warning:**
+- Display: "A goal with this name exists. It will be saved as '[Name] 2'"
+- Color: Warning yellow/orange
+- Position: Below input field
+
+#### Mobile Considerations
+
+**Goal Cards:**
+- Stack vertically, full width on mobile
+- Touch-friendly card sizes (minimum 44px height)
+- Swipe actions: Future enhancement (delete in Phase 3)
+
+**Form:**
+- Goal name input prominently displayed
+- Auto-save indicator visible but compact
+- Smooth transitions between landing and form views
+
+### Error Handling
+
+**localStorage Full:**
+- Show warning: "Storage limit reached. Please delete old goals."
+- Provide link to manage goals (future enhancement)
+
+**localStorage Disabled:**
+- Show fallback message: "Local storage is disabled. Your goals won't be saved."
+- Disable save functionality gracefully
+- Allow form to work but show persistent warning
+
+**Corrupted Data:**
+- Validate on load
+- Show error message: "Unable to load goal plan. Starting fresh."
+- Option to clear corrupted data
+
+**Network Issues:**
+- N/A (localStorage is local, no network required)
+
+### Performance Considerations
+
+**Debounced Saves:**
+- 500ms delay prevents excessive writes
+- Reduces localStorage write operations
+- Improves performance on low-end devices
+
+**Lazy Loading:**
+- Load goal list on demand (when landing page opens)
+- Don't load all goal plans on app initialization
+
+**Data Size:**
+- Limit stored data (form inputs only, no calculated results)
+- Estimated size: ~500 bytes per goal plan
+- Reasonable limit: ~50 goal plans (~25KB)
+
+**Cleanup:**
+- Consider limit on number of saved goals (future enhancement)
+- Oldest goals auto-deleted if limit exceeded (future)
+
+### Data Migration & Compatibility
+
+**Initial Load:**
+- Check if localStorage has old format
+- Handle migration gracefully
+- Validate data structure on load
+
+**Backward Compatibility:**
+- Support existing data structure
+- Handle missing fields gracefully
+- Default values for new fields
+
+---
+
+### Flow Structure Overview
+
+The Goal Planning feature follows a progressive disclosure pattern where each step builds naturally from the previous one. Key decisions are presented as primary steps, with detailed configurations available as expandable sections.
+
+### Step-by-Step Flow
+
+```
+Step 1: Goal Type Selection (Primary Decision)
+├─ Examples shown for each type
+├─ Side panel: "What is goal planning?" + Goal type specific info
+├─ Impact: Shows how goal type affects inflation rate, recommended instruments
+└─ Next: Enable "Goal Details" section
+
+Step 2: Goal Details (Expandable after Step 1)
+├─ Target Amount
+│  ├─ Input field with helper text
+│  ├─ Side panel: "How much do you need?"
+│  └─ Impact preview: Shows monthly SIP required
+├─ Timeline
+│  ├─ Input field with slider
+│  ├─ Side panel: "Timeline impact on strategy"
+│  └─ Impact: Auto-calculates urgency, shows risk profile impact
+└─ Examples: "For retirement at 60, if you're 30..."
+
+Step 3: Risk Profile (Contextual based on goal type + timeline)
+├─ Quick Mode (Default)
+│  ├─ Radio buttons: Low/Medium/High/Very High
+│  ├─ Side panel: "Understanding risk profiles"
+│  └─ Impact preview: Shows allocation changes
+├─ Detailed Assessment (Optional)
+│  ├─ Expandable questionnaire (5-7 questions)
+│  ├─ Side panel: "Why risk profiling matters"
+│  └─ Impact: Pre-fills risk profile, shows rationale
+└─ Impact visualization: Allocation breakdown updates in real-time
+
+Step 4: Current Savings (Progressive disclosure)
+├─ Amount Input
+│  ├─ Input field
+│  ├─ Side panel: "Your starting point"
+│  └─ Impact: Shows how current savings reduce required SIP
+├─ Allocation (Auto with manual override)
+│  ├─ Auto-allocated based on risk profile
+│  ├─ Visual breakdown: Pie chart or bar chart
+│  ├─ Side panel: "Why allocation matters"
+│  ├─ [Edit Allocation] button (expandable)
+│  └─ Impact preview: Shows expected returns by allocation
+└─ Educational: "Moving from FD to equity can increase returns by 3-5%"
+
+Step 5: Advanced Options (Optional, expandable)
+├─ Step-Up SIP
+│  ├─ Toggle switch
+│  ├─ Side panel: "What is step-up SIP?"
+│  └─ Impact: Shows corpus difference with/without step-up
+├─ Tax Considerations
+│  ├─ Expandable section
+│  ├─ Tax slab selector
+│  ├─ Side panel: "Tax impact on returns"
+│  └─ Impact: Shows pre-tax vs post-tax corpus
+└─ Inflation Customization
+   ├─ Advanced setting
+   ├─ Side panel: "Inflation explained"
+   └─ Impact: Shows real vs nominal value
+
+Step 6: Review & Recommendations
+├─ Results Visualization
+│  ├─ Results cards (Target, Projected, Shortfall)
+│  ├─ Pie chart (allocation)
+│  ├─ Projection graph (expandable)
+│  └─ Inflation comparison (expandable)
+├─ Shortfall Handling (If applicable)
+│  ├─ Prioritized recommendations
+│  ├─ Side panel: "How to bridge the gap"
+│  └─ Impact: Shows each option's effect
+└─ Specific Recommendations
+   ├─ Monthly SIP breakdown
+   ├─ One-time investments
+   ├─ Side panel: "Why these instruments?"
+   └─ Educational insights
+```
+
+### Side Panel Requirements
+
+**Contextual Updates:**
+- Side panel content updates dynamically based on:
+  - Current step/question
+  - User's selections (goal type, risk profile, etc.)
+  - Input values (timeline, amount, etc.)
+
+**Content Structure:**
+- **What?** section: Brief definition/explanation
+- **How?** section: Step-by-step mechanism
+- **Why?** section: Impact and rationale
+- **Example:** Real-world scenario relevant to user's inputs
+- **Common Mistakes:** What to avoid
+
+**Desktop Layout:**
+```
+┌─────────────────────┬──────────────────────┐
+│                     │                      │
+│   Form Section      │   Side Panel         │
+│   (Left)            │   (Right)           │
+│                     │                      │
+│   [Inputs]          │   [Contextual Info] │
+│   [Impact Preview]  │   [Examples]         │
+│                     │   [FAQs]             │
+└─────────────────────┴──────────────────────┘
+```
+
+**Mobile Layout:**
+```
+┌─────────────────────┐
+│   Form Section      │
+│   [Inputs]          │
+│   [Drawer Toggle]  │ ← Opens side panel
+│   [Impact Preview]  │   (Collapsible)
+└─────────────────────┘
+```
+
+### Impact Visualization
+
+**Real-time Preview Panel:**
+- Updates automatically as user changes inputs
+- Shows:
+  - Projected corpus
+  - Monthly SIP required
+  - Allocation breakdown
+  - Expected returns
+- Visual indicators for changes (arrows, color coding)
+
+**Before/After Comparisons:**
+- Available for key decisions:
+  - Goal type changes
+  - Risk profile changes
+  - Timeline adjustments
+  - Current savings impact
+- Side-by-side view showing:
+  - Before: Current scenario
+  - After: Modified scenario
+  - Difference: Impact of change
+
+**Desktop:**
+- Impact preview panel always visible (side-by-side or below form)
+- Before/After comparison in modal or expandable section
+
+**Mobile:**
+- Impact preview in collapsible section or drawer
+- Before/After comparison in modal or full-screen view
+
+### Progressive Disclosure Patterns
+
+**Primary Level (Always Visible):**
+- Goal type selector
+- Target amount input
+- Timeline input
+- Risk profile selector (quick mode)
+- Current savings amount
+
+**Secondary Level (Expandable):**
+- Detailed risk assessment questionnaire
+- Current savings allocation (manual override)
+- Step-up SIP settings
+- Tax considerations
+- Advanced inflation settings
+
+**Tertiary Level (Deep Dive):**
+- Educational content library
+- Detailed FAQs
+- Scenario comparisons
+- Advanced calculation details
+
+### Educational Moments
+
+**Throughout the Flow:**
+1. **Goal Type Selection**: "Why different goals need different strategies"
+2. **Timeline Entry**: "How timeline affects risk and returns"
+3. **Risk Profile**: "Understanding your risk tolerance"
+4. **Current Savings**: "Optimizing your existing investments"
+5. **Results Review**: "Understanding your goal plan"
+
+**Each Moment Includes:**
+- Brief explanation (What?)
+- Mechanism (How?)
+- Impact (Why?)
+- Example scenario
+- Common mistakes to avoid
+
+---
+
 ## Interdependencies Summary
 
 ### Critical Dependencies
@@ -1131,12 +2180,14 @@ Option 3: Increase Risk
    - Question 9 (Shortfall Options)
 
 3. **Question 4 (Tax)** affects:
-   - Question 7 (Recommendations): Tax-efficient instruments
-   - Question 11 (Visualization): Post-tax vs pre-tax display
+   - Question 7 (Recommendations): Tax-efficient instruments (Phase 2+)
+   - Question 11 (Visualization): Post-tax vs pre-tax display (Phase 2+)
+   - **Phase 1**: Pre-tax only, no tax impact on recommendations
 
 4. **Question 5 (Multiple Goals)** affects:
-   - Question 9 (Shortfall): Need to allocate across goals
-   - Question 12 (Unrealistic Goals): Need to consider total SIP capacity
+   - Question 9 (Shortfall): Need to allocate across goals (Phase 2+)
+   - Question 12 (Unrealistic Goals): Need to consider total SIP capacity (Phase 2+)
+   - **Phase 1**: Single goal per session, independent goal plans
 
 ### Decision Flow
 
@@ -1170,28 +2221,42 @@ Results Display
 
 ## Recommended MVP Feature Set
 
-### Phase 1: Core Goal Planning (MVP)
+### Phase 1: Core Goal Planning + History (MVP)
 
 **Goal Types:**
-- Retirement
-- Child Education  
-- House Purchase
-- Generic Goal
+- Retirement (age-based calculations)
+- Child Education (SSY-specific recommendations)
+- House Purchase (real estate inflation consideration)
+- Generic Goal (catch-all)
+- **Single Goal Focus**: One goal at a time to reduce cognitive load
+
+**Goal History & Local Storage:**
+- Save goal plans to localStorage
+- Auto-save functionality (debounced, 500ms)
+- Goal name validation with duplicate handling
+- Goal list UI with cards showing key metrics
+- Form pre-filling for editing existing goals
+- Landing page with "Plan New Goal" and "Tweak Current Goals" options
 
 **Risk Profile:**
 - Quick Mode: Self-selection (Low/Medium/High/Very High)
 - Detailed Mode: Questionnaire (optional)
 
 **Current Savings:**
-- Auto-allocate based on risk profile
-- Manual override available
+- **Flow 1 (Active)**: Fresh start, no current savings allocation
+- **Flow 2 (Coming Soon)**: Current savings allocation with auto-algorithm (Phase 2)
 
 **Tax Considerations:**
-- Pre-tax returns (default)
-- Post-tax returns (expandable, with tax slab selector)
+- **Pre-tax returns only** (matches current calculator implementations)
+- Tax slab selector: Not included in Phase 1
+- Tax-adjusted calculations: Phase 2+ enhancement
+- Rationale: Simplest implementation for POC validation
 
 **Multiple Goals:**
-- Single goal per session (Phase 2: Multi-goal support)
+- **Single goal per session** (POC focus)
+- Users can create multiple goal plans separately via Goal History
+- Each goal plan is independent
+- Multi-goal dashboard: Phase 2+ enhancement
 
 **Inflation:**
 - Default: 6% (from user preferences)
@@ -1203,7 +2268,7 @@ Results Display
 
 **Recommendations:**
 - Specific instrument recommendations with amounts
-- Tax-aware recommendations
+- Tax-aware recommendations (Phase 2+)
 - Alternative scenarios (expandable)
 
 **Visualization:**
@@ -1222,6 +2287,44 @@ Results Display
 - Unrealistic goals: Warning + auto-suggest alternatives
 - Continue anyway option
 
+### Phase 2: Multi-Goal Planning + Tax Implementation
+
+**Multi-Goal Dashboard:**
+- Multiple goals dashboard
+- Priority ranking
+- Resource allocation algorithm
+- "SIP capacity: ₹50K/month → Allocate across goals"
+
+**Tax Implementation:**
+- Tax slab selector (5%, 10%, 15%, 20%, 30%, New Regime)
+- Post-tax returns calculation
+- Tax-adjusted corpus display
+- Tax efficiency recommendations
+
+**Current Savings Flow 2:**
+- Current savings allocation with auto-algorithm
+- Portfolio analysis and re-allocation help
+
+**Additional Goal Types:**
+- Emergency Fund
+- Vacation/Travel
+- Marriage
+- Custom goal types
+
+### Phase 3: Goal Management & Advanced Features
+
+**Goal Management:**
+- Delete goal functionality
+- Duplicate/clone goal
+- Rename goal
+- Export goal plan (PDF/Excel)
+- Share goal plan
+
+**Advanced Features:**
+- Goal comparison view
+- Progress tracking integration
+- Goal analytics and insights
+
 ---
 
 ## Implementation Considerations
@@ -1235,20 +2338,66 @@ Results Display
 **Components Structure:**
 ```
 GoalPlanningPage/
-├─ GoalPlanningPage.jsx (Main container)
-├─ components/
-│  ├─ GoalForm.jsx (Input form)
+├─ GoalPlanningPage.jsx (Main container/router - landing vs form)
+├─ GoalPlanningLanding.jsx (New - Landing page with goal list)
+├─ GoalPlanningForm.jsx (Form component)
+│  ├─ GoalNameInput.jsx (New - with uniqueness validation)
+│  ├─ AutoSaveIndicator.jsx (New - visual feedback for save status)
+│  ├─ EducationalSidePanel.jsx (Contextual information panel)
+│  ├─ ImpactPreview.jsx (Real-time impact visualization)
+│  ├─ ProgressiveForm.jsx (Step-based form wrapper)
+│  ├─ ExampleScenarios.jsx (Reusable example component)
+│  ├─ WhatHowWhyTooltip.jsx (Educational tooltip component)
 │  ├─ RiskProfileSelector.jsx (Quick + Detailed)
 │  ├─ CurrentSavingsAllocator.jsx (Auto + Manual)
 │  ├─ GoalPlanningResults.jsx (Results display)
 │  ├─ RecommendationsTable.jsx (Specific recommendations)
-│  ├─ ProjectionChart.jsx (Growth graph)
+│  ├─ ProjectionChart.jsx (Growth graph with annotations)
 │  ├─ InflationComparison.jsx (Nominal vs real)
 │  └─ ShortfallRecommendations.jsx (Shortfall options)
+├─ GoalCard.jsx (New - Card component for goal list display)
 ├─ hooks/
-│  └─ useGoalPlanning.js (Calculation logic)
-└─ schemas/
-   └─ goalPlanningSchema.js (Joi validation)
+│  ├─ useGoalPlanning.js (Calculation logic)
+│  └─ useImpactPreview.js (Impact calculation hook)
+├─ schemas/
+│  └─ goalPlanningSchema.js (Joi validation)
+└─ constants/
+   └─ educationalContent.js (What/How/Why content library)
+```
+
+**Layout Structure:**
+
+**Desktop:**
+```
+┌─────────────────────┬──────────────────────┐
+│                     │                      │
+│   Form Section      │   Side Panel         │
+│   (Left, 60%)       │   (Right, 40%)      │
+│                     │                      │
+│   [Progressive Form]│   [Contextual Info] │
+│   [Impact Preview]  │   [What/How/Why]     │
+│                     │   [Examples]         │
+│                     │   [FAQs]             │
+└─────────────────────┴──────────────────────┘
+│   Results Section (Full width below)       │
+│   [Results Cards] [Charts] [Tables]        │
+└────────────────────────────────────────────┘
+```
+
+**Mobile:**
+```
+┌─────────────────────┐
+│   Form Section      │
+│   [Progressive Form]│
+│   [Drawer Toggle]  │ ← Opens side panel
+│   [Impact Preview]  │   (Slide-out drawer)
+│   [Collapsible]     │
+├─────────────────────┤
+│   Results Section   │
+│   [Results Cards]    │
+│   [Charts]          │
+│   [Tables]          │
+└─────────────────────┘
 ```
 
 **Calculation Engine:**
@@ -1257,6 +2406,22 @@ GoalPlanningPage/
 - Tax-adjusted calculations
 - Shortfall detection algorithm
 - Recommendation generation algorithm
+
+**Goal Plan Storage Service:**
+- **File:** `src/utils/goalPlanStorage.js`
+- **Storage Key:** `wealth-mngr-goal-plans`
+- **Functions:**
+  - `saveGoalPlan(goalPlan)`: Save new or update existing goal plan
+  - `getGoalPlan(id)`: Retrieve specific goal plan by ID
+  - `getAllGoalPlans()`: Get all saved goal plans
+  - `updateGoalPlan(id, updates)`: Update existing goal plan
+  - `generateUniqueGoalName(baseName)`: Generate unique name with auto-numbering
+  - `deleteGoalPlan(id)`: Delete goal plan (Phase 3)
+- **Features:**
+  - JSON serialization/deserialization
+  - Error handling for localStorage limits
+  - Data validation on load
+  - Migration support for future schema changes
 
 ### Financial Accuracy Requirements
 
@@ -1280,6 +2445,165 @@ GoalPlanningPage/
 - FD: Interest taxable as per slab
 - NPS: 60% tax-free, 40% taxable
 - Equity: LTCG after 1 year
+
+### Mobile-Specific Requirements
+
+#### Responsive Layout Patterns
+
+**Side Panel (Educational Content):**
+- **Desktop**: Fixed right panel (40% width), always visible
+- **Mobile**: Slide-out drawer (overlay), accessible via:
+  - Floating action button (FAB) with info icon
+  - Drawer toggle button in header
+  - Swipe gesture from right edge
+- **Drawer Behavior**:
+  - Opens from right side
+  - Backdrop overlay (semi-transparent)
+  - Close via: X button, backdrop tap, or swipe right
+  - Smooth slide animation (300ms)
+
+**Impact Preview Panel:**
+- **Desktop**: Side-by-side with form or below form
+- **Mobile**: Collapsible section below form
+  - Default: Collapsed (shows summary only)
+  - Expandable: Tap to expand full preview
+  - Sticky header: "Impact Preview" always visible
+  - Smooth expand/collapse animation
+
+**Form Inputs:**
+- **Touch-Friendly Targets**: Minimum 44x44px tap targets
+- **Input Fields**: Large, readable fonts (16px minimum)
+- **Radio Buttons/Cards**: Large, easily tappable
+- **Sliders**: Thumb size appropriate for touch
+- **Dropdowns**: Full-screen modals or bottom sheets on mobile
+
+**Charts and Visualizations:**
+- **Responsive Charts**: Stack vertically on mobile
+- **Pie Chart**: Larger segments for easier tapping
+- **Projection Graph**: Horizontal scroll enabled
+- **Tooltips**: Tap to show, tap outside to dismiss
+- **Comparison Views**: Swipeable cards or tabs
+
+**Progressive Disclosure:**
+- **Accordion Pattern**: Collapsible sections
+- **Expandable Sections**: Smooth animations
+- **Sticky Headers**: Section headers remain visible while scrolling
+- **Breadcrumb Navigation**: Show current step/progress
+
+**Performance Considerations:**
+- **Lazy Loading**: Load educational content on demand
+- **Image Optimization**: Optimize example images
+- **Animation Performance**: Use CSS transforms for smooth animations
+- **Viewport Optimization**: Minimize reflows/repaints
+
+#### Mobile-Specific Interactions
+
+**Gestures:**
+- **Swipe Right**: Close side panel drawer
+- **Swipe Left**: Open side panel drawer (from edge)
+- **Swipe Up/Down**: Scroll through form sections
+- **Pinch Zoom**: Disabled for charts (prevent accidental zoom)
+
+**Navigation:**
+- **Sticky Header**: Progress indicator and navigation
+- **Back Button**: Browser back button returns to previous step
+- **Scroll Restoration**: Remember scroll position when returning
+
+**Accessibility:**
+- **Screen Reader Support**: Proper ARIA labels
+- **Focus Management**: Focus moves to opened drawer
+- **Keyboard Navigation**: Tab through form elements
+- **High Contrast**: Support for system dark mode
+
+#### Mobile Component Specifications
+
+**EducationalSidePanel (Mobile):**
+- Width: 85% of screen width
+- Height: Full screen height
+- Position: Overlay (above content)
+- Animation: Slide in from right
+- Close button: Top-right corner
+
+**ImpactPreview (Mobile):**
+- Collapsible card component
+- Summary view: Key metrics only
+- Expanded view: Full breakdown
+- Sticky positioning: Optional (can scroll with content)
+
+**ProgressiveForm (Mobile):**
+- Single column layout
+- Step indicators: Top of form
+- Section dividers: Clear visual separation
+- Smooth scroll: Auto-scroll to next section on step completion
+
+---
+
+## Future Enhancements
+
+### Goal Management Features (Phase 3+)
+
+**Delete Goal Functionality:**
+- Delete button on goal cards
+- Confirmation dialog before deletion
+- Permanent removal from localStorage
+- Empty state handling after deletion
+
+**Duplicate/Clone Goal:**
+- "Duplicate" option on goal cards
+- Creates new goal with same data but different name
+- Auto-generates new ID and name (e.g., "Retirement Copy")
+- Useful for creating similar goals with slight variations
+
+**Rename Goal:**
+- Edit goal name inline or via modal
+- Validation: Same uniqueness rules as new goals
+- Updates localStorage without changing ID
+- Updates `updatedAt` timestamp
+
+**Export Functionality:**
+- Export goal plan as PDF
+- Export goal plan as Excel/CSV
+- Include form data and calculated results
+- Printable format option
+
+**Share Goal Plan:**
+- Generate shareable link (if backend integration)
+- Export as JSON file
+- Email goal plan summary
+
+**Goal Comparison View:**
+- Side-by-side comparison of multiple goals
+- Compare corpus, SIP requirements, timelines
+- Visual comparison charts
+
+**Progress Tracking Integration:**
+- Track actual investments vs planned
+- Show progress towards goal
+- Update projections based on actual performance
+- Milestone tracking
+
+### Additional Features
+
+**Goal Analytics:**
+- Dashboard showing all goals overview
+- Total SIP required across all goals
+- Timeline visualization
+- Risk profile distribution
+
+**Goal Recommendations:**
+- AI-powered suggestions based on user profile
+- Optimal goal prioritization
+- Resource allocation recommendations
+
+**Goal Templates:**
+- Pre-built goal templates
+- Common scenarios (e.g., "Retirement at 60")
+- Quick start options
+
+**Backup & Sync:**
+- Export/import all goals
+- Cloud sync (if backend integration)
+- Cross-device access
 
 ---
 
