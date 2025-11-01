@@ -1,0 +1,338 @@
+import { useForm } from 'react-hook-form'
+import { joiResolver } from '@hookform/resolvers/joi'
+import { useEffect } from 'react'
+import CalculatorLayout from '@/components/common/Layout/CalculatorLayout'
+import InputField from '@/components/common/InputField/InputField'
+import Slider from '@/components/common/Slider/Slider'
+import ToggleSwitch from '@/components/common/ToggleSwitch/ToggleSwitch'
+import EquityCalculatorResults from './EquityCalculatorResults'
+import EquityCalculatorInfo from './EquityCalculatorInfo'
+import EquityCalculatorTable from './EquityCalculatorTable'
+import useEquityCalculator from './useEquityCalculator'
+import { equitySchema } from './equitySchema'
+import { investmentRates } from '@/constants/investmentRates'
+import { formatCurrency, formatPercentageValue } from '@/utils/formatters'
+
+/**
+ * Equity Calculator Component
+ * 
+ * Real-time equity calculator supporting both SIP and Lumpsum investment modes
+ * Features:
+ * - Investment type selection (SIP or Lumpsum)
+ * - Investment amount input (₹500+)
+ * - Tenure input (years)
+ * - Expected CAGR input (default 12%, user-defined)
+ * - Step-up SIP option with annual increase percentage (SIP mode only)
+ * - Inflation adjustment toggle
+ * - Real-time calculations with results panel, pie chart, and evolution table
+ * - Market-linked returns with appropriate warnings
+ */
+const EquityCalculator = () => {
+  const { register, watch, setValue, formState: { errors } } = useForm({
+    resolver: joiResolver(equitySchema),
+    defaultValues: {
+      investmentType: 'sip',
+      amount: 5000,
+      tenure: 5,
+      expectedCAGR: investmentRates.equity.defaultExpectedReturn,
+      stepUpEnabled: false,
+      stepUpPercentage: 10,
+      adjustInflation: false
+    },
+    mode: 'onChange'
+  })
+
+  // Watch form values for real-time updates
+  const investmentType = watch('investmentType')
+  const amount = watch('amount')
+  const tenure = watch('tenure')
+  const expectedCAGR = watch('expectedCAGR')
+  const stepUpEnabled = watch('stepUpEnabled')
+  const stepUpPercentage = watch('stepUpPercentage')
+  const adjustInflation = watch('adjustInflation')
+
+  // Convert string values to numbers
+  const amountNum = parseFloat(amount) || 0
+  const tenureNum = parseFloat(tenure) || 0
+  const expectedCAGRNum = parseFloat(expectedCAGR) || 0
+  const stepUpPercentageNum = parseFloat(stepUpPercentage) || 0
+
+  // Calculate results using custom hook
+  const results = useEquityCalculator(
+    investmentType,
+    amountNum,
+    tenureNum,
+    expectedCAGRNum,
+    investmentType === 'sip' ? stepUpEnabled : false,
+    stepUpPercentageNum,
+    adjustInflation
+  )
+
+  // Disable step-up when switching to lumpsum mode
+  useEffect(() => {
+    if (investmentType === 'lumpsum' && stepUpEnabled) {
+      setValue('stepUpEnabled', false, { shouldValidate: true })
+    }
+  }, [investmentType, stepUpEnabled, setValue])
+
+  // Calculate max values for sliders
+  const maxAmount = investmentType === 'sip' ? 100000 : 10000000 // ₹1 lakh for SIP, ₹1 crore for Lumpsum
+  const maxTenure = 50
+  const maxCAGR = 30
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Calculator Header */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4">
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+          Equity Calculator
+        </h1>
+        <p className="text-gray-600 dark:text-gray-400">
+          Calculate your direct equity investment returns (SIP or Lumpsum) with market-linked returns
+        </p>
+      </div>
+
+      {/* Risk Warning Banner */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-4">
+        <div className="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 dark:border-red-400 p-4 rounded-lg">
+          <div className="flex items-start">
+            <svg className="w-5 h-5 text-red-500 dark:text-red-400 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+            </svg>
+            <div>
+              <h3 className="text-sm font-semibold text-red-800 dark:text-red-200 mb-1">
+                High Risk Investment Warning
+              </h3>
+              <p className="text-sm text-red-700 dark:text-red-300">
+                Equity investments are subject to market risk. Returns shown are estimates based on expected CAGR and may vary significantly. Past performance does not guarantee future returns. Please invest only if you understand the risks involved.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <CalculatorLayout
+          inputPanel={
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                Investment Details
+              </h2>
+
+              {/* Investment Type Selection */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                  Investment Type
+                </label>
+                <div className="grid grid-cols-2 gap-4">
+                  <label
+                    className={`flex items-center p-4 border rounded-lg cursor-pointer transition-colors ${
+                      investmentType === 'sip'
+                        ? 'border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/20'
+                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      {...register('investmentType')}
+                      value="sip"
+                      className="mr-3"
+                    />
+                    <div>
+                      <div className="text-sm font-medium text-gray-900 dark:text-white">
+                        SIP
+                      </div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">
+                        Systematic Investment Plan
+                      </div>
+                    </div>
+                  </label>
+                  <label
+                    className={`flex items-center p-4 border rounded-lg cursor-pointer transition-colors ${
+                      investmentType === 'lumpsum'
+                        ? 'border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/20'
+                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      {...register('investmentType')}
+                      value="lumpsum"
+                      className="mr-3"
+                    />
+                    <div>
+                      <div className="text-sm font-medium text-gray-900 dark:text-white">
+                        Lumpsum
+                      </div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">
+                        One-time Investment
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              {/* Investment Amount */}
+              <div>
+                <InputField
+                  label={investmentType === 'sip' ? 'Monthly SIP Amount' : 'Investment Amount'}
+                  type="number"
+                  {...register('amount', { 
+                    valueAsNumber: true
+                  })}
+                  onChange={(e) => {
+                    const value = parseFloat(e.target.value) || 0
+                    setValue('amount', value, { shouldValidate: true })
+                  }}
+                  error={errors.amount?.message}
+                  showCurrency
+                  placeholder={investmentType === 'sip' ? '5000' : '100000'}
+                  min={500}
+                  step={investmentType === 'sip' ? 500 : 1000}
+                  className="mb-4"
+                />
+                <Slider
+                  label=""
+                  min={500}
+                  max={maxAmount}
+                  value={amountNum || (investmentType === 'sip' ? 5000 : 100000)}
+                  onChange={(value) => setValue('amount', value, { shouldValidate: true })}
+                  step={investmentType === 'sip' ? 500 : 1000}
+                  showCurrency
+                  formatValue={(val) => formatCurrency(val)}
+                />
+              </div>
+
+              {/* Tenure */}
+              <div>
+                <InputField
+                  label="Investment Tenure (Years)"
+                  type="number"
+                  {...register('tenure', { 
+                    valueAsNumber: true
+                  })}
+                  onChange={(e) => {
+                    const value = parseFloat(e.target.value) || 0
+                    setValue('tenure', value, { shouldValidate: true })
+                  }}
+                  error={errors.tenure?.message}
+                  placeholder="5"
+                  min={1}
+                  max={maxTenure}
+                  step={1}
+                  className="mb-4"
+                />
+                <Slider
+                  label=""
+                  min={1}
+                  max={maxTenure}
+                  value={tenureNum || 5}
+                  onChange={(value) => setValue('tenure', value, { shouldValidate: true })}
+                  step={1}
+                  formatValue={(val) => `${val} ${val === 1 ? 'year' : 'years'}`}
+                />
+              </div>
+
+              {/* Expected CAGR */}
+              <div>
+                <InputField
+                  label="Expected CAGR (% p.a.)"
+                  type="number"
+                  {...register('expectedCAGR', { 
+                    valueAsNumber: true
+                  })}
+                  onChange={(e) => {
+                    const value = parseFloat(e.target.value) || 0
+                    setValue('expectedCAGR', value, { shouldValidate: true })
+                  }}
+                  error={errors.expectedCAGR?.message}
+                  placeholder="12"
+                  min={0}
+                  max={maxCAGR}
+                  step={0.1}
+                  className="mb-4"
+                />
+                <div className="mb-2">
+                  <Slider
+                    label=""
+                    min={0}
+                    max={maxCAGR}
+                    value={expectedCAGRNum || 12}
+                    onChange={(value) => setValue('expectedCAGR', value, { shouldValidate: true })}
+                    step={0.1}
+                    formatValue={(val) => formatPercentageValue(val)}
+                  />
+                </div>
+                <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-2">
+                  <strong>Note:</strong> This is an estimate. Historical equity market returns in India have averaged around 10-15% p.a. over long periods, but individual stocks may vary significantly.
+                </p>
+              </div>
+
+              {/* Step-up SIP Toggle (only shown for SIP mode) */}
+              {investmentType === 'sip' && (
+                <>
+                  <ToggleSwitch
+                    label="Enable Step-up SIP"
+                    checked={stepUpEnabled}
+                    onChange={(checked) => setValue('stepUpEnabled', checked, { shouldValidate: true })}
+                    description="Increase your SIP amount annually by a fixed percentage"
+                  />
+
+                  {/* Step-up Percentage (shown when step-up is enabled) */}
+                  {stepUpEnabled && (
+                    <div>
+                      <InputField
+                        label="Annual Step-up Percentage (%)"
+                        type="number"
+                        {...register('stepUpPercentage', { 
+                          valueAsNumber: true
+                        })}
+                        onChange={(e) => {
+                          const value = parseFloat(e.target.value) || 0
+                          setValue('stepUpPercentage', value, { shouldValidate: true })
+                        }}
+                        error={errors.stepUpPercentage?.message}
+                        placeholder="10"
+                        min={0}
+                        max={100}
+                        step={1}
+                        className="mb-4"
+                      />
+                      <Slider
+                        label=""
+                        min={0}
+                        max={50}
+                        value={stepUpPercentageNum || 10}
+                        onChange={(value) => setValue('stepUpPercentage', value, { shouldValidate: true })}
+                        step={1}
+                        formatValue={(val) => formatPercentageValue(val)}
+                      />
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* Inflation Adjustment Toggle */}
+              <ToggleSwitch
+                label="Adjust for Inflation"
+                checked={adjustInflation}
+                onChange={(checked) => setValue('adjustInflation', checked, { shouldValidate: true })}
+                description="Show real returns after accounting for inflation"
+              />
+            </div>
+          }
+          resultsPanel={
+            <EquityCalculatorResults results={results} />
+          }
+          infoPanel={
+            <EquityCalculatorInfo />
+          }
+          evolutionTable={
+            <EquityCalculatorTable evolution={results?.evolution} />
+          }
+        />
+    </div>
+  )
+}
+
+export default EquityCalculator
+

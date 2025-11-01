@@ -1,66 +1,41 @@
-# Multi-Agent Development Quick Start
+# Quick Start Guide
 
-## Initial Setup
+## Project Status
 
-1. **Initialize Git Repository** (Already done)
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   ```
+✅ **All 10 Calculators Complete**: FD, SIP, NSC, SGB, NPS, PPF, SSY, SCSS, Equity, ELSS
 
-2. **Create Feature Branches**
-   ```bash
-   git checkout -b develop
-   git checkout -b feature/ppf-calculator
-   git checkout -b feature/fd-calculator
-   # ... etc
-   ```
+## Current Focus
 
-3. **Setup Git Worktrees** (Optional, for parallel development)
-   ```bash
-   ./scripts/setup-worktrees.sh
-   ```
+- Goal Planning Page implementation
+- Corpus Calculator Page implementation
+- Testing and polish
+- Performance optimizations
 
 ## Quick Reference
 
-### Stub Files Location
-```
-src/components/calculators/{CalculatorName}/{CalculatorName}.stub.jsx
-```
+### Documentation Files
+- `docs/architecture.md` - System architecture and technical specifications
+- `docs/PLAN.md` - Main implementation plan and status
+- `docs/HANDOFF.md` - Implementation patterns and completed calculators reference
 
-### Plan Files Location
+### Calculator Implementations
+All calculators are located in:
 ```
-docs/calculators/PLAN-{CalculatorName}.md
-```
-
-### Handoff Documentation
-```
-docs/HANDOFF.md
+src/components/calculators/{CalculatorName}/
 ```
 
-## Workflow
+Reference implementations:
+- `FDCalculator` - Flexible compounding options
+- `SIPCalculator` - Step-up SIP with inflation adjustment
+- `EquityCalculator` - SIP/Lumpsum modes with step-up SIP
 
-1. Pick a calculator stub file
-2. Read corresponding PLAN file
-3. Copy stub to main component file
-4. Implement following PLAN.md
-5. Create feature branch
-6. Commit and push
+## Development Workflow
 
-## Git Worktrees
+1. Review existing calculator implementations for patterns
+2. Follow architecture guidelines in `docs/architecture.md`
+3. Use common components from `@/components/common`
+4. Implement calculations using utilities from `@/utils/calculations.js`
+5. Add validation using Joi schemas
+6. Ensure responsive design (desktop: side-by-side, mobile: stacked)
 
-Use worktrees for parallel development:
-
-```bash
-# List worktrees
-git worktree list
-
-# Create new worktree
-git worktree add ../wealth-mngr-ppf -b feature/ppf-calculator
-
-# Remove worktree
-git worktree remove ../wealth-mngr-ppf
-```
-
-See `docs/HANDOFF.md` for detailed workflow.
+See `docs/HANDOFF.md` for detailed implementation patterns.

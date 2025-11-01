@@ -88,10 +88,9 @@ src/
 └── docs/
     ├── architecture.md       # This file
     ├── PLAN.md              # Main implementation plan
-    └── calculators/
-        ├── PLAN-PPF.md
-        ├── PLAN-FD.md
-        └── ... (10 PLAN files)
+    ├── HANDOFF.md           # Implementation patterns and reference guide
+    ├── QUICKSTART.md        # Quick start guide
+    └── SETUP_STATUS.md      # Setup status
 ```
 
 ## State Management Strategy
@@ -325,8 +324,20 @@ npm run build  # Creates optimized production build
 - Common reusable components (InputField, Slider, ToggleSwitch, ResultCard, PieChart, InvestmentTable)
 - All components feature premium styling, dark mode support, and accessibility features
 
+### ✅ Completed (Phase 2)
+- **FD Calculator** - Complete with flexible compounding and tenure options
+- **SIP Calculator** - Complete with step-up SIP and inflation adjustment
+- **NSC Calculator** - Complete with 5-year fixed tenure
+- **SGB Calculator** - Complete with real-time gold price integration
+- **NPS Calculator** - Complete with asset allocation options
+- **PPF Calculator** - Complete with step-up option
+- **SSY Calculator** - Complete with age validation
+- **SCSS Calculator** - Complete with quarterly interest
+- **Equity Calculator** - Complete with SIP/Lumpsum modes and step-up SIP
+- **ELSS Calculator** - Complete with 3-year lock-in
+- Calculator index page with card-based navigation
+
 ### 📋 Pending
-- Individual calculator components (10 calculators)
 - Goal Planning Page
 - Corpus Calculator Page
 - Testing and polish
@@ -459,14 +470,10 @@ npm run lint
 
 ## Documentation Structure
 
-- **architecture.md**: This file - system overview
+- **architecture.md**: This file - system overview and technical specifications
 - **PLAN.md**: Main implementation plan with progress tracking
-- **calculators/PLAN-*.md**: Individual calculator implementation details
+- **HANDOFF.md**: Implementation patterns and reference guide for completed calculators
+- **QUICKSTART.md**: Quick start guide for developers
+- **SETUP_STATUS.md**: Project setup and status information
 
-Each PLAN file includes:
-- Component structure
-- Input fields with validation
-- Calculation formulas
-- Expected outputs
-- Test cases
-- Dependencies
+All calculators are complete and documented in HANDOFF.md with implementation details.

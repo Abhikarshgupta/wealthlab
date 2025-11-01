@@ -110,9 +110,21 @@ Based on latest government and market data:
 - **PieChart**: Highcharts integration, dark mode support, responsive, customizable
 - **InvestmentTable**: Premium styling, hover effects, gradient headers, tabular numbers, totals row
 
-## Phase 2: Individual Investment Calculators (📋 PENDING)
+## Phase 2: Individual Investment Calculators (✅ COMPLETED)
 
-Each calculator follows the same structure and is documented in `/docs/calculators/PLAN-*.md`.
+All calculators follow the same structure and were documented in `/docs/calculators/PLAN-*.md` (now archived as all calculators are complete).
+
+**Status**: 10 of 10 calculators complete (100%)
+- ✅ FD Calculator - COMPLETE
+- ✅ SIP Calculator - COMPLETE
+- ✅ NSC Calculator - COMPLETE
+- ✅ SGB Calculator - COMPLETE
+- ✅ NPS Calculator - COMPLETE
+- ✅ PPF Calculator - COMPLETE
+- ✅ SSY Calculator - COMPLETE
+- ✅ SCSS Calculator - COMPLETE
+- ✅ Equity Calculator - COMPLETE (with step-up SIP support)
+- ✅ ELSS Calculator - COMPLETE
 
 ### Calculator Layout Structure
 ```
@@ -152,49 +164,54 @@ Mobile:
 5. **Evolution Table:** Year-wise breakdown
 
 ### Calculators to Build
-1. **PPF Calculator** (`PLAN-PPF.md`)
+1. **PPF Calculator** ✅ **COMPLETE**
    - Formula: A = P × [(1 + r)^n - 1] / r × (1 + r)
    - Annual compounding
    - Step-up option
    - Max ₹1.5L/year
 
-2. **FD Calculator** (`PLAN-FD.md`)
+2. **FD Calculator** ✅ **COMPLETE**
    - Formula: A = P × (1 + r/n)^(nt)
-   - Quarterly compounding
+   - Flexible compounding: Quarterly, Monthly, Annually, Cumulative
+   - Flexible tenure: Years/Months toggle (1-10 years or 1-120 months)
    - Lumpsum only
+   - Enhanced with bank-style configuration options
 
-3. **SIP Calculator** (`PLAN-SIP.md`)
+3. **SIP Calculator** ✅ **COMPLETE**
    - Formula: FV = P × [(1 + r)^n - 1] / r × (1 + r)
    - Monthly investment
    - Step-up SIP option
 
-4. **SSY Calculator** (`PLAN-SSY.md`)
+4. **SSY Calculator** ✅ **COMPLETE**
    - Same as PPF formula
    - Yearly contribution
    - Age validation (girl child < 10 years)
 
-5. **NSC Calculator** (`PLAN-NSC.md`)
+5. **NSC Calculator** ✅ **COMPLETE**
    - Formula: A = P × (1 + r)^n
    - Annual compounding, paid at maturity
    - 5-year lock-in
 
-6. **SCSS Calculator** (`PLAN-SCSS.md`)
+6. **SCSS Calculator** ✅ **COMPLETE**
    - Quarterly interest
    - Age validation (60+ years)
 
-7. **SGB Calculator** (`PLAN-SGB.md`)
+7. **SGB Calculator** ✅ **COMPLETE**
    - Fixed interest: 2.5% p.a. + gold appreciation
    - User-adjustable gold appreciation rate
+   - Real-time gold price integration
 
-8. **Equity Calculator** (`PLAN-Equity.md`)
-   - SIP or lumpsum
+8. **Equity Calculator** ✅ **COMPLETE**
+   - SIP or lumpsum modes
    - User-input expected CAGR
+   - Step-up SIP option
+   - Comprehensive risk warnings
 
-9. **ELSS Calculator** (`PLAN-ELSS.md`)
+9. **ELSS Calculator** ✅ **COMPLETE**
    - Similar to SIP
    - 3-year lock-in
 
-10. **NPS Calculator** (`PLAN-NPS.md`)
+10. **NPS Calculator** ✅ **COMPLETE**
     - Asset allocation (Equity/Debt/Corporate Bonds)
     - Variable returns based on allocation
 
@@ -261,21 +278,21 @@ Mobile:
 - [x] PieChart component (Highcharts)
 - [x] InvestmentTable component
 
-### 📋 Week 2-3: Core Calculators (NEXT)
-- [ ] PPF Calculator
-- [ ] FD Calculator
-- [ ] SIP Calculator
+### ✅ Week 2-3: Core Calculators (COMPLETED)
+- [x] PPF Calculator ✅ **COMPLETE**
+- [x] FD Calculator ✅ **COMPLETE**
+- [x] SIP Calculator ✅ **COMPLETE**
 
-### 📋 Week 3-4: Additional Calculators
-- [ ] SSY Calculator
-- [ ] NSC Calculator
-- [ ] SCSS Calculator
-- [ ] SGB Calculator
+### ✅ Week 3-4: Additional Calculators (COMPLETED)
+- [x] SSY Calculator ✅ **COMPLETE**
+- [x] NSC Calculator ✅ **COMPLETE**
+- [x] SCSS Calculator ✅ **COMPLETE**
+- [x] SGB Calculator ✅ **COMPLETE**
 
-### 📋 Week 4-5: Market-Linked Calculators
-- [ ] Equity Calculator
-- [ ] ELSS Calculator
-- [ ] NPS Calculator
+### ✅ Week 4-5: Market-Linked Calculators (COMPLETED)
+- [x] Equity Calculator ✅ **COMPLETE**
+- [x] ELSS Calculator ✅ **COMPLETE**
+- [x] NPS Calculator ✅ **COMPLETE**
 
 ### 📋 Week 5-6: Advanced Features
 - [ ] Goal Planning Page
@@ -341,12 +358,12 @@ CAGR = (Ending Value / Beginning Value)^(1/years) - 1
 
 ## Notes for Parallel Development
 
-Each calculator is independent and can be developed in parallel:
-1. Create PLAN-*.md file in `/docs/calculators/`
-2. Build calculator component following the structure
-3. Use common components from `/components/common/`
-4. Follow calculation formulas from `/utils/calculations.js`
-5. Use validation schemas with Joi
-6. Test against reference calculators
+All calculators are complete. For new features or modifications:
+1. Review existing calculator implementations for patterns
+2. Use common components from `/components/common/`
+3. Follow calculation formulas from `/utils/calculations.js`
+4. Use validation schemas with Joi
+5. Test against reference calculators
+6. Follow architecture guidelines in `architecture.md`
 
-See `architecture.md` for detailed technical specifications.
+See `architecture.md` and `HANDOFF.md` for detailed technical specifications and implementation patterns.
