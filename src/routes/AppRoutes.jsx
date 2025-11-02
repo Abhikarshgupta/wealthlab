@@ -4,6 +4,9 @@ import Home from '@/pages/Home/Home'
 import CalculatorPage from '@/pages/calculators/CalculatorPage'
 import GoalPlanningPage from '@/pages/GoalPlanningPage/GoalPlanningPage'
 import CorpusCalculatorPage from '@/pages/CorpusCalculatorPage/CorpusCalculatorPage'
+import PrivacyPolicy from '@/pages/Legal/PrivacyPolicy'
+import TermsOfService from '@/pages/Legal/TermsOfService'
+import Disclaimer from '@/pages/Legal/Disclaimer'
 
 const AppRoutes = () => {
   return (
@@ -22,6 +25,9 @@ const AppRoutes = () => {
       <Route path={routes.calculators.scss} element={<CalculatorPage calculatorType="scss" />} />
       <Route path={routes.goalPlanning} element={<GoalPlanningPage />} />
       <Route path={routes.corpusCalculator} element={<CorpusCalculatorPage />} />
+      <Route path={routes.legal.privacy} element={<PrivacyPolicy />} />
+      <Route path={routes.legal.terms} element={<TermsOfService />} />
+      <Route path={routes.legal.disclaimer} element={<Disclaimer />} />
     </Routes>
   )
 }
