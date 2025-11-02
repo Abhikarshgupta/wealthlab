@@ -13,6 +13,7 @@ import { investmentRates } from '@/constants/investmentRates'
 import { formatCurrency, formatPercentageValue } from '@/utils/formatters'
 import { 
   convertYearsMonthsToYears, 
+  convertYearsMonthsToMonths,
   normalizeYearsMonths,
   formatTenureDisplay,
   migrateFDData 
