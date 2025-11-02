@@ -22,7 +22,7 @@ const Footer = () => {
             <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Resources</h3>
             <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
               <li>Goal Planning</li>
-              <li>Corpus Calculator</li>
+              <li>Corpus Simulator</li>
               <li>Investment Guides</li>
             </ul>
           </div>

@@ -5,14 +5,15 @@ import {
   calculateRealReturn
 } from '@/utils/calculations'
 import useUserPreferencesStore from '@/store/userPreferencesStore'
+import { convertYearsMonthsToYears, convertYearsMonthsToMonths } from '@/utils/fdTenureUtils'
 
 /**
  * Custom hook for FD Calculator calculations
  * Handles real-time calculations with inflation adjustments
  * 
  * @param {number} principal - Principal investment amount
- * @param {number} tenure - Tenure value
- * @param {string} tenureUnit - 'years' or 'months'
+ * @param {number} tenureYears - Number of years (0 or positive integer)
+ * @param {number} tenureMonths - Number of months (0-11)
  * @param {number} rate - Annual interest rate (as percentage, e.g., 6.5 for 6.5%)
  * @param {string} compoundingFrequency - 'quarterly', 'monthly', 'annually', or 'cumulative'
  * @param {boolean} adjustInflation - Whether to adjust for inflation
@@ -20,8 +21,8 @@ import useUserPreferencesStore from '@/store/userPreferencesStore'
  */
 const useFDCalculator = (
   principal,
-  tenure,
-  tenureUnit,
+  tenureYears,
+  tenureMonths,
   rate,
   compoundingFrequency,
   adjustInflation
@@ -31,22 +32,23 @@ const useFDCalculator = (
   const inflationRate = defaultInflationRate / 100 // Convert to decimal
 
   useEffect(() => {
-    // Validate inputs - use explicit null/undefined checks instead of falsy checks
-    // Minimum rate is 0.1% (as per schema requirement)
+    // Validate inputs
     if (
       principal == null || principal < 1000 || 
-      tenure == null || tenure < 1 || 
+      tenureYears == null || tenureMonths == null ||
+      (tenureYears === 0 && tenureMonths === 0) ||
       rate == null || rate < 0.1
     ) {
       setResults(null)
       return
     }
 
-    // Convert tenure to years
-    const years = tenureUnit === 'months' ? tenure / 12 : tenure
+    // Convert years + months to total years (decimal)
+    const years = convertYearsMonthsToYears(tenureYears, tenureMonths)
+    const totalMonths = convertYearsMonthsToMonths(tenureYears, tenureMonths)
     
-    // For monthly tenure, round to 2 decimal places for display
-    const tenureYears = tenureUnit === 'months' ? Math.round((tenure / 12) * 100) / 100 : tenure
+    // For display purposes
+    const tenureYearsDisplay = years
 
     // Convert rates to decimals
     const annualRate = rate / 100
@@ -85,8 +87,7 @@ const useFDCalculator = (
       evolution = calculateFDEvolution(principal, annualRate, Math.ceil(years), compoundingFrequency)
     } else {
       // For tenure < 1 year, show monthly breakdown
-      const months = tenureUnit === 'months' ? tenure : Math.round(years * 12)
-      evolution = calculateFDMonthlyEvolution(principal, annualRate, months, compoundingFrequency)
+      evolution = calculateFDMonthlyEvolution(principal, annualRate, totalMonths, compoundingFrequency)
     }
 
     setResults({
@@ -98,12 +99,14 @@ const useFDCalculator = (
       realMaturityAmount: adjustInflation ? Math.round(realMaturityAmount * 100) / 100 : null,
       realInterestEarned: adjustInflation ? Math.round(realInterestEarned * 100) / 100 : null,
       evolution,
-      tenureYears, // Store for display purposes
+      tenureYears: tenureYearsDisplay, // Store for display purposes
+      tenureYearsInput: tenureYears,
+      tenureMonthsInput: tenureMonths,
     })
   }, [
     principal,
-    tenure,
-    tenureUnit,
+    tenureYears,
+    tenureMonths,
     rate,
     compoundingFrequency,
     adjustInflation,

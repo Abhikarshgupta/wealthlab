@@ -43,10 +43,10 @@ const Home = () => {
           className="card hover:shadow-lg transition-shadow"
         >
           <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">
-            Corpus Calculator
+            Corpus Simulator
           </h2>
           <p className="text-gray-600 dark:text-gray-400">
-            Project your portfolio across multiple investment instruments
+            Simulate your future corpus across multiple investment instruments
           </p>
         </Link>
       </div>

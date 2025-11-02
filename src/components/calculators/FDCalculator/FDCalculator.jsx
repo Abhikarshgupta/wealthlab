@@ -11,6 +11,12 @@ import useFDCalculator from './useFDCalculator'
 import { fdSchema } from './fdSchema'
 import { investmentRates } from '@/constants/investmentRates'
 import { formatCurrency, formatPercentageValue } from '@/utils/formatters'
+import { 
+  convertYearsMonthsToYears, 
+  normalizeYearsMonths,
+  formatTenureDisplay,
+  migrateFDData 
+} from '@/utils/fdTenureUtils'
 
 /**
  * FD Calculator Component
@@ -29,8 +35,8 @@ const FDCalculator = () => {
     resolver: joiResolver(fdSchema),
     defaultValues: {
       principal: 100000,
-      tenure: 5,
-      tenureUnit: 'years',
+      tenureYears: 1,
+      tenureMonths: 0,
       rate: investmentRates.fd.rate,
       compoundingFrequency: 'quarterly',
       adjustInflation: false
@@ -40,22 +46,27 @@ const FDCalculator = () => {
 
   // Watch form values for real-time updates
   const principal = watch('principal')
-  const tenure = watch('tenure')
-  const tenureUnit = watch('tenureUnit')
+  const tenureYears = watch('tenureYears')
+  const tenureMonths = watch('tenureMonths')
   const rate = watch('rate')
   const compoundingFrequency = watch('compoundingFrequency')
   const adjustInflation = watch('adjustInflation')
 
   // Convert string values to numbers
   const principalNum = parseFloat(principal) || 0
-  const tenureNum = parseFloat(tenure) || 0
+  const tenureYearsNum = parseInt(tenureYears) || 0
+  const tenureMonthsNum = parseInt(tenureMonths) || 0
   const rateNum = parseFloat(rate) || 0
+
+  // Normalize months if > 11
+  const normalizedTenure = normalizeYearsMonths(tenureYearsNum, tenureMonthsNum)
+  const totalYears = convertYearsMonthsToYears(normalizedTenure.years, normalizedTenure.months)
 
   // Calculate results using custom hook
   const results = useFDCalculator(
     principalNum,
-    tenureNum,
-    tenureUnit,
+    normalizedTenure.years,
+    normalizedTenure.months,
     rateNum,
     compoundingFrequency,
     adjustInflation
@@ -63,7 +74,6 @@ const FDCalculator = () => {
 
   // Calculate max values for sliders
   const maxPrincipal = 10000000 // ₹1 crore
-  const maxTenure = tenureUnit === 'years' ? 10 : 120 // 10 years or 120 months
   const maxRate = 20
 
   // Compounding frequency options
@@ -124,57 +134,80 @@ const FDCalculator = () => {
                 />
               </div>
 
-              {/* Tenure */}
+              {/* Tenure - Years and Months */}
               <div>
-                <div className="flex items-center justify-between mb-2">
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Tenure
-                  </label>
-                  <div className="flex items-center space-x-4">
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        {...register('tenureUnit')}
-                        value="years"
-                        className="mr-2"
-                      />
-                      <span className="text-sm text-gray-700 dark:text-gray-300">Years</span>
-                    </label>
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        {...register('tenureUnit')}
-                        value="months"
-                        className="mr-2"
-                      />
-                      <span className="text-sm text-gray-700 dark:text-gray-300">Months</span>
-                    </label>
+                <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
+                  Tenure
+                </label>
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <InputField
+                      label="Years"
+                      type="number"
+                      {...register('tenureYears', { 
+                        valueAsNumber: true
+                      })}
+                      onChange={(e) => {
+                        const value = parseInt(e.target.value) || 0
+                        setValue('tenureYears', Math.max(0, value), { shouldValidate: true })
+                        // Auto-normalize if needed
+                        const currentMonths = parseInt(tenureMonths) || 0
+                        const normalized = normalizeYearsMonths(value, currentMonths)
+                        if (normalized.months !== currentMonths) {
+                          setValue('tenureMonths', normalized.months, { shouldValidate: true })
+                        }
+                        if (normalized.years !== value) {
+                          setValue('tenureYears', normalized.years, { shouldValidate: true })
+                        }
+                      }}
+                      error={errors.tenureYears?.message}
+                      placeholder="0"
+                      min={0}
+                      max={10}
+                      step={1}
+                    />
+                  </div>
+                  <div>
+                    <InputField
+                      label="Months"
+                      type="number"
+                      {...register('tenureMonths', { 
+                        valueAsNumber: true
+                      })}
+                      onChange={(e) => {
+                        const value = parseInt(e.target.value) || 0
+                        const normalized = normalizeYearsMonths(tenureYearsNum || 0, value)
+                        setValue('tenureYears', normalized.years, { shouldValidate: true })
+                        setValue('tenureMonths', normalized.months, { shouldValidate: true })
+                      }}
+                      error={errors.tenureMonths?.message || errors.tenure?.message}
+                      placeholder="0"
+                      min={0}
+                      max={11}
+                      step={1}
+                    />
+                    {tenureMonthsNum >= 12 && (
+                      <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
+                        Normalized to {normalizedTenure.years} year{normalizedTenure.years !== 1 ? 's' : ''} {normalizedTenure.months} month{normalizedTenure.months !== 1 ? 's' : ''}
+                      </p>
+                    )}
                   </div>
                 </div>
-                <InputField
-                  type="number"
-                  {...register('tenure', { 
-                    valueAsNumber: true
-                  })}
-                  onChange={(e) => {
-                    const value = parseFloat(e.target.value) || 0
-                    setValue('tenure', value, { shouldValidate: true })
-                  }}
-                  error={errors.tenure?.message}
-                  placeholder={tenureUnit === 'years' ? '5' : '60'}
-                  min={1}
-                  max={maxTenure}
-                  step={1}
-                  className="mb-4"
-                />
+                {/* Combined slider showing total tenure */}
                 <Slider
                   label=""
-                  min={1}
-                  max={maxTenure}
-                  value={tenureNum || (tenureUnit === 'years' ? 5 : 60)}
-                  onChange={(value) => setValue('tenure', value, { shouldValidate: true })}
+                  min={0}
+                  max={120} // 10 years = 120 months
+                  value={convertYearsMonthsToMonths(normalizedTenure.years, normalizedTenure.months)}
+                  onChange={(value) => {
+                    // Convert slider value (total months) back to years + months
+                    const totalMonths = Math.max(1, Math.min(120, value))
+                    const normalized = normalizeYearsMonths(0, totalMonths)
+                    setValue('tenureYears', normalized.years, { shouldValidate: true })
+                    setValue('tenureMonths', normalized.months, { shouldValidate: true })
+                  }}
                   step={1}
-                  formatValue={(val) => `${val} ${tenureUnit === 'years' ? (val === 1 ? 'year' : 'years') : (val === 1 ? 'month' : 'months')}`}
+                  formatValue={(val) => formatTenureDisplay(Math.floor(val / 12), val % 12)}
                 />
               </div>
 
