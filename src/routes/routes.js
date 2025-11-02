@@ -14,5 +14,10 @@ export const routes = {
     scss: '/calculators/scss'
   },
   goalPlanning: '/goal-planning',
-  corpusCalculator: '/corpus-calculator'
+  corpusCalculator: '/corpus-calculator',
+  legal: {
+    privacy: '/privacy-policy',
+    terms: '/terms-of-service',
+    disclaimer: '/disclaimer'
+  }
 }

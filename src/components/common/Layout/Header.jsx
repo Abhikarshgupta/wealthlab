@@ -2,6 +2,10 @@ import { Link } from 'react-router-dom'
 import { useTheme } from '@/contexts/ThemeContext'
 import { routes } from '@/routes/routes'
 
+/**
+ * Header Component
+ * Navigation header with functional links and upcoming badges
+ */
 const Header = () => {
   const { theme, toggleTheme } = useTheme()
 
@@ -33,9 +37,12 @@ const Header = () => {
             </Link>
             <Link
               to={routes.goalPlanning}
-              className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+              className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors inline-flex items-center gap-2"
             >
               Goal Planning
+              <span className="px-1.5 py-0.5 text-xs bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 rounded">
+                Soon
+              </span>
             </Link>
             <Link
               to={routes.corpusCalculator}
