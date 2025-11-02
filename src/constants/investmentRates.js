@@ -34,6 +34,15 @@ export const investmentRates = {
     maxInvestment: 3000000,
     lockInPeriod: 5,
   },
+  pomis: {
+    rate: 7.4,
+    compounding: 'monthly',
+    lastUpdated: '2025-11-01',
+    minInvestment: 1000,
+    maxInvestmentSingle: 900000,
+    maxInvestmentJoint: 1500000,
+    lockInPeriod: 5,
+  },
   sgb: {
     fixedRate: 2.5, // Per annum, paid semi-annually
     goldAppreciation: 8, // Expected, user adjustable
@@ -70,6 +79,39 @@ export const investmentRates = {
     // User input expected
     defaultExpectedReturn: 12,
     lastUpdated: '2025-11-01',
+  },
+  ipo: {
+    // Market-linked, user-defined expected CAGR for post-listing period
+    defaultExpectedCAGR: 12,
+    lastUpdated: '2025-11-01',
+  },
+  etf: {
+    equity: 12,
+    debt: 7,
+    gold: 8,
+    international: 10,
+    lastUpdated: '2025-01-01',
+  },
+  debtMutualFund: {
+    liquid: 6.5, // Liquid funds (0-90 days)
+    shortTerm: 7.5, // Short-term debt (1-3 years)
+    longTerm: 8.5, // Long-term debt (3+ years)
+    gilt: 7.8, // Gilt funds
+    corporateBond: 8.2, // Corporate bond funds
+    lastUpdated: '2025-01-01',
+  },
+  reits: {
+    dividendYield: 7, // Default dividend yield percentage
+    capitalAppreciation: 6, // Default capital appreciation percentage
+    lastUpdated: '2025-01-01',
+  },
+  bonds54EC: {
+    rate: 5.75, // Default interest rate (% p.a.)
+    compounding: 'annual',
+    lastUpdated: '2025-01-01',
+    minInvestment: 1000,
+    maxInvestment: 5000000, // ₹50L per financial year
+    lockInPeriod: 5,
   },
 }
 

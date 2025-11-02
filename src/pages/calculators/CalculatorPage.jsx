@@ -8,10 +8,17 @@ import NSCalculator from '@/components/calculators/NSCalculator/NSCalculator'
 import SGBCalculator from '@/components/calculators/SGBCalculator/SGBCalculator'
 import NPSCalculator from '@/components/calculators/NPSCalculator/NPSCalculator'
 import SCSSCalculator from '@/components/calculators/SCSSCalculator/SCSSCalculator'
+import POMISCalculator from '@/components/calculators/POMISCalculator/POMISCalculator'
 import PPFCalculator from '@/components/calculators/PPFCalculator/PPFCalculator'
 import ELSSCalculator from '@/components/calculators/ELSSCalculator/ELSSCalculator'
 import SSYCalculator from '@/components/calculators/SSYCalculator/SSYCalculator'
 import EquityCalculator from '@/components/calculators/EquityCalculator/EquityCalculator'
+import ETFCalculator from '@/components/calculators/ETFCalculator/ETFCalculator'
+import DebtMutualFundCalculator from '@/components/calculators/DebtMutualFundCalculator/DebtMutualFundCalculator'
+import RDCalculator from '@/components/calculators/RDCalculator/RDCalculator'
+import REITsCalculator from '@/components/calculators/REITsCalculator/REITsCalculator'
+import IPOCalculator from '@/components/calculators/IPOCalculator/IPOCalculator'
+import Bonds54ECCalculator from '@/components/calculators/54ECBondsCalculator/54ECBondsCalculator'
 import ScrollToTop from '@/components/common/ScrollToTop'
 
 /**
@@ -167,6 +174,97 @@ const CalculatorPage = ({ calculatorType }) => {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       )
+    },
+    {
+      id: 'rd',
+      name: 'RD',
+      fullName: 'Recurring Deposit',
+      description: investmentInfo.rd.description,
+      route: routes.calculators.rd,
+      status: 'complete',
+      icon: (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+        </svg>
+      )
+    },
+    {
+      id: 'pomis',
+      name: 'POMIS',
+      fullName: 'Post Office Monthly Income Scheme',
+      description: investmentInfo.pomis.description,
+      route: routes.calculators.pomis,
+      status: 'complete',
+      icon: (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+      )
+    },
+    {
+      id: 'etf',
+      name: 'ETF',
+      fullName: 'Exchange Traded Funds',
+      description: investmentInfo.etf.description,
+      route: routes.calculators.etf,
+      status: 'complete',
+      icon: (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+      )
+    },
+    {
+      id: 'debtMutualFund',
+      name: 'Debt MF',
+      fullName: 'Debt Mutual Funds',
+      description: investmentInfo.debtMutualFund.description,
+      route: routes.calculators.debtMutualFund,
+      status: 'complete',
+      icon: (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+      )
+    },
+    {
+      id: 'reits',
+      name: 'REITs',
+      fullName: 'Real Estate Investment Trusts',
+      description: investmentInfo.reits.description,
+      route: routes.calculators.reits,
+      status: 'complete',
+      icon: (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+        </svg>
+      )
+    },
+    {
+      id: 'ipo',
+      name: 'IPO/FPO',
+      fullName: 'IPO/FPO',
+      description: investmentInfo.ipo.description,
+      route: routes.calculators.ipo,
+      status: 'complete',
+      icon: (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+      )
+    },
+    {
+      id: 'bonds54EC',
+      name: '54EC Bonds',
+      fullName: 'Capital Gain Bonds',
+      description: investmentInfo.bonds54EC.description,
+      route: routes.calculators.bonds54EC,
+      status: 'complete',
+      icon: (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+        </svg>
+      )
     }
   ]
 
@@ -240,6 +338,55 @@ const CalculatorPage = ({ calculatorType }) => {
         return (
           <>
             <EquityCalculator />
+            <ScrollToTop />
+          </>
+        )
+      case 'ipo':
+        return (
+          <>
+            <IPOCalculator />
+            <ScrollToTop />
+          </>
+        )
+      case 'rd':
+        return (
+          <>
+            <RDCalculator />
+            <ScrollToTop />
+          </>
+        )
+      case 'pomis':
+        return (
+          <>
+            <POMISCalculator />
+            <ScrollToTop />
+          </>
+        )
+      case 'etf':
+        return (
+          <>
+            <ETFCalculator />
+            <ScrollToTop />
+          </>
+        )
+      case 'debtMutualFund':
+        return (
+          <>
+            <DebtMutualFundCalculator />
+            <ScrollToTop />
+          </>
+        )
+      case 'reits':
+        return (
+          <>
+            <REITsCalculator />
+            <ScrollToTop />
+          </>
+        )
+      case 'bonds54EC':
+        return (
+          <>
+            <Bonds54ECCalculator />
             <ScrollToTop />
           </>
         )

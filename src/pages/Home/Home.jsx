@@ -100,7 +100,7 @@ const Home = () => {
               <div className="grid grid-cols-3 gap-6 pt-8">
                 <div>
                   <div className={`text-3xl font-bold ${isDark ? 'text-green-400' : 'text-green-600'}`}>
-                    10+
+                    15+
                   </div>
                   <div className={`text-sm mt-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                     Calculators
@@ -158,7 +158,7 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             <FeatureCard
               title="Investment Calculators"
-              description="Calculate returns for PPF, FD, SIP, NPS, and more with precision and detailed breakdowns"
+              description="Calculate returns for PPF, FD, SIP, NPS, NSC, SSY, SCSS, SGB, ELSS, Equity, ETFs, Debt Mutual Funds, REITs, 54EC Bonds, and more with precision and detailed breakdowns"
               route={routes.calculators.index}
               icon="📊"
               delay={0.1}
