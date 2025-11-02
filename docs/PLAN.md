@@ -228,18 +228,35 @@ Mobile:
 - Recommendations display
 - Zustand store for form state
 
-## Phase 4: Multi-Instrument Corpus Calculator (📋 PENDING)
+## Phase 4: Corpus Simulator (✅ COMPLETED)
 
-### Three-Step Form
-1. **Step 1:** Investment selection (checkbox cards)
-2. **Step 2:** Detailed input forms for each selected instrument
-3. **Step 3:** Review and submit
+### ✅ Four-Step Form Implementation
+1. **Step 1:** Investment instrument selection (card-based)
+2. **Step 2:** Investment details (existing + future investments)
+3. **Step 3:** Settings & configuration (inflation, tax bracket, tax method, city)
+4. **Step 4:** Results & analysis (comprehensive breakdown)
 
-### Output Display
-- Overall corpus breakdown (invested, returns, corpus, %, pie chart)
-- Sectional breakdown per instrument
-- Export/import JSON functionality
+### ✅ Key Features Implemented
+- Multi-instrument portfolio simulation (10+ instruments)
+- Existing + future investment support
+- Tax-aware calculations with user-selectable tax bracket (0%, 5%, 20%, 30%)
+- Accurate tax calculations using actual principal/interest
+- Inflation-adjusted projections (general + category-specific)
+- Purchasing power analysis (city-specific, category-based)
+- Comprehensive tax breakdown with educational panel overlay
+- Scenario saving and persistence (localStorage)
+- Visual analytics (pie charts, bar charts)
+- Session persistence and restore functionality
+- FD tenure enhancement (years + months input)
+
+### ✅ Technical Implementation
 - Zustand store for multi-step form state
+- Modular component architecture (steps, forms, results)
+- Custom hooks for calculations and persistence
+- Comprehensive validation with Joi schemas
+- Tax calculation utilities with instrument-specific rules
+- Purchasing power comparison utilities
+- Responsive design with mobile support
 
 ## Phase 5: Polish & Testing (📋 PENDING)
 
@@ -294,14 +311,32 @@ Mobile:
 - [x] ELSS Calculator ✅ **COMPLETE**
 - [x] NPS Calculator ✅ **COMPLETE**
 
-### 📋 Week 5-6: Advanced Features
+### ✅ Week 5-6: Advanced Features (COMPLETED)
+- [x] Corpus Simulator Page ✅ **COMPLETE**
+  - Multi-step form with instrument selection
+  - Existing + future investment support
+  - Tax-aware calculations
+  - Inflation adjustments
+  - Purchasing power analysis
+  - Scenario saving
+  - Comprehensive refactoring and modularization
+
+### 📋 Week 7-8: Remaining Features
 - [ ] Goal Planning Page
-- [ ] Corpus Calculator Page
+
+### ✅ Additional Completed Work
+- [x] Legal pages (Privacy Policy, Terms of Service, Disclaimer)
+- [x] Functional navigation links with "upcoming" badges
+- [x] FD tenure enhancement (years + months input)
+- [x] Tax calculation accuracy improvements
+- [x] Corpus Simulator rebranding (Calculator → Simulator)
+- [x] Comprehensive documentation
 
 ### 📋 Week 7-8: Polish & Deploy
+- [ ] Goal Planning Page implementation
 - [ ] Testing
 - [ ] UI polish
-- [ ] Documentation
+- [ ] Documentation updates
 - [ ] Deployment
 
 ## Key Formulas Reference

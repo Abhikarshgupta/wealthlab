@@ -149,7 +149,10 @@ const GoalPlanningPage = () => {
 /calculators/elss              → ELSS Calculator
 /calculators/scss              → SCSS Calculator
 /goal-planning                 → Goal Planning Page
-/corpus-calculator             → Corpus Calculator Page
+/corpus-calculator             → Corpus Simulator Page
+/privacy-policy                → Privacy Policy
+/terms-of-service              → Terms of Service
+/disclaimer                    → Disclaimer
 ```
 
 ### Route Configuration
@@ -337,9 +340,26 @@ npm run build  # Creates optimized production build
 - **ELSS Calculator** - Complete with 3-year lock-in
 - Calculator index page with card-based navigation
 
+### ✅ Completed (Phase 4)
+- **Corpus Simulator** - Complete multi-instrument portfolio simulation tool
+  - Multi-step form (4 steps)
+  - Existing + future investment support
+  - Tax-aware calculations with user-selectable tax bracket
+  - Inflation-adjusted projections
+  - Purchasing power analysis (city-specific)
+  - Comprehensive tax breakdown with educational panel
+  - Scenario saving and persistence
+  - Visual analytics (charts and graphs)
+
+### ✅ Completed (Legal & Navigation)
+- Privacy Policy page
+- Terms of Service page
+- Disclaimer page
+- Functional navigation links in footer and header
+- "Coming Soon" badges for upcoming features
+
 ### 📋 Pending
 - Goal Planning Page
-- Corpus Calculator Page
 - Testing and polish
 
 ## Future Enhancements
@@ -470,9 +490,20 @@ npm run lint
 
 ## Documentation Structure
 
+### Core Documentation
 - **architecture.md**: This file - system overview and technical specifications
 - **PLAN.md**: Main implementation plan with progress tracking
 - **HANDOFF.md**: Implementation patterns and reference guide for completed calculators
+- **CORPUS_SIMULATOR_README.md**: Comprehensive feature documentation for Corpus Simulator
+
+### Decision Documentation (Product Decisions & Impact)
+- **FD_YEARS_MONTHS_PLAN.md**: Decision process for FD tenure input enhancement
+- **FD_TAX_CALCULATION_ANALYSIS.md**: Tax calculation analysis and problem-solving
+- **TAX_CALCULATION_FIXES_SUMMARY.md**: Implementation summary of tax calculation fixes
+- **plan.plan.md**: Original Corpus Simulator implementation plan
+- **GOAL_PLANNING_REQUIREMENTS.md**: Requirements analysis for Goal Planning feature (pending)
+
+### Reference Documentation
 - **QUICKSTART.md**: Quick start guide for developers
 - **SETUP_STATUS.md**: Project setup and status information
 
