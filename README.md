@@ -6,7 +6,7 @@
 
 WealthLab is a modern web application that empowers you to experiment with different investment strategies and gain complete control over your personal finance planning journey. Built with production-grade architecture, it provides:
 
-- **10+ Investment Calculators** - Calculate returns for PPF, FD, SIP, NPS, NSC, SSY, SCSS, SGB, ELSS, and Equity investments
+- **15+ Investment Calculators** - Calculate returns for PPF, FD, SIP, NPS, NSC, SSY, SCSS, SGB, ELSS, Equity, ETFs, Debt Mutual Funds, REITs, 54EC Bonds, IPO/FPO, RD, POMIS, and more
 - **Real-Time Calculations** - Instant results as you type, no calculate buttons needed
 - **Goal-Based Planning** - Plan your financial goals with risk-based asset allocation recommendations
 - **Multi-Instrument Corpus Calculator** - Project your portfolio across multiple investment instruments
@@ -24,7 +24,7 @@ WealthLab is a modern web application that empowers you to experiment with diffe
 - ✅ Routing architecture
 - ✅ State management with Zustand
 
-**Investment Calculators (10/10 Complete)**
+**Investment Calculators (15/15 Complete)**
 - ✅ **PPF Calculator** - Annual compounding with step-up option
 - ✅ **FD Calculator** - Flexible compounding frequencies (Quarterly/Monthly/Annually)
 - ✅ **SIP Calculator** - Monthly SIP with step-up support
@@ -35,6 +35,13 @@ WealthLab is a modern web application that empowers you to experiment with diffe
 - ✅ **NPS Calculator** - National Pension System with asset allocation
 - ✅ **ELSS Calculator** - Equity Linked Savings Scheme with 3-year lock-in
 - ✅ **Equity Calculator** - SIP/Lumpsum with step-up support
+- ✅ **RD Calculator** - Recurring Deposit with flexible tenure
+- ✅ **POMIS Calculator** - Post Office Monthly Income Scheme
+- ✅ **ETF Calculator** - Exchange Traded Funds (Equity, Debt, Gold, International)
+- ✅ **Debt Mutual Funds Calculator** - Tax-efficient debt investments with indexation
+- ✅ **REITs Calculator** - Real Estate Investment Trusts
+- ✅ **IPO/FPO Calculator** - Initial/Follow-on Public Offer
+- ✅ **54EC Bonds Calculator** - Capital Gain Bonds with tax exemption
 
 **Each Calculator Includes:**
 - Real-time calculation engine
@@ -134,7 +141,7 @@ src/
 │   │   ├── PPFCalculator/
 │   │   ├── FDCalculator/
 │   │   ├── SIPCalculator/
-│   │   └── ... (10 calculators total)
+│   │   └── ... (15 calculators total)
 │   └── common/          # Reusable UI components
 │       ├── InputField/
 │       ├── Slider/

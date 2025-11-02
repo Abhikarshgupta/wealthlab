@@ -44,6 +44,32 @@ export const getTaxRateForInstrument = (instrumentType) => {
       exemptionLimit: 100000, // ₹1L exemption
       notes: 'LTCG: 10% above ₹1L exemption (held > 3 years). STCG: 15% (held < 3 years)',
     },
+    etf: {
+      type: 'conditional',
+      notes: 'Equity ETFs: LTCG (10% above ₹1L exemption) after 1 year, STCG (15%) before 1 year. Debt ETFs: LTCG (20% with indexation) after 3 years. Gold ETFs: LTCG (20% with indexation) after 3 years',
+      equityEtf: {
+        type: 'ltcg',
+        rate: 0.10,
+        exemptionLimit: 100000,
+        minHoldingPeriod: 1,
+      },
+      debtEtf: {
+        type: 'ltcg_indexed',
+        rate: 0.20,
+        minHoldingPeriod: 3,
+      },
+      goldEtf: {
+        type: 'ltcg_indexed',
+        rate: 0.20,
+        minHoldingPeriod: 3,
+      },
+      internationalEtf: {
+        type: 'ltcg',
+        rate: 0.10,
+        exemptionLimit: 100000,
+        minHoldingPeriod: 1,
+      },
+    },
     nps: {
       type: 'partial',
       taxFreePortion: 0.60, // 60% tax-free
@@ -66,6 +92,35 @@ export const getTaxRateForInstrument = (instrumentType) => {
       type: 'interest',
       rate: null, // Depends on income slab
       notes: 'Interest taxable quarterly as per income slab',
+    },
+    ipo: {
+      type: 'ltcg',
+      rate: 0.10, // 10% above ₹1L exemption
+      exemptionLimit: 100000, // ₹1L exemption
+      notes: 'LTCG: 10% above ₹1L exemption (held > 1 year). STCG: 15% (held < 1 year). Listing gains taxable',
+    },
+    reits: {
+      type: 'ltcg',
+      rate: 0.10, // 10% above ₹1L exemption
+      exemptionLimit: 100000, // ₹1L exemption
+      stcgRate: 0.15, // 15% for STCG
+      minHoldingPeriod: 1, // LTCG after 1 year
+      dividendTaxable: true, // Dividend taxable as per income slab
+      notes: 'Dividend income: Taxable as per income tax slab. LTCG: 10% above ₹1L exemption (held > 1 year). STCG: 15% (held < 1 year). No indexation benefit on capital gains',
+    },
+    debtMutualFund: {
+      type: 'ltcg_indexed',
+      rate: 0.20, // 20% with indexation
+      minHoldingPeriod: 3, // LTCG after 3 years
+      stcgRate: null, // STCG taxed as per income slab
+      notes: 'LTCG: 20% with indexation benefit after 3 years - More tax-efficient than FDs. STCG: Taxed as per income tax slab if held < 3 years. No TDS on redemption.',
+    },
+    bonds54EC: {
+      type: 'capital_gains_exempt',
+      capitalGainsExempt: true, // Exempts LTCG on property sale (up to ₹50L per FY)
+      interestTaxable: true,
+      maxExemptionLimit: 5000000, // ₹50L per financial year
+      notes: 'Exempts long-term capital gains tax on property sale (up to ₹50L per FY). Interest taxable as per income tax slab. Must invest within 6 months of property sale.',
     },
   }
 
@@ -128,6 +183,36 @@ export const calculateTaxOnWithdrawal = (corpus, instrumentType, tenure, options
         // Short-term capital gains
         taxAmount = corpus * 0.15 // 15% STCG
         effectiveTaxRate = 15
+      }
+      break
+
+    case 'ltcg_indexed':
+      // Debt Mutual Funds - LTCG with indexation after 3 years
+      const minDebtFundHoldingPeriod = taxRule.minHoldingPeriod || 3
+      
+      // Try to get principal for indexation calculation
+      let principalAmount = principal
+      if (principalAmount === null || principalAmount === undefined) {
+        principalAmount = investmentData?.principal || 
+                         investmentData?.investedAmount ||
+                         investmentData?.yearlyInvestment ||
+                         (returns !== null && returns > 0 ? corpus - returns : corpus * 0.7) // Estimate if not available
+      }
+
+      if (tenure >= minDebtFundHoldingPeriod) {
+        // Long-term capital gains with indexation
+        // Indexation factor = CII for year of sale / CII for year of purchase
+        // Simplified: Assume 6% inflation for indexation (typical CII increase)
+        const indexationFactor = Math.pow(1.06, tenure) // Simplified indexation
+        const indexedCost = principalAmount * indexationFactor
+        const capitalGains = Math.max(0, corpus - indexedCost)
+        taxAmount = capitalGains * taxRule.rate // 20% with indexation
+        effectiveTaxRate = corpus > 0 ? (taxAmount / corpus) * 100 : 0
+      } else {
+        // Short-term capital gains - taxed as per income slab
+        const capitalGains = Math.max(0, corpus - principalAmount)
+        taxAmount = capitalGains * incomeTaxSlab
+        effectiveTaxRate = corpus > 0 ? (taxAmount / corpus) * 100 : 0
       }
       break
 
@@ -200,6 +285,42 @@ export const calculateTaxOnWithdrawal = (corpus, instrumentType, tenure, options
         const estimatedReturns = corpus * 0.3 // Rough estimate
         taxAmount = estimatedReturns * incomeTaxSlab
         effectiveTaxRate = (estimatedReturns / corpus) * incomeTaxSlab * 100
+      }
+      break
+
+    case 'capital_gains_exempt':
+      // 54EC Bonds - Capital gains exempt, interest taxable
+      // Capital gains exemption is already applied at investment time (not at withdrawal)
+      // Only interest portion is taxable as per income slab
+      
+      // Try to get actual interest amount
+      let bonds54ECInterest = null
+      
+      if (returns !== null && returns !== undefined && returns > 0) {
+        bonds54ECInterest = returns
+      } else {
+        let principalAmount = principal
+        
+        if (principalAmount === null || principalAmount === undefined) {
+          principalAmount = investmentData?.principal || 
+                           investmentData?.investedAmount ||
+                           0
+        }
+        
+        if (principalAmount && principalAmount > 0 && corpus > principalAmount) {
+          bonds54ECInterest = corpus - principalAmount
+        }
+      }
+      
+      if (bonds54ECInterest !== null && bonds54ECInterest > 0) {
+        // Only interest is taxable (capital gains already exempt at investment)
+        taxAmount = bonds54ECInterest * incomeTaxSlab
+        effectiveTaxRate = corpus > 0 ? (taxAmount / corpus) * 100 : 0
+      } else {
+        // Fallback: estimate interest portion
+        const estimatedInterest = corpus * 0.25 // Rough estimate for 5-year bond
+        taxAmount = estimatedInterest * incomeTaxSlab
+        effectiveTaxRate = corpus > 0 ? (taxAmount / corpus) * 100 : 0
       }
       break
 

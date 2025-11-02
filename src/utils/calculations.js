@@ -607,3 +607,115 @@ export const calculateNPSEvolution = (
   
   return evolution
 }
+
+/**
+ * Calculate RD (Recurring Deposit) maturity amount
+ * Formula: FV = P × [(1 + r)^n - 1] / r × (1 + r)
+ * Where:
+ * - P = Monthly deposit amount
+ * - r = Monthly interest rate (adjusted for compounding frequency)
+ * - n = Number of months
+ * 
+ * For RD, deposits are made monthly, but interest is credited based on compounding frequency
+ * 
+ * @param {number} monthlyDeposit - Monthly deposit amount
+ * @param {number} annualRate - Annual interest rate (as decimal)
+ * @param {number} months - Number of months
+ * @param {string} compoundingFrequency - 'quarterly', 'monthly', 'annually', or 'cumulative'
+ * @returns {number} Maturity amount
+ */
+export const calculateRD = (monthlyDeposit, annualRate, months, compoundingFrequency = 'quarterly') => {
+  if (monthlyDeposit == null || annualRate == null || months == null) return 0
+  if (monthlyDeposit < 0 || annualRate < 0 || months < 0) return 0
+  if (months === 0) return 0
+  
+  // Calculate effective monthly rate based on compounding frequency
+  // For quarterly compounding: Effective monthly rate = (1 + annualRate/4)^(1/3) - 1
+  // For monthly compounding: Effective monthly rate = annualRate/12
+  // For annual compounding: Effective monthly rate = (1 + annualRate)^(1/12) - 1
+  let effectiveMonthlyRate = 0
+  if (compoundingFrequency === 'monthly') {
+    effectiveMonthlyRate = annualRate / 12
+  } else if (compoundingFrequency === 'quarterly') {
+    // Quarterly compounding: Interest credited every 3 months
+    // Effective monthly rate = (1 + quarterlyRate)^(1/3) - 1
+    const quarterlyRate = annualRate / 4
+    effectiveMonthlyRate = Math.pow(1 + quarterlyRate, 1/3) - 1
+  } else if (compoundingFrequency === 'annually') {
+    // Annual compounding: Interest credited yearly
+    // Effective monthly rate = (1 + annualRate)^(1/12) - 1
+    effectiveMonthlyRate = Math.pow(1 + annualRate, 1/12) - 1
+  } else if (compoundingFrequency === 'cumulative') {
+    // Cumulative: Use monthly rate, but interest is paid at maturity
+    effectiveMonthlyRate = annualRate / 12
+  }
+  
+  // If rate is 0, return simple sum of deposits
+  if (effectiveMonthlyRate === 0) {
+    return monthlyDeposit * months
+  }
+  
+  // Formula: FV = P × [(1 + r)^n - 1] / r × (1 + r)
+  // This assumes deposits are made at the beginning of each month
+  const numerator = Math.pow(1 + effectiveMonthlyRate, months) - 1
+  const denominator = effectiveMonthlyRate
+  const futureValue = monthlyDeposit * (numerator / denominator) * (1 + effectiveMonthlyRate)
+  
+  return futureValue
+}
+
+/**
+ * Calculate year-wise evolution for RD
+ * @param {number} monthlyDeposit - Monthly deposit amount
+ * @param {number} annualRate - Annual interest rate (as decimal)
+ * @param {number} years - Investment period in years
+ * @param {string} compoundingFrequency - 'quarterly', 'monthly', 'annually', or 'cumulative'
+ * @returns {Array} Array of objects with year-wise breakdown
+ */
+export const calculateRDEvolution = (monthlyDeposit, annualRate, years, compoundingFrequency = 'quarterly') => {
+  const evolution = []
+  let cumulativeBalance = 0
+  
+  // Calculate effective monthly rate (same as in calculateRD)
+  let effectiveMonthlyRate = 0
+  if (compoundingFrequency === 'monthly') {
+    effectiveMonthlyRate = annualRate / 12
+  } else if (compoundingFrequency === 'quarterly') {
+    const quarterlyRate = annualRate / 4
+    effectiveMonthlyRate = Math.pow(1 + quarterlyRate, 1/3) - 1
+  } else if (compoundingFrequency === 'annually') {
+    effectiveMonthlyRate = Math.pow(1 + annualRate, 1/12) - 1
+  } else if (compoundingFrequency === 'cumulative') {
+    effectiveMonthlyRate = annualRate / 12
+  }
+  
+  for (let year = 1; year <= years; year++) {
+    const openingBalance = cumulativeBalance
+    let yearInvestment = 0
+    
+    // Process each month of this year
+    for (let month = 1; month <= 12; month++) {
+      yearInvestment += monthlyDeposit
+      
+      // Apply monthly compounding: balance grows by monthly rate, then add new deposit
+      if (effectiveMonthlyRate === 0) {
+        cumulativeBalance += monthlyDeposit
+      } else {
+        cumulativeBalance = cumulativeBalance * (1 + effectiveMonthlyRate) + monthlyDeposit
+      }
+    }
+    
+    const closingBalance = cumulativeBalance
+    const interest = closingBalance - openingBalance - yearInvestment
+    
+    evolution.push({
+      year,
+      openingBalance: Math.round(openingBalance * 100) / 100,
+      investment: Math.round(yearInvestment * 100) / 100,
+      interest: Math.round(interest * 100) / 100,
+      closingBalance: Math.round(closingBalance * 100) / 100,
+    })
+  }
+  
+  return evolution
+}

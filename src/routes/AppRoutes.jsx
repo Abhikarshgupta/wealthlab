@@ -23,6 +23,12 @@ const AppRoutes = () => {
       <Route path={routes.calculators.nsc} element={<CalculatorPage calculatorType="nsc" />} />
       <Route path={routes.calculators.elss} element={<CalculatorPage calculatorType="elss" />} />
       <Route path={routes.calculators.scss} element={<CalculatorPage calculatorType="scss" />} />
+      <Route path={routes.calculators.debtMutualFund} element={<CalculatorPage calculatorType="debtMutualFund" />} />
+      <Route path={routes.calculators.pomis} element={<CalculatorPage calculatorType="pomis" />} />
+      <Route path={routes.calculators.etf} element={<CalculatorPage calculatorType="etf" />} />
+      <Route path={routes.calculators.rd} element={<CalculatorPage calculatorType="rd" />} />
+      <Route path={routes.calculators.reits} element={<CalculatorPage calculatorType="reits" />} />
+      <Route path={routes.calculators.bonds54EC} element={<CalculatorPage calculatorType="bonds54EC" />} />
       <Route path={routes.goalPlanning} element={<GoalPlanningPage />} />
       <Route path={routes.corpusCalculator} element={<CorpusCalculatorPage />} />
       <Route path={routes.legal.privacy} element={<PrivacyPolicy />} />
