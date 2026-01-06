@@ -28,8 +28,10 @@ const CorpusResults = ({ results, settings, investments, instruments }) => {
     }
 
     const corpusByInstrument = {}
+    const returnsByInstrument = {}
     Object.keys(results.byInstrument).forEach((key) => {
       corpusByInstrument[key] = results.byInstrument[key].maturityValue
+      returnsByInstrument[key] = results.byInstrument[key].returns || 0
     })
 
     const taxResults = calculateTaxForMultipleInstruments(
@@ -37,11 +39,14 @@ const CorpusResults = ({ results, settings, investments, instruments }) => {
       investments,
       instruments,
       taxMethod,
-      { incomeTaxSlab: 0.30 } // Default 30% tax slab
+      {
+        incomeTaxSlab: settings?.incomeTaxSlab || 0.30, // Use user-selected tax bracket
+        returnsByInstrument, // Pass returns for LTCG exemption calculation
+      }
     )
 
     return taxResults
-  }, [results?.byInstrument, investments, instruments, taxMethod])
+  }, [results?.byInstrument, investments, instruments, taxMethod, settings?.incomeTaxSlab])
 
   if (!results) {
     return (

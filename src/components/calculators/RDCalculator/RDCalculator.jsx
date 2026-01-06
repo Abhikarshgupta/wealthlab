@@ -12,7 +12,6 @@ import { rdSchema } from './rdSchema'
 import { investmentRates } from '@/constants/investmentRates'
 import { formatCurrency, formatPercentageValue } from '@/utils/formatters'
 import { 
-  convertYearsMonthsToYears, 
   convertYearsMonthsToMonths,
   normalizeYearsMonths,
   formatTenureDisplay,
@@ -60,7 +59,6 @@ const RDCalculator = () => {
 
   // Normalize months if > 11
   const normalizedTenure = normalizeYearsMonths(tenureYearsNum, tenureMonthsNum)
-  const totalYears = convertYearsMonthsToYears(normalizedTenure.years, normalizedTenure.months)
 
   // Calculate results using custom hook
   const results = useRDCalculator(

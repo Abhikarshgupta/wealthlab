@@ -137,31 +137,13 @@ const NPSCalculator = () => {
     }
   }, [currentAgeNum, tenureNum, setValue])
 
-  // Auto-adjust equity allocation when it exceeds age-based cap
+  // Auto-adjust equity allocation when it exceeds age-based cap (regulatory requirement)
   useEffect(() => {
     if (equityAllocationNum > maxEquity) {
-      const excess = equityAllocationNum - maxEquity
-      
-      // Calculate total of other allocations
-      const totalOther = corporateBondsAllocationNum + governmentBondsAllocationNum + alternativeAllocationNum
-      
-      if (totalOther > 0) {
-        // Redistribute excess proportionally
-        const newCorporateBonds = corporateBondsAllocationNum + excess * (corporateBondsAllocationNum / totalOther)
-        const newGovernmentBonds = governmentBondsAllocationNum + excess * (governmentBondsAllocationNum / totalOther)
-        const newAlternative = alternativeAllocationNum + excess * (alternativeAllocationNum / totalOther)
-        
-        setValue('equityAllocation', maxEquity, { shouldValidate: true })
-        setValue('corporateBondsAllocation', Math.round(newCorporateBonds), { shouldValidate: true })
-        setValue('governmentBondsAllocation', Math.round(newGovernmentBonds), { shouldValidate: true })
-        setValue('alternativeAllocation', Math.min(5, Math.round(newAlternative)), { shouldValidate: true })
-      } else {
-        // If no other allocations, add to corporate bonds
-        setValue('equityAllocation', maxEquity, { shouldValidate: true })
-        setValue('corporateBondsAllocation', Math.round(equityAllocationNum - maxEquity), { shouldValidate: true })
-      }
+      // Simply cap at maxEquity without redistributing excess
+      setValue('equityAllocation', maxEquity, { shouldValidate: true })
     }
-  }, [currentAgeNum, maxEquity, equityAllocationNum, corporateBondsAllocationNum, governmentBondsAllocationNum, alternativeAllocationNum, setValue])
+  }, [currentAgeNum, maxEquity, equityAllocationNum, setValue])
 
   // Calculate total allocation
   const totalAllocation = 
@@ -172,21 +154,11 @@ const NPSCalculator = () => {
 
   /**
    * Handle asset allocation change
-   * Ensures allocations sum to 100% by adjusting other allocations
+   * Simply sets the allocation value without automatic redistribution
+   * Enforces max caps for equity and alternative investments
    * Uses whole numbers for all percentages
-   * Special case: When equity is 100% and others are 0%, reducing equity defaults to corporate bonds
    */
   const handleAllocationChange = (assetType, newValue) => {
-    const currentTotal = totalAllocation
-    const currentValue = assetType === 'equity' ? equityAllocationNum :
-                        assetType === 'corporateBonds' ? corporateBondsAllocationNum :
-                        assetType === 'governmentBonds' ? governmentBondsAllocationNum :
-                        alternativeAllocationNum
-    
-    const remainingTotal = currentTotal - currentValue
-    
-    if (remainingTotal <= 0) return // Can't adjust if nothing left
-    
     // Round to whole number
     let adjustedValue = Math.round(newValue)
     
@@ -194,51 +166,16 @@ const NPSCalculator = () => {
     if (assetType === 'equity') {
       adjustedValue = Math.min(maxEquity, adjustedValue)
     }
+    // For alternative, enforce max cap
     if (assetType === 'alternative') {
       adjustedValue = Math.min(5, adjustedValue)
     }
     
-    // Get other assets
-    const otherAssets = [
-      { type: 'equity', value: equityAllocationNum },
-      { type: 'corporateBonds', value: corporateBondsAllocationNum },
-      { type: 'governmentBonds', value: governmentBondsAllocationNum },
-      { type: 'alternative', value: alternativeAllocationNum }
-    ].filter(item => item.type !== assetType)
-    
-    // Check if all other allocations are 0 (special case: default to corporate bonds)
-    const otherAssetsTotal = otherAssets.reduce((sum, asset) => sum + asset.value, 0)
-    const actualDifference = adjustedValue - currentValue
+    // Ensure non-negative
+    adjustedValue = Math.max(0, adjustedValue)
     
     // Set the changed allocation (rounded to whole number)
     setValue(`${assetType}Allocation`, adjustedValue, { shouldValidate: true })
-    
-    // If all other assets are 0, distribute difference to corporate bonds by default
-    if (otherAssetsTotal === 0) {
-      // Default to corporate bonds when others are 0
-      const corporateBondsNew = Math.max(0, Math.min(100, Math.round(corporateBondsAllocationNum - actualDifference)))
-      setValue('corporateBondsAllocation', corporateBondsNew, { shouldValidate: true })
-    } else {
-      // Redistribute proportionally among other assets (rounded to whole numbers)
-      const totalOther = otherAssets.reduce((sum, asset) => sum + asset.value, 0)
-      let distributedTotal = 0
-      
-      otherAssets.forEach(({ type, value }, index) => {
-        const proportion = totalOther > 0 ? value / totalOther : 1 / otherAssets.length
-        const adjustment = -actualDifference * proportion
-        const newAllocation = Math.max(0, Math.min(100, Math.round(value + adjustment)))
-        distributedTotal += newAllocation
-        
-        // For last asset, ensure total equals 100
-        if (index === otherAssets.length - 1) {
-          const remaining = 100 - (adjustedValue + distributedTotal - newAllocation)
-          const finalAllocation = Math.max(0, Math.min(100, Math.round(remaining)))
-          setValue(`${type}Allocation`, finalAllocation, { shouldValidate: true })
-        } else {
-          setValue(`${type}Allocation`, newAllocation, { shouldValidate: true })
-        }
-      })
-    }
   }
 
   // Calculate results using custom hook
