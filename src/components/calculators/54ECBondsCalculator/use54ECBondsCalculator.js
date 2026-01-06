@@ -13,17 +13,15 @@ import { calculateTaxOnWithdrawal } from '@/utils/taxCalculations'
  * @param {number} capitalGainAmount - Capital gain amount from property sale
  * @param {number} investmentAmount - Investment amount in 54EC Bonds (max: capitalGainAmount, max ₹50L per FY)
  * @param {number} rate - Annual interest rate (as percentage, e.g., 5.75 for 5.75%)
- * @param {boolean} adjustInflation - Whether to adjust for inflation
  * @returns {Object} Calculation results
  */
 const use54ECBondsCalculator = (
   capitalGainAmount,
   investmentAmount,
-  rate,
-  adjustInflation
+  rate
 ) => {
   const [results, setResults] = useState(null)
-  const { defaultInflationRate } = useUserPreferencesStore()
+  const { defaultInflationRate, adjustInflation } = useUserPreferencesStore()
   const inflationRate = defaultInflationRate / 100 // Convert to decimal
   const tenure = 5 // Fixed tenure for 54EC Bonds
 

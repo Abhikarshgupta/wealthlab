@@ -5,8 +5,9 @@ import InvestmentTable from '@/components/common/InvestmentTable/InvestmentTable
  * Displays year-wise breakdown of SIP investment
  * 
  * @param {Array} evolution - Evolution data from useSIPCalculator hook
+ * @param {number} tenure - Investment tenure in years
  */
-const SIPCalculatorTable = ({ evolution }) => {
+const SIPCalculatorTable = ({ evolution, tenure }) => {
   if (!evolution || evolution.length === 0) {
     return null
   }
@@ -15,6 +16,7 @@ const SIPCalculatorTable = ({ evolution }) => {
     <InvestmentTable
       data={evolution}
       title="Year-wise Investment Evolution"
+      tenure={tenure}
     />
   )
 }

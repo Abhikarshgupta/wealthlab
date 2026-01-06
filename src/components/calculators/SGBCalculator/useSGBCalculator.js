@@ -16,21 +16,19 @@ import { getGoldPricePerGram, getCachedGoldPrice, FALLBACK_GOLD_PRICE_PER_GRAM }
  * @param {number} goldAmount - Gold amount in grams (1-1000)
  * @param {number} tenure - Tenure in years (5 or 8)
  * @param {number} goldAppreciationRate - Annual gold appreciation rate (as percentage, e.g., 8 for 8%)
- * @param {boolean} adjustInflation - Whether to adjust for inflation
  * @returns {Object} Calculation results
  */
 const useSGBCalculator = (
   goldAmount,
   tenure,
-  goldAppreciationRate,
-  adjustInflation
+  goldAppreciationRate
 ) => {
   const [results, setResults] = useState(null)
   const [goldPricePerGram, setGoldPricePerGram] = useState(getCachedGoldPrice())
   const [isLoadingPrice, setIsLoadingPrice] = useState(false)
   const [isRealTimePrice, setIsRealTimePrice] = useState(false)
   const [refreshTrigger, setRefreshTrigger] = useState(0)
-  const { defaultInflationRate } = useUserPreferencesStore()
+  const { defaultInflationRate, adjustInflation } = useUserPreferencesStore()
   const inflationRate = defaultInflationRate / 100 // Convert to decimal
 
   // Initialize and fetch gold price on mount or when refresh is triggered

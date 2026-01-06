@@ -20,7 +20,6 @@ import useUserPreferencesStore from '@/store/userPreferencesStore'
  * @param {number} expectedCAGR - Expected CAGR (as percentage, e.g., 12 for 12%)
  * @param {boolean} stepUpEnabled - Whether step-up SIP is enabled (only for SIP mode)
  * @param {number} stepUpPercentage - Annual step-up percentage (as percentage, e.g., 10 for 10%)
- * @param {boolean} adjustInflation - Whether to adjust for inflation
  * @returns {Object} Calculation results
  */
 const useEquityCalculator = (
@@ -29,11 +28,10 @@ const useEquityCalculator = (
   tenure,
   expectedCAGR,
   stepUpEnabled,
-  stepUpPercentage,
-  adjustInflation
+  stepUpPercentage
 ) => {
   const [results, setResults] = useState(null)
-  const { defaultInflationRate } = useUserPreferencesStore()
+  const { defaultInflationRate, adjustInflation } = useUserPreferencesStore()
   const inflationRate = defaultInflationRate / 100 // Convert to decimal
 
   useEffect(() => {

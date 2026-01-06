@@ -22,7 +22,6 @@ import useUserPreferencesStore from '@/store/userPreferencesStore'
  * @param {number} expenseRatio - Expense ratio (as percentage, e.g., 0.20 for 0.20%)
  * @param {boolean} stepUpEnabled - Whether step-up SIP is enabled (only for SIP mode)
  * @param {number} stepUpPercentage - Annual step-up percentage (as percentage, e.g., 10 for 10%)
- * @param {boolean} adjustInflation - Whether to adjust for inflation
  * @returns {Object} Calculation results
  */
 const useETFCalculator = (
@@ -33,11 +32,10 @@ const useETFCalculator = (
   expectedCAGR,
   expenseRatio,
   stepUpEnabled,
-  stepUpPercentage,
-  adjustInflation
+  stepUpPercentage
 ) => {
   const [results, setResults] = useState(null)
-  const { defaultInflationRate } = useUserPreferencesStore()
+  const { defaultInflationRate, adjustInflation } = useUserPreferencesStore()
   const inflationRate = defaultInflationRate / 100 // Convert to decimal
 
   useEffect(() => {

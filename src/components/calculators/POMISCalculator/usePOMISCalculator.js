@@ -90,17 +90,15 @@ const calculatePOMISEvolution = (principal, rate, years) => {
  * @param {number} principal - Principal investment amount
  * @param {boolean} isJointAccount - Whether it's a joint account (affects max limit)
  * @param {number} rate - Annual interest rate (as percentage, e.g., 7.4 for 7.4%)
- * @param {boolean} adjustInflation - Whether to adjust for inflation
  * @returns {Object} Calculation results
  */
 const usePOMISCalculator = (
   principal,
   isJointAccount,
-  rate,
-  adjustInflation
+  rate
 ) => {
   const [results, setResults] = useState(null)
-  const { defaultInflationRate } = useUserPreferencesStore()
+  const { defaultInflationRate, adjustInflation } = useUserPreferencesStore()
   const inflationRate = defaultInflationRate / 100 // Convert to decimal
 
   useEffect(() => {

@@ -5,8 +5,9 @@ import InvestmentTable from '@/components/common/InvestmentTable/InvestmentTable
  * Displays year-wise breakdown of debt mutual fund investment
  * 
  * @param {Array} evolution - Evolution data from useDebtMutualFundCalculator hook
+ * @param {number} tenure - Investment tenure in years
  */
-const DebtMutualFundCalculatorTable = ({ evolution }) => {
+const DebtMutualFundCalculatorTable = ({ evolution, tenure }) => {
   if (!evolution || evolution.length === 0) {
     return null
   }
@@ -15,6 +16,7 @@ const DebtMutualFundCalculatorTable = ({ evolution }) => {
     <InvestmentTable
       data={evolution}
       title="Year-wise Investment Evolution"
+      tenure={tenure}
     />
   )
 }

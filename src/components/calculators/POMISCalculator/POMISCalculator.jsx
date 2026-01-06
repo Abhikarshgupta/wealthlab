@@ -3,7 +3,6 @@ import { joiResolver } from '@hookform/resolvers/joi'
 import CalculatorLayout from '@/components/common/Layout/CalculatorLayout'
 import InputField from '@/components/common/InputField/InputField'
 import Slider from '@/components/common/Slider/Slider'
-import ToggleSwitch from '@/components/common/ToggleSwitch/ToggleSwitch'
 import POMISCalculatorResults from './POMISCalculatorResults'
 import POMISCalculatorInfo from './POMISCalculatorInfo'
 import POMISCalculatorTable from './POMISCalculatorTable'
@@ -30,8 +29,7 @@ const POMISCalculator = () => {
     defaultValues: {
       principal: 1000000,
       isJointAccount: false,
-      rate: investmentRates.pomis.rate,
-      adjustInflation: false
+      rate: investmentRates.pomis.rate
     },
     mode: 'onChange'
   })
@@ -40,7 +38,6 @@ const POMISCalculator = () => {
   const principal = watch('principal')
   const isJointAccount = watch('isJointAccount')
   const rate = watch('rate')
-  const adjustInflation = watch('adjustInflation')
 
   // Convert string values to numbers
   const principalNum = parseFloat(principal) || 0
@@ -64,8 +61,7 @@ const POMISCalculator = () => {
   const results = usePOMISCalculator(
     principalNum,
     isJointAccount,
-    rateNum,
-    adjustInflation
+    rateNum
   )
 
   return (
@@ -175,14 +171,6 @@ const POMISCalculator = () => {
                   Fixed at <strong>5 years</strong> for POMIS accounts
                 </p>
               </div>
-
-              {/* Inflation Adjustment Toggle */}
-              <ToggleSwitch
-                label="Adjust for Inflation"
-                checked={adjustInflation}
-                onChange={(checked) => setValue('adjustInflation', checked, { shouldValidate: true })}
-                description="Show real returns after accounting for inflation"
-              />
             </div>
           }
           resultsPanel={
@@ -192,7 +180,7 @@ const POMISCalculator = () => {
             <POMISCalculatorInfo />
           }
           evolutionTable={
-            <POMISCalculatorTable evolution={results?.evolution} />
+            <POMISCalculatorTable evolution={results?.evolution} tenure={5} />
           }
         />
     </div>

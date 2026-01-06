@@ -13,7 +13,6 @@ import useUserPreferencesStore from '@/store/userPreferencesStore'
  * @param {number} listingGainPercent - Expected listing gain percentage (if listingPrice not provided)
  * @param {number} holdingPeriod - Holding period in years
  * @param {number} expectedCAGR - Expected CAGR for post-listing period (as percentage)
- * @param {boolean} adjustInflation - Whether to adjust for inflation
  * @returns {Object} Calculation results
  */
 const useIPOCalculator = (
@@ -23,11 +22,10 @@ const useIPOCalculator = (
   listingPrice,
   listingGainPercent,
   holdingPeriod,
-  expectedCAGR,
-  adjustInflation
+  expectedCAGR
 ) => {
   const [results, setResults] = useState(null)
-  const { defaultInflationRate } = useUserPreferencesStore()
+  const { defaultInflationRate, adjustInflation } = useUserPreferencesStore()
   const inflationRate = defaultInflationRate / 100 // Convert to decimal
 
   useEffect(() => {

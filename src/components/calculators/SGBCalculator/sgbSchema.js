@@ -34,9 +34,7 @@ export const sgbSchema = Joi.object({
       'number.min': 'Gold appreciation rate must be at least 0.1%',
       'number.max': 'Gold appreciation rate cannot exceed 100%',
       'number.base': 'Gold appreciation rate must be a number'
-    }),
-  
-  adjustInflation: Joi.boolean().default(false)
+    })
 })
 
 export default sgbSchema

@@ -87,7 +87,6 @@ const calculateSCSSEvolution = (principal, rate, years) => {
  * @param {number} tenure - Investment tenure in years (1-5)
  * @param {number} seniorsAge - Senior citizen's age (must be >= 60, or >= 55 for defense personnel)
  * @param {number} rate - Annual interest rate (as percentage, e.g., 8.2 for 8.2%)
- * @param {boolean} adjustInflation - Whether to adjust for inflation
  * @param {boolean} isDefensePersonnel - Whether user is retired defense personnel (eligible at 55+)
  * @returns {Object} Calculation results
  */
@@ -96,11 +95,10 @@ const useSCSSCalculator = (
   tenure,
   seniorsAge,
   rate,
-  adjustInflation,
   isDefensePersonnel = false
 ) => {
   const [results, setResults] = useState(null)
-  const { defaultInflationRate } = useUserPreferencesStore()
+  const { defaultInflationRate, adjustInflation } = useUserPreferencesStore()
   const inflationRate = defaultInflationRate / 100 // Convert to decimal
 
   useEffect(() => {

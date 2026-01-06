@@ -12,16 +12,14 @@ import useUserPreferencesStore from '@/store/userPreferencesStore'
  * 
  * @param {number} principal - Principal investment amount
  * @param {number} rate - Annual interest rate (as percentage, e.g., 7.7 for 7.7%)
- * @param {boolean} adjustInflation - Whether to adjust for inflation
  * @returns {Object} Calculation results
  */
 const useNSCalculator = (
   principal,
-  rate,
-  adjustInflation
+  rate
 ) => {
   const [results, setResults] = useState(null)
-  const { defaultInflationRate } = useUserPreferencesStore()
+  const { defaultInflationRate, adjustInflation } = useUserPreferencesStore()
   const inflationRate = defaultInflationRate / 100 // Convert to decimal
   const tenure = 5 // Fixed tenure for NSC
 

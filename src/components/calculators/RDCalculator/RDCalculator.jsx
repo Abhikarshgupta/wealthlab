@@ -3,7 +3,6 @@ import { joiResolver } from '@hookform/resolvers/joi'
 import CalculatorLayout from '@/components/common/Layout/CalculatorLayout'
 import InputField from '@/components/common/InputField/InputField'
 import Slider from '@/components/common/Slider/Slider'
-import ToggleSwitch from '@/components/common/ToggleSwitch/ToggleSwitch'
 import RDCalculatorResults from './RDCalculatorResults'
 import RDCalculatorInfo from './RDCalculatorInfo'
 import RDCalculatorTable from './RDCalculatorTable'
@@ -13,6 +12,7 @@ import { investmentRates } from '@/constants/investmentRates'
 import { formatCurrency, formatPercentageValue } from '@/utils/formatters'
 import { 
   convertYearsMonthsToMonths,
+  convertYearsMonthsToYears,
   normalizeYearsMonths,
   formatTenureDisplay,
 } from '@/utils/fdTenureUtils'
@@ -37,8 +37,7 @@ const RDCalculator = () => {
       tenureYears: 1,
       tenureMonths: 0,
       rate: investmentRates.rd.rate,
-      compoundingFrequency: 'quarterly',
-      adjustInflation: false
+      compoundingFrequency: 'quarterly'
     },
     mode: 'onChange'
   })
@@ -49,7 +48,6 @@ const RDCalculator = () => {
   const tenureMonths = watch('tenureMonths')
   const rate = watch('rate')
   const compoundingFrequency = watch('compoundingFrequency')
-  const adjustInflation = watch('adjustInflation')
 
   // Convert string values to numbers
   const monthlyDepositNum = parseFloat(monthlyDeposit) || 0
@@ -66,8 +64,7 @@ const RDCalculator = () => {
     normalizedTenure.years,
     normalizedTenure.months,
     rateNum,
-    compoundingFrequency,
-    adjustInflation
+    compoundingFrequency
   )
 
   // Calculate max values for sliders
@@ -272,14 +269,6 @@ const RDCalculator = () => {
                   ))}
                 </div>
               </div>
-
-              {/* Inflation Adjustment Toggle */}
-              <ToggleSwitch
-                label="Adjust for Inflation"
-                checked={adjustInflation}
-                onChange={(checked) => setValue('adjustInflation', checked, { shouldValidate: true })}
-                description="Show real returns after accounting for inflation"
-              />
             </div>
           }
           resultsPanel={
@@ -289,7 +278,10 @@ const RDCalculator = () => {
             <RDCalculatorInfo />
           }
           evolutionTable={
-            <RDCalculatorTable evolution={results?.evolution} />
+            <RDCalculatorTable 
+              evolution={results?.evolution} 
+              tenure={results?.tenureYears || convertYearsMonthsToYears(normalizedTenure.years, normalizedTenure.months)}
+            />
           }
         />
     </div>

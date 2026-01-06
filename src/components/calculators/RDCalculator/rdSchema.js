@@ -52,9 +52,7 @@ export const rdSchema = Joi.object({
       'number.min': 'Interest rate must be at least 0.1%',
       'number.max': 'Interest rate cannot exceed 100%',
       'number.base': 'Interest rate must be a number'
-    }),
-  
-  adjustInflation: Joi.boolean().default(false)
+    })
 }).custom((value, helpers) => {
   // Custom validation: Ensure at least one tenure format is provided and valid
   const hasNewFormat = value.tenureYears !== undefined || value.tenureMonths !== undefined

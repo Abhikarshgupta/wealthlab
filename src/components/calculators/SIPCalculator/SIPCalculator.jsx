@@ -34,7 +34,6 @@ const SIPCalculator = () => {
       expectedReturn: investmentRates.sip.expectedReturn,
       stepUpEnabled: false,
       stepUpPercentage: 10,
-      adjustInflation: false
     },
     mode: 'onChange'
   })
@@ -46,7 +45,6 @@ const SIPCalculator = () => {
   const expectedReturn = watch('expectedReturn')
   const stepUpEnabled = watch('stepUpEnabled')
   const stepUpPercentage = watch('stepUpPercentage')
-  const adjustInflation = watch('adjustInflation')
 
   // Convert string values to numbers
   const monthlySIPNum = parseFloat(monthlySIP) || 0
@@ -61,8 +59,7 @@ const SIPCalculator = () => {
     tenureUnit,
     expectedReturnNum,
     stepUpEnabled,
-    stepUpPercentageNum,
-    adjustInflation
+    stepUpPercentageNum
   )
 
   // Calculate max values for sliders
@@ -244,13 +241,6 @@ const SIPCalculator = () => {
                 </div>
               )}
 
-              {/* Inflation Adjustment Toggle */}
-              <ToggleSwitch
-                label="Adjust for Inflation"
-                checked={adjustInflation}
-                onChange={(checked) => setValue('adjustInflation', checked, { shouldValidate: true })}
-                description="Show real returns after accounting for inflation"
-              />
             </div>
           }
           resultsPanel={
@@ -260,7 +250,7 @@ const SIPCalculator = () => {
             <SIPCalculatorInfo />
           }
           evolutionTable={
-            <SIPCalculatorTable evolution={results?.evolution} />
+            <SIPCalculatorTable evolution={results?.evolution} tenure={tenureUnit === 'years' ? tenureNum : tenureNum / 12} />
           }
         />
     </div>

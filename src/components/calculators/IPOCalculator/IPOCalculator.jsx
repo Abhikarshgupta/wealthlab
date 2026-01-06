@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 import CalculatorLayout from '@/components/common/Layout/CalculatorLayout'
 import InputField from '@/components/common/InputField/InputField'
 import Slider from '@/components/common/Slider/Slider'
-import ToggleSwitch from '@/components/common/ToggleSwitch/ToggleSwitch'
 import IPOCalculatorResults from './IPOCalculatorResults'
 import IPOCalculatorInfo from './IPOCalculatorInfo'
 import IPOCalculatorTable from './IPOCalculatorTable'
@@ -37,8 +36,7 @@ const IPOCalculator = () => {
       listingPrice: 110,
       listingGainPercent: 10,
       holdingPeriod: 1,
-      expectedCAGR: 12,
-      adjustInflation: false
+      expectedCAGR: 12
     },
     mode: 'onChange'
   })
@@ -52,7 +50,6 @@ const IPOCalculator = () => {
   const listingGainPercent = watch('listingGainPercent')
   const holdingPeriod = watch('holdingPeriod')
   const expectedCAGR = watch('expectedCAGR')
-  const adjustInflation = watch('adjustInflation')
 
   // Convert string values to numbers
   const applicationAmountNum = parseFloat(applicationAmount) || 0
@@ -71,8 +68,7 @@ const IPOCalculator = () => {
     listingPriceNum,
     listingGainPercentNum,
     holdingPeriodNum,
-    holdingPeriodNum > 0 ? expectedCAGRNum : null,
-    adjustInflation
+    holdingPeriodNum > 0 ? expectedCAGRNum : null
   )
 
   // Reset expectedCAGR when holding period is 0
@@ -400,15 +396,6 @@ const IPOCalculator = () => {
                 </div>
               )}
 
-              {/* Inflation Adjustment Toggle */}
-              {holdingPeriodNum > 0 && (
-                <ToggleSwitch
-                  label="Adjust for Inflation"
-                  checked={adjustInflation}
-                  onChange={(checked) => setValue('adjustInflation', checked, { shouldValidate: true })}
-                  description="Show real returns after accounting for inflation"
-                />
-              )}
             </div>
           }
           resultsPanel={
@@ -418,7 +405,7 @@ const IPOCalculator = () => {
             <IPOCalculatorInfo />
           }
           evolutionTable={
-            <IPOCalculatorTable evolution={results?.evolution} />
+            <IPOCalculatorTable evolution={results?.evolution} tenure={holdingPeriodNum} />
           }
         />
     </div>

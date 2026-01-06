@@ -66,9 +66,7 @@ export const debtMutualFundSchema = Joi.object({
         'any.required': 'Step-up percentage is required when step-up is enabled'
       }),
     otherwise: Joi.optional()
-  }),
-  
-  adjustInflation: Joi.boolean().default(false)
+  })
 })
 
 export default debtMutualFundSchema

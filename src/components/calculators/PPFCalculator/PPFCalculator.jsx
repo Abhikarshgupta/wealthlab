@@ -33,7 +33,6 @@ const PPFCalculator = () => {
       rate: investmentRates.ppf.rate,
       stepUpEnabled: false,
       stepUpPercentage: 10,
-      adjustInflation: false
     },
     mode: 'onChange'
   })
@@ -44,7 +43,6 @@ const PPFCalculator = () => {
   const rate = watch('rate')
   const stepUpEnabled = watch('stepUpEnabled')
   const stepUpPercentage = watch('stepUpPercentage')
-  const adjustInflation = watch('adjustInflation')
 
   // Convert string values to numbers
   const yearlyInvestmentNum = parseFloat(yearlyInvestment) || 0
@@ -58,8 +56,7 @@ const PPFCalculator = () => {
     tenureNum,
     rateNum,
     stepUpEnabled,
-    stepUpPercentageNum,
-    adjustInflation
+    stepUpPercentageNum
   )
 
   // Calculate max values for sliders
@@ -225,13 +222,6 @@ const PPFCalculator = () => {
                 </div>
               )}
 
-              {/* Inflation Adjustment Toggle */}
-              <ToggleSwitch
-                label="Adjust for Inflation"
-                checked={adjustInflation}
-                onChange={(checked) => setValue('adjustInflation', checked, { shouldValidate: true })}
-                description="Show real returns after accounting for inflation"
-              />
             </div>
           }
           resultsPanel={
@@ -241,7 +231,7 @@ const PPFCalculator = () => {
             <PPFCalculatorInfo />
           }
           evolutionTable={
-            <PPFCalculatorTable evolution={results?.evolution} />
+            <PPFCalculatorTable evolution={results?.evolution} tenure={tenureNum} />
           }
         />
     </div>

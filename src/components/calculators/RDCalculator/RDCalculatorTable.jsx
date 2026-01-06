@@ -5,8 +5,9 @@ import InvestmentTable from '@/components/common/InvestmentTable/InvestmentTable
  * Displays year-wise or month-wise breakdown of RD investment
  * 
  * @param {Array} evolution - Evolution data from useRDCalculator hook
+ * @param {number} tenure - Investment tenure in years
  */
-const RDCalculatorTable = ({ evolution }) => {
+const RDCalculatorTable = ({ evolution, tenure }) => {
   if (!evolution || evolution.length === 0) {
     return null
   }
@@ -18,6 +19,7 @@ const RDCalculatorTable = ({ evolution }) => {
     <InvestmentTable
       data={evolution}
       title={isMonthly ? "Month-wise Investment Evolution" : "Year-wise Investment Evolution"}
+      tenure={tenure}
     />
   )
 }

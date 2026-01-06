@@ -17,18 +17,16 @@ import useUserPreferencesStore from '@/store/userPreferencesStore'
  * @param {number} amount - Investment amount (monthly SIP or lumpsum)
  * @param {number} tenure - Investment tenure in years (minimum 3 years)
  * @param {number} expectedReturn - Expected annual return rate (as percentage, e.g., 14 for 14%)
- * @param {boolean} adjustInflation - Whether to adjust for inflation
  * @returns {Object} Calculation results
  */
 const useELSSCalculator = (
   investmentType,
   amount,
   tenure,
-  expectedReturn,
-  adjustInflation
+  expectedReturn
 ) => {
   const [results, setResults] = useState(null)
-  const { defaultInflationRate } = useUserPreferencesStore()
+  const { defaultInflationRate, adjustInflation } = useUserPreferencesStore()
   const inflationRate = defaultInflationRate / 100 // Convert to decimal
 
   useEffect(() => {

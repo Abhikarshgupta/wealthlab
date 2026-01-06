@@ -3,7 +3,6 @@ import { joiResolver } from '@hookform/resolvers/joi'
 import CalculatorLayout from '@/components/common/Layout/CalculatorLayout'
 import InputField from '@/components/common/InputField/InputField'
 import Slider from '@/components/common/Slider/Slider'
-import ToggleSwitch from '@/components/common/ToggleSwitch/ToggleSwitch'
 import NSCalculatorResults from './NSCalculatorResults'
 import NSCalculatorInfo from './NSCalculatorInfo'
 import NSCalculatorTable from './NSCalculatorTable'
@@ -28,8 +27,7 @@ const NSCalculator = () => {
     resolver: joiResolver(nscSchema),
     defaultValues: {
       principal: 100000,
-      rate: investmentRates.nsc.rate,
-      adjustInflation: false
+      rate: investmentRates.nsc.rate
     },
     mode: 'onChange'
   })
@@ -37,7 +35,6 @@ const NSCalculator = () => {
   // Watch form values for real-time updates
   const principal = watch('principal')
   const rate = watch('rate')
-  const adjustInflation = watch('adjustInflation')
 
   // Convert string values to numbers
   const principalNum = parseFloat(principal) || 0
@@ -46,8 +43,7 @@ const NSCalculator = () => {
   // Calculate results using custom hook
   const results = useNSCalculator(
     principalNum,
-    rateNum,
-    adjustInflation
+    rateNum
   )
 
   // Calculate max values for sliders
@@ -152,13 +148,6 @@ const NSCalculator = () => {
                 />
               </div>
 
-              {/* Inflation Adjustment Toggle */}
-              <ToggleSwitch
-                label="Adjust for Inflation"
-                checked={adjustInflation}
-                onChange={(checked) => setValue('adjustInflation', checked, { shouldValidate: true })}
-                description="Show real returns after accounting for inflation"
-              />
             </div>
           }
           resultsPanel={
@@ -168,7 +157,7 @@ const NSCalculator = () => {
             <NSCalculatorInfo />
           }
           evolutionTable={
-            <NSCalculatorTable evolution={results?.evolution} />
+            <NSCalculatorTable evolution={results?.evolution} tenure={5} />
           }
         />
     </div>

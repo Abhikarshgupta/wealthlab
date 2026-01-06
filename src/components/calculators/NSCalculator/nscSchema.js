@@ -22,9 +22,7 @@ export const nscSchema = Joi.object({
       'number.min': 'Interest rate must be at least 0.1%',
       'number.max': 'Interest rate cannot exceed 100%',
       'number.base': 'Interest rate must be a number'
-    }),
-  
-  adjustInflation: Joi.boolean().default(false)
+    })
 })
 
 export default nscSchema
