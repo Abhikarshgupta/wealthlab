@@ -24,7 +24,6 @@ import useUserPreferencesStore from '@/store/userPreferencesStore'
  * @param {number} governmentBondsReturn - Expected government bonds return rate (as percentage)
  * @param {number} alternativeReturn - Expected alternative investments return rate (as percentage)
  * @param {boolean} useAgeBasedCaps - Whether to apply age-based equity caps
- * @param {boolean} adjustInflation - Whether to adjust for inflation
  * @returns {Object} Calculation results
  */
 const useNPSCalculator = (
@@ -39,11 +38,10 @@ const useNPSCalculator = (
   corporateBondsReturn,
   governmentBondsReturn,
   alternativeReturn,
-  useAgeBasedCaps,
-  adjustInflation
+  useAgeBasedCaps
 ) => {
   const [results, setResults] = useState(null)
-  const { defaultInflationRate } = useUserPreferencesStore()
+  const { defaultInflationRate, adjustInflation } = useUserPreferencesStore()
   const inflationRate = defaultInflationRate / 100 // Convert to decimal
 
   useEffect(() => {

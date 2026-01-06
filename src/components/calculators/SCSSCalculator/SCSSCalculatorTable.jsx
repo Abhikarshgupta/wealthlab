@@ -5,8 +5,9 @@ import InvestmentTable from '@/components/common/InvestmentTable/InvestmentTable
  * Displays year-wise breakdown of SCSS investment
  * 
  * @param {Array} evolution - Evolution data from useSCSSCalculator hook
+ * @param {number} tenure - Investment tenure in years
  */
-const SCSSCalculatorTable = ({ evolution }) => {
+const SCSSCalculatorTable = ({ evolution, tenure }) => {
   if (!evolution || evolution.length === 0) {
     return null
   }
@@ -15,6 +16,7 @@ const SCSSCalculatorTable = ({ evolution }) => {
     <InvestmentTable
       data={evolution}
       title="Year-wise Investment Evolution"
+      tenure={tenure}
     />
   )
 }

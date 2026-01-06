@@ -31,8 +31,7 @@ const Bonds54ECCalculator = () => {
     defaultValues: {
       capitalGainAmount: 1000000,
       investmentAmount: 1000000,
-      rate: investmentRates.bonds54EC?.rate || 5.75,
-      adjustInflation: false
+      rate: investmentRates.bonds54EC?.rate || 5.75
     },
     mode: 'onChange'
   })
@@ -41,7 +40,6 @@ const Bonds54ECCalculator = () => {
   const capitalGainAmount = watch('capitalGainAmount')
   const investmentAmount = watch('investmentAmount')
   const rate = watch('rate')
-  const adjustInflation = watch('adjustInflation')
 
   // Convert string values to numbers
   const capitalGainAmountNum = parseFloat(capitalGainAmount) || 0
@@ -52,8 +50,7 @@ const Bonds54ECCalculator = () => {
   const results = use54ECBondsCalculator(
     capitalGainAmountNum,
     investmentAmountNum,
-    rateNum,
-    adjustInflation
+    rateNum
   )
 
   // Calculate max values for sliders
@@ -213,14 +210,6 @@ const Bonds54ECCalculator = () => {
                 />
               </div>
 
-              {/* Inflation Adjustment Toggle */}
-              <ToggleSwitch
-                label="Adjust for Inflation"
-                checked={adjustInflation}
-                onChange={(checked) => setValue('adjustInflation', checked, { shouldValidate: true })}
-                description="Show real returns after accounting for inflation"
-              />
-
               {/* Important Note */}
               <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
                 <h3 className="text-sm font-semibold text-yellow-900 dark:text-yellow-200 mb-2">
@@ -242,7 +231,7 @@ const Bonds54ECCalculator = () => {
             <Bonds54ECCalculatorInfo />
           }
           evolutionTable={
-            <Bonds54ECCalculatorTable evolution={results?.evolution} />
+            <Bonds54ECCalculatorTable evolution={results?.evolution} tenure={5} />
           }
         />
     </div>

@@ -37,7 +37,6 @@ const EquityCalculator = () => {
       expectedCAGR: investmentRates.equity.defaultExpectedReturn,
       stepUpEnabled: false,
       stepUpPercentage: 10,
-      adjustInflation: false
     },
     mode: 'onChange'
   })
@@ -49,7 +48,6 @@ const EquityCalculator = () => {
   const expectedCAGR = watch('expectedCAGR')
   const stepUpEnabled = watch('stepUpEnabled')
   const stepUpPercentage = watch('stepUpPercentage')
-  const adjustInflation = watch('adjustInflation')
 
   // Convert string values to numbers
   const amountNum = parseFloat(amount) || 0
@@ -64,8 +62,7 @@ const EquityCalculator = () => {
     tenureNum,
     expectedCAGRNum,
     investmentType === 'sip' ? stepUpEnabled : false,
-    stepUpPercentageNum,
-    adjustInflation
+    stepUpPercentageNum
   )
 
   // Disable step-up when switching to lumpsum mode
@@ -311,13 +308,6 @@ const EquityCalculator = () => {
                 </>
               )}
 
-              {/* Inflation Adjustment Toggle */}
-              <ToggleSwitch
-                label="Adjust for Inflation"
-                checked={adjustInflation}
-                onChange={(checked) => setValue('adjustInflation', checked, { shouldValidate: true })}
-                description="Show real returns after accounting for inflation"
-              />
             </div>
           }
           resultsPanel={
@@ -327,7 +317,7 @@ const EquityCalculator = () => {
             <EquityCalculatorInfo />
           }
           evolutionTable={
-            <EquityCalculatorTable evolution={results?.evolution} />
+            <EquityCalculatorTable evolution={results?.evolution} tenure={tenureNum} />
           }
         />
     </div>

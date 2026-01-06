@@ -16,7 +16,6 @@ import { convertYearsMonthsToYears, convertYearsMonthsToMonths } from '@/utils/f
  * @param {number} tenureMonths - Number of months (0-11)
  * @param {number} rate - Annual interest rate (as percentage, e.g., 6.5 for 6.5%)
  * @param {string} compoundingFrequency - 'quarterly', 'monthly', 'annually', or 'cumulative'
- * @param {boolean} adjustInflation - Whether to adjust for inflation
  * @returns {Object} Calculation results
  */
 const useFDCalculator = (
@@ -24,11 +23,10 @@ const useFDCalculator = (
   tenureYears,
   tenureMonths,
   rate,
-  compoundingFrequency,
-  adjustInflation
+  compoundingFrequency
 ) => {
   const [results, setResults] = useState(null)
-  const { defaultInflationRate } = useUserPreferencesStore()
+  const { defaultInflationRate, adjustInflation } = useUserPreferencesStore()
   const inflationRate = defaultInflationRate / 100 // Convert to decimal
 
   useEffect(() => {

@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 import CalculatorLayout from '@/components/common/Layout/CalculatorLayout'
 import InputField from '@/components/common/InputField/InputField'
 import Slider from '@/components/common/Slider/Slider'
-import ToggleSwitch from '@/components/common/ToggleSwitch/ToggleSwitch'
 import DebtMutualFundCalculatorResults from './DebtMutualFundCalculatorResults'
 import DebtMutualFundCalculatorInfo from './DebtMutualFundCalculatorInfo'
 import DebtMutualFundCalculatorTable from './DebtMutualFundCalculatorTable'
@@ -43,8 +42,7 @@ const DebtMutualFundCalculator = () => {
       fundType: 'shortTerm',
       expectedReturn: getDefaultReturn('shortTerm'),
       stepUpEnabled: false,
-      stepUpPercentage: 10,
-      adjustInflation: false
+      stepUpPercentage: 10
     },
     mode: 'onChange'
   })
@@ -57,7 +55,6 @@ const DebtMutualFundCalculator = () => {
   const expectedReturn = watch('expectedReturn')
   const stepUpEnabled = watch('stepUpEnabled')
   const stepUpPercentage = watch('stepUpPercentage')
-  const adjustInflation = watch('adjustInflation')
 
   // Convert string values to numbers
   const amountNum = parseFloat(amount) || 0
@@ -82,8 +79,7 @@ const DebtMutualFundCalculator = () => {
     fundType,
     expectedReturnNum,
     investmentType === 'sip' ? stepUpEnabled : false,
-    stepUpPercentageNum,
-    adjustInflation
+    stepUpPercentageNum
   )
 
   // Disable step-up when switching to lumpsum mode
@@ -363,13 +359,6 @@ const DebtMutualFundCalculator = () => {
                 </>
               )}
 
-              {/* Inflation Adjustment Toggle */}
-              <ToggleSwitch
-                label="Adjust for Inflation"
-                checked={adjustInflation}
-                onChange={(checked) => setValue('adjustInflation', checked, { shouldValidate: true })}
-                description="Show real returns after accounting for inflation"
-              />
             </div>
           }
           resultsPanel={
@@ -379,7 +368,7 @@ const DebtMutualFundCalculator = () => {
             <DebtMutualFundCalculatorInfo />
           }
           evolutionTable={
-            <DebtMutualFundCalculatorTable evolution={results?.evolution} />
+            <DebtMutualFundCalculatorTable evolution={results?.evolution} tenure={tenureNum} />
           }
         />
     </div>

@@ -17,7 +17,6 @@ import useUserPreferencesStore from '@/store/userPreferencesStore'
  * @param {number} rate - Annual interest rate (as percentage, e.g., 8.2 for 8.2%)
  * @param {boolean} stepUpEnabled - Whether step-up is enabled
  * @param {number} stepUpPercentage - Annual step-up percentage (as percentage, e.g., 10 for 10%)
- * @param {boolean} adjustInflation - Whether to adjust for inflation
  * @returns {Object} Calculation results
  */
 const useSSYCalculator = (
@@ -26,11 +25,10 @@ const useSSYCalculator = (
   startYear,
   rate,
   stepUpEnabled,
-  stepUpPercentage,
-  adjustInflation
+  stepUpPercentage
 ) => {
   const [results, setResults] = useState(null)
-  const { defaultInflationRate } = useUserPreferencesStore()
+  const { defaultInflationRate, adjustInflation } = useUserPreferencesStore()
   const inflationRate = defaultInflationRate / 100 // Convert to decimal
   const MAX_YEARLY_INVESTMENT = 150000 // ₹1.5L cap per year
 

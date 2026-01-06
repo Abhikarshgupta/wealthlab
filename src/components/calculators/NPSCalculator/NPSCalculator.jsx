@@ -55,7 +55,6 @@ const NPSCalculator = () => {
       governmentBondsReturn: investmentRates.nps.debt || 8,
       alternativeReturn: 7,
       useAgeBasedCaps: false,
-      adjustInflation: false
     },
     mode: 'onChange'
   })
@@ -73,7 +72,6 @@ const NPSCalculator = () => {
   const governmentBondsReturn = watch('governmentBondsReturn')
   const alternativeReturn = watch('alternativeReturn')
   const useAgeBasedCaps = watch('useAgeBasedCaps')
-  const adjustInflation = watch('adjustInflation')
 
   // Convert string values to numbers
   const monthlyContributionNum = parseFloat(monthlyContribution) || 0
@@ -191,8 +189,7 @@ const NPSCalculator = () => {
     corporateBondsReturnNum,
     governmentBondsReturnNum,
     alternativeReturnNum,
-    useAgeBasedCaps,
-    adjustInflation
+    useAgeBasedCaps
   )
 
   return (
@@ -655,13 +652,6 @@ const NPSCalculator = () => {
                 description="Automatically reduce equity allocation cap as you age (100% up to age 35, decreases by 2.5% annually after, reaches 50% at age 60+)"
               />
 
-              {/* Inflation Adjustment Toggle */}
-              <ToggleSwitch
-                label="Adjust for Inflation"
-                checked={adjustInflation}
-                onChange={(checked) => setValue('adjustInflation', checked, { shouldValidate: true })}
-                description="Show real returns after accounting for inflation"
-              />
             </div>
           }
           resultsPanel={
@@ -671,7 +661,7 @@ const NPSCalculator = () => {
             <NPSCalculatorInfo />
           }
           evolutionTable={
-            <NPSCalculatorTable evolution={results?.evolution} />
+            <NPSCalculatorTable evolution={results?.evolution} tenure={tenureNum} />
           }
         />
     </div>

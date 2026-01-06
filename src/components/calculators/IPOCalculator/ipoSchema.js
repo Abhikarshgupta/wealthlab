@@ -92,9 +92,7 @@ export const ipoSchema = Joi.object({
         'any.required': 'Expected CAGR is required when holding period is greater than 0'
       }),
     otherwise: Joi.optional()
-  }),
-  
-  adjustInflation: Joi.boolean().default(false)
+  })
 })
 
 export default ipoSchema

@@ -43,7 +43,6 @@ const ELSSCalculator = () => {
   const amount = watch('amount')
   const tenure = watch('tenure')
   const expectedReturn = watch('expectedReturn')
-  const adjustInflation = watch('adjustInflation')
 
   // Convert string values to numbers
   const amountNum = parseFloat(amount) || 0
@@ -55,8 +54,7 @@ const ELSSCalculator = () => {
     investmentType,
     amountNum,
     tenureNum,
-    expectedReturnNum,
-    adjustInflation
+    expectedReturnNum
   )
 
   // Calculate max values for sliders
@@ -209,13 +207,6 @@ const ELSSCalculator = () => {
               />
             </div>
 
-            {/* Inflation Adjustment Toggle */}
-            <ToggleSwitch
-              label="Adjust for Inflation"
-              checked={adjustInflation}
-              onChange={(checked) => setValue('adjustInflation', checked, { shouldValidate: true })}
-              description="Show real returns after accounting for inflation"
-            />
           </div>
         }
         resultsPanel={
@@ -225,7 +216,7 @@ const ELSSCalculator = () => {
           <ELSSCalculatorInfo />
         }
         evolutionTable={
-          <ELSSCalculatorTable evolution={results?.evolution} />
+          <ELSSCalculatorTable evolution={results?.evolution} tenure={tenureNum} />
         }
       />
     </div>

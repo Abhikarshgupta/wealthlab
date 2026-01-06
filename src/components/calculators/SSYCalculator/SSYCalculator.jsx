@@ -3,7 +3,6 @@ import { joiResolver } from '@hookform/resolvers/joi'
 import CalculatorLayout from '@/components/common/Layout/CalculatorLayout'
 import InputField from '@/components/common/InputField/InputField'
 import Slider from '@/components/common/Slider/Slider'
-import ToggleSwitch from '@/components/common/ToggleSwitch/ToggleSwitch'
 import SSYCalculatorResults from './SSYCalculatorResults'
 import SSYCalculatorInfo from './SSYCalculatorInfo'
 import SSYCalculatorTable from './SSYCalculatorTable'
@@ -37,8 +36,7 @@ const SSYCalculator = () => {
       startYear: currentYear,
       rate: investmentRates.ssy.rate,
       stepUpEnabled: false,
-      stepUpPercentage: 10,
-      adjustInflation: false
+      stepUpPercentage: 10
     },
     mode: 'onChange'
   })
@@ -50,7 +48,6 @@ const SSYCalculator = () => {
   const rate = watch('rate')
   const stepUpEnabled = watch('stepUpEnabled')
   const stepUpPercentage = watch('stepUpPercentage')
-  const adjustInflation = watch('adjustInflation')
 
   // Convert string values to numbers
   const yearlyInvestmentNum = parseFloat(yearlyInvestment) || 0
@@ -66,8 +63,7 @@ const SSYCalculator = () => {
     startYearNum,
     rateNum,
     stepUpEnabled,
-    stepUpPercentageNum,
-    adjustInflation
+    stepUpPercentageNum
   )
 
   // Calculate max values for sliders
@@ -271,13 +267,6 @@ const SSYCalculator = () => {
                 </div>
               )}
 
-              {/* Inflation Adjustment Toggle */}
-              <ToggleSwitch
-                label="Adjust for Inflation"
-                checked={adjustInflation}
-                onChange={(checked) => setValue('adjustInflation', checked, { shouldValidate: true })}
-                description="Show real returns after accounting for inflation"
-              />
             </div>
           }
           resultsPanel={

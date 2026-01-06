@@ -5,8 +5,9 @@ import InvestmentTable from '@/components/common/InvestmentTable/InvestmentTable
  * Displays year-wise breakdown of equity investment
  * 
  * @param {Array} evolution - Evolution data from useEquityCalculator hook
+ * @param {number} tenure - Investment tenure in years
  */
-const EquityCalculatorTable = ({ evolution }) => {
+const EquityCalculatorTable = ({ evolution, tenure }) => {
   if (!evolution || evolution.length === 0) {
     return null
   }
@@ -15,6 +16,7 @@ const EquityCalculatorTable = ({ evolution }) => {
     <InvestmentTable
       data={evolution}
       title="Year-wise Investment Evolution"
+      tenure={tenure}
     />
   )
 }

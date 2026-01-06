@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 import CalculatorLayout from '@/components/common/Layout/CalculatorLayout'
 import InputField from '@/components/common/InputField/InputField'
 import Slider from '@/components/common/Slider/Slider'
-import ToggleSwitch from '@/components/common/ToggleSwitch/ToggleSwitch'
 import ETFCalculatorResults from './ETFCalculatorResults'
 import ETFCalculatorInfo from './ETFCalculatorInfo'
 import ETFCalculatorTable from './ETFCalculatorTable'
@@ -39,8 +38,7 @@ const ETFCalculator = () => {
       expectedCAGR: investmentRates.etf?.equity || 12,
       expenseRatio: 0.20,
       stepUpEnabled: false,
-      stepUpPercentage: 10,
-      adjustInflation: false
+      stepUpPercentage: 10
     },
     mode: 'onChange'
   })
@@ -54,7 +52,6 @@ const ETFCalculator = () => {
   const expenseRatio = watch('expenseRatio')
   const stepUpEnabled = watch('stepUpEnabled')
   const stepUpPercentage = watch('stepUpPercentage')
-  const adjustInflation = watch('adjustInflation')
 
   // Convert string values to numbers
   const amountNum = parseFloat(amount) || 0
@@ -86,8 +83,7 @@ const ETFCalculator = () => {
     expectedCAGRNum,
     expenseRatioNum,
     investmentType === 'sip' ? stepUpEnabled : false,
-    stepUpPercentageNum,
-    adjustInflation
+    stepUpPercentageNum
   )
 
   // Disable step-up when switching to lumpsum mode
@@ -418,13 +414,6 @@ const ETFCalculator = () => {
                 </>
               )}
 
-              {/* Inflation Adjustment Toggle */}
-              <ToggleSwitch
-                label="Adjust for Inflation"
-                checked={adjustInflation}
-                onChange={(checked) => setValue('adjustInflation', checked, { shouldValidate: true })}
-                description="Show real returns after accounting for inflation"
-              />
             </div>
           }
           resultsPanel={
@@ -434,7 +423,7 @@ const ETFCalculator = () => {
             <ETFCalculatorInfo />
           }
           evolutionTable={
-            <ETFCalculatorTable evolution={results?.evolution} />
+            <ETFCalculatorTable evolution={results?.evolution} tenure={tenureNum} />
           }
         />
     </div>

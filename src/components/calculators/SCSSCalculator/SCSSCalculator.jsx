@@ -3,7 +3,6 @@ import { joiResolver } from '@hookform/resolvers/joi'
 import CalculatorLayout from '@/components/common/Layout/CalculatorLayout'
 import InputField from '@/components/common/InputField/InputField'
 import Slider from '@/components/common/Slider/Slider'
-import ToggleSwitch from '@/components/common/ToggleSwitch/ToggleSwitch'
 import SCSSCalculatorResults from './SCSSCalculatorResults'
 import SCSSCalculatorInfo from './SCSSCalculatorInfo'
 import SCSSCalculatorTable from './SCSSCalculatorTable'
@@ -32,8 +31,7 @@ const SCSSCalculator = () => {
       tenure: 5,
       seniorsAge: 65,
       isDefensePersonnel: false,
-      rate: investmentRates.scss.rate,
-      adjustInflation: false
+      rate: investmentRates.scss.rate
     },
     mode: 'onChange'
   })
@@ -44,7 +42,6 @@ const SCSSCalculator = () => {
   const seniorsAge = watch('seniorsAge')
   const isDefensePersonnel = watch('isDefensePersonnel')
   const rate = watch('rate')
-  const adjustInflation = watch('adjustInflation')
 
   // Convert string values to numbers
   const principalNum = parseFloat(principal) || 0
@@ -58,7 +55,6 @@ const SCSSCalculator = () => {
     tenureNum,
     seniorsAgeNum,
     rateNum,
-    adjustInflation,
     isDefensePersonnel
   )
 
@@ -240,13 +236,6 @@ const SCSSCalculator = () => {
                 />
               </div>
 
-              {/* Inflation Adjustment Toggle */}
-              <ToggleSwitch
-                label="Adjust for Inflation"
-                checked={adjustInflation}
-                onChange={(checked) => setValue('adjustInflation', checked, { shouldValidate: true })}
-                description="Show real returns after accounting for inflation"
-              />
             </div>
           }
           resultsPanel={
@@ -256,7 +245,7 @@ const SCSSCalculator = () => {
             <SCSSCalculatorInfo />
           }
           evolutionTable={
-            <SCSSCalculatorTable evolution={results?.evolution} />
+            <SCSSCalculatorTable evolution={results?.evolution} tenure={tenureNum} />
           }
         />
     </div>

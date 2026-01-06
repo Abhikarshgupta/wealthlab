@@ -6,8 +6,9 @@ import { formatCurrency, formatPercentageValue } from '@/utils/formatters'
  * Displays year-wise breakdown of IPO investment including listing gains and post-listing growth
  * 
  * @param {Array} evolution - Evolution data from useIPOCalculator hook
+ * @param {number} tenure - Investment tenure in years
  */
-const IPOCalculatorTable = ({ evolution }) => {
+const IPOCalculatorTable = ({ evolution, tenure }) => {
   if (!evolution || evolution.length === 0) {
     return null
   }

@@ -33,9 +33,7 @@ export const bonds54ECSchema = Joi.object({
       'number.min': 'Interest rate must be at least 0.1%',
       'number.max': 'Interest rate cannot exceed 100%',
       'number.base': 'Interest rate must be a number'
-    }),
-  
-  adjustInflation: Joi.boolean().default(false)
+    })
 })
   .custom((value, helpers) => {
     // Custom validation: investment amount cannot exceed capital gain amount

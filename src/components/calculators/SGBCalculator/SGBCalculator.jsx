@@ -3,7 +3,6 @@ import { joiResolver } from '@hookform/resolvers/joi'
 import CalculatorLayout from '@/components/common/Layout/CalculatorLayout'
 import InputField from '@/components/common/InputField/InputField'
 import Slider from '@/components/common/Slider/Slider'
-import ToggleSwitch from '@/components/common/ToggleSwitch/ToggleSwitch'
 import SGBCalculatorResults from './SGBCalculatorResults'
 import SGBCalculatorInfo from './SGBCalculatorInfo'
 import SGBCalculatorTable from './SGBCalculatorTable'
@@ -32,8 +31,7 @@ const SGBCalculator = () => {
     defaultValues: {
       goldAmount: 10,
       tenure: 8,
-      goldAppreciationRate: investmentRates.sgb.goldAppreciation,
-      adjustInflation: false
+      goldAppreciationRate: investmentRates.sgb.goldAppreciation
     },
     mode: 'onChange'
   })
@@ -42,7 +40,6 @@ const SGBCalculator = () => {
   const goldAmount = watch('goldAmount')
   const tenure = watch('tenure')
   const goldAppreciationRate = watch('goldAppreciationRate')
-  const adjustInflation = watch('adjustInflation')
 
   // Convert string values to numbers
   const goldAmountNum = parseFloat(goldAmount) || 0
@@ -53,8 +50,7 @@ const SGBCalculator = () => {
   const results = useSGBCalculator(
     goldAmountNum,
     tenureNum,
-    goldAppreciationRateNum,
-    adjustInflation
+    goldAppreciationRateNum
   )
 
   // State for refreshing gold price
@@ -276,13 +272,6 @@ const SGBCalculator = () => {
                 />
               </div>
 
-              {/* Inflation Adjustment Toggle */}
-              <ToggleSwitch
-                label="Adjust for Inflation"
-                checked={adjustInflation}
-                onChange={(checked) => setValue('adjustInflation', checked, { shouldValidate: true })}
-                description="Show real returns after accounting for inflation"
-              />
             </div>
           }
           resultsPanel={

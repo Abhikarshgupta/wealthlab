@@ -7,10 +7,13 @@ import CorpusCalculatorPage from '@/pages/CorpusCalculatorPage/CorpusCalculatorP
 import PrivacyPolicy from '@/pages/Legal/PrivacyPolicy'
 import TermsOfService from '@/pages/Legal/TermsOfService'
 import Disclaimer from '@/pages/Legal/Disclaimer'
+import ScrollToTopOnRouteChange from '@/components/common/ScrollToTopOnRouteChange'
 
 const AppRoutes = () => {
   return (
-    <Routes>
+    <>
+      <ScrollToTopOnRouteChange />
+      <Routes>
       <Route path={routes.home} element={<Home />} />
       <Route path={routes.calculators.index} element={<CalculatorPage />} />
       <Route path={routes.calculators.ppf} element={<CalculatorPage calculatorType="ppf" />} />
@@ -34,7 +37,8 @@ const AppRoutes = () => {
       <Route path={routes.legal.privacy} element={<PrivacyPolicy />} />
       <Route path={routes.legal.terms} element={<TermsOfService />} />
       <Route path={routes.legal.disclaimer} element={<Disclaimer />} />
-    </Routes>
+      </Routes>
+    </>
   )
 }
 

@@ -40,7 +40,6 @@ const FDCalculator = () => {
       tenureMonths: 0,
       rate: investmentRates.fd.rate,
       compoundingFrequency: 'quarterly',
-      adjustInflation: false
     },
     mode: 'onChange'
   })
@@ -51,7 +50,6 @@ const FDCalculator = () => {
   const tenureMonths = watch('tenureMonths')
   const rate = watch('rate')
   const compoundingFrequency = watch('compoundingFrequency')
-  const adjustInflation = watch('adjustInflation')
 
   // Convert string values to numbers
   const principalNum = parseFloat(principal) || 0
@@ -69,8 +67,7 @@ const FDCalculator = () => {
     normalizedTenure.years,
     normalizedTenure.months,
     rateNum,
-    compoundingFrequency,
-    adjustInflation
+    compoundingFrequency
   )
 
   // Calculate max values for sliders
@@ -276,13 +273,6 @@ const FDCalculator = () => {
                 </div>
               </div>
 
-              {/* Inflation Adjustment Toggle */}
-              <ToggleSwitch
-                label="Adjust for Inflation"
-                checked={adjustInflation}
-                onChange={(checked) => setValue('adjustInflation', checked, { shouldValidate: true })}
-                description="Show real returns after accounting for inflation"
-              />
             </div>
           }
           resultsPanel={
@@ -292,7 +282,7 @@ const FDCalculator = () => {
             <FDCalculatorInfo />
           }
           evolutionTable={
-            <FDCalculatorTable evolution={results?.evolution} />
+            <FDCalculatorTable evolution={results?.evolution} tenure={totalYears} />
           }
         />
     </div>

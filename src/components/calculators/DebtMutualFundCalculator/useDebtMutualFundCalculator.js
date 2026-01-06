@@ -21,7 +21,6 @@ import useUserPreferencesStore from '@/store/userPreferencesStore'
  * @param {number} expectedReturn - Expected annual return rate (as percentage, e.g., 7.5 for 7.5%)
  * @param {boolean} stepUpEnabled - Whether step-up SIP is enabled (only for SIP mode)
  * @param {number} stepUpPercentage - Annual step-up percentage (as percentage, e.g., 10 for 10%)
- * @param {boolean} adjustInflation - Whether to adjust for inflation
  * @returns {Object} Calculation results
  */
 const useDebtMutualFundCalculator = (
@@ -31,11 +30,10 @@ const useDebtMutualFundCalculator = (
   fundType,
   expectedReturn,
   stepUpEnabled,
-  stepUpPercentage,
-  adjustInflation
+  stepUpPercentage
 ) => {
   const [results, setResults] = useState(null)
-  const { defaultInflationRate } = useUserPreferencesStore()
+  const { defaultInflationRate, adjustInflation } = useUserPreferencesStore()
   const inflationRate = defaultInflationRate / 100 // Convert to decimal
 
   useEffect(() => {

@@ -5,8 +5,9 @@ import InvestmentTable from '@/components/common/InvestmentTable/InvestmentTable
  * Displays year-wise breakdown of 54EC Bonds investment
  * 
  * @param {Array} evolution - Evolution data from use54ECBondsCalculator hook
+ * @param {number} tenure - Investment tenure in years
  */
-const Bonds54ECCalculatorTable = ({ evolution }) => {
+const Bonds54ECCalculatorTable = ({ evolution, tenure }) => {
   if (!evolution || evolution.length === 0) {
     return null
   }
@@ -15,6 +16,7 @@ const Bonds54ECCalculatorTable = ({ evolution }) => {
     <InvestmentTable
       data={evolution}
       title="Year-wise Investment Evolution"
+      tenure={tenure}
     />
   )
 }

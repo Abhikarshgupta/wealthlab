@@ -51,9 +51,7 @@ export const scssSchema = Joi.object({
       'number.min': 'Rate must be at least 0.1%',
       'number.max': 'Rate cannot exceed 100%',
       'number.base': 'Rate must be a number'
-    }),
-  
-  adjustInflation: Joi.boolean().default(false)
+    })
 })
 
 export default scssSchema
