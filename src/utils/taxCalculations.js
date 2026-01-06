@@ -151,8 +151,8 @@ export const calculateTaxOnWithdrawal = (corpus, instrumentType, tenure, options
   }
 
   const taxRule = getTaxRateForInstrument(instrumentType)
-  const { 
-    incomeTaxSlab = 0.30, 
+  const {
+    incomeTaxSlab = 0.30,
     ltcgExemptionUsed = 0,
     investmentData = {},
     principal = null,
@@ -169,31 +169,50 @@ export const calculateTaxOnWithdrawal = (corpus, instrumentType, tenure, options
       effectiveTaxRate = 0
       break
 
-    case 'ltcg':
+    case 'ltcg': {
       // Equity, SIP, ELSS - LTCG if held > 1 year (or > 3 years for ELSS)
       const minHoldingPeriod = instrumentType === 'elss' ? 3 : 1
+
+      // Get actual returns for accurate exemption calculation
+      let actualReturns = returns
+      if (actualReturns === null || actualReturns === undefined || actualReturns < 0) {
+        // Calculate returns from corpus and principal
+        let principalAmount = principal
+        if (principalAmount === null || principalAmount === undefined) {
+          principalAmount = investmentData?.investedAmount ||
+                           investmentData?.principal ||
+                           (investmentData?.monthlySIP ? investmentData.monthlySIP * 12 * (investmentData.tenure || 0) : 0) ||
+                           0
+        }
+        actualReturns = corpus > principalAmount ? corpus - principalAmount : 0
+      }
+
+      // Calculate available exemption (exemption already used by this instrument)
       const availableExemption = Math.max(0, taxRule.exemptionLimit - ltcgExemptionUsed)
 
       if (tenure >= minHoldingPeriod) {
         // Long-term capital gains
-        const taxableAmount = Math.max(0, corpus - availableExemption)
-        taxAmount = taxableAmount * taxRule.rate
+        // Exemption applies to returns, not corpus
+        // Taxable returns = max(0, returns - availableExemption)
+        const taxableReturns = Math.max(0, actualReturns - availableExemption)
+        taxAmount = taxableReturns * taxRule.rate // Tax only on taxable returns
         effectiveTaxRate = corpus > 0 ? (taxAmount / corpus) * 100 : 0
       } else {
-        // Short-term capital gains
-        taxAmount = corpus * 0.15 // 15% STCG
-        effectiveTaxRate = 15
+        // Short-term capital gains (no exemption)
+        taxAmount = actualReturns * 0.15 // 15% STCG on returns
+        effectiveTaxRate = corpus > 0 ? (taxAmount / corpus) * 100 : 0
       }
       break
+    }
 
-    case 'ltcg_indexed':
+    case 'ltcg_indexed': {
       // Debt Mutual Funds - LTCG with indexation after 3 years
       const minDebtFundHoldingPeriod = taxRule.minHoldingPeriod || 3
-      
+
       // Try to get principal for indexation calculation
       let principalAmount = principal
       if (principalAmount === null || principalAmount === undefined) {
-        principalAmount = investmentData?.principal || 
+        principalAmount = investmentData?.principal ||
                          investmentData?.investedAmount ||
                          investmentData?.yearlyInvestment ||
                          (returns !== null && returns > 0 ? corpus - returns : corpus * 0.7) // Estimate if not available
@@ -215,15 +234,17 @@ export const calculateTaxOnWithdrawal = (corpus, instrumentType, tenure, options
         effectiveTaxRate = corpus > 0 ? (taxAmount / corpus) * 100 : 0
       }
       break
+    }
 
-    case 'partial':
+    case 'partial': {
       // NPS - 60% tax-free, 40% taxable
       const taxablePortion = corpus * taxRule.taxablePortion
       taxAmount = taxablePortion * incomeTaxSlab
       effectiveTaxRate = taxRule.taxablePortion * incomeTaxSlab * 100
       break
+    }
 
-    case 'conditional':
+    case 'conditional': {
       // SGB - Capital gains exempt if held till maturity, interest taxable
       // For simplicity, assume held till maturity (5/8 years)
       const minSGBTenure = 5
@@ -240,45 +261,47 @@ export const calculateTaxOnWithdrawal = (corpus, instrumentType, tenure, options
         effectiveTaxRate = 15
       }
       break
+    }
 
-    case 'interest':
+    case 'interest': {
       // FD, NSC, SCSS - Interest taxed as per income slab
       // Principal is not taxable (already post-tax money)
       // Only interest portion is taxable
-      
+
       // Try to get actual interest amount in order of preference:
       // 1. Direct returns parameter (most accurate)
       // 2. Calculate from principal if available
       // 3. Calculate from investmentData
       // 4. Fallback to estimate (for backward compatibility)
-      
+
       let actualInterest = null
-      
+
       if (returns !== null && returns !== undefined && returns > 0) {
         // Use provided returns directly (most accurate)
         actualInterest = returns
       } else {
         // Try to get principal
         let principalAmount = principal
-        
+
         if (principalAmount === null || principalAmount === undefined) {
           // Try to get from investmentData
-          principalAmount = investmentData?.principal || 
+          principalAmount = investmentData?.principal ||
                            investmentData?.investedAmount ||
                            investmentData?.yearlyInvestment ||
                            0
         }
-        
+
         if (principalAmount && principalAmount > 0 && corpus > principalAmount) {
           // Calculate actual interest
           actualInterest = corpus - principalAmount
         }
       }
-      
+
       if (actualInterest !== null && actualInterest > 0) {
         // Use actual interest for tax calculation
         taxAmount = actualInterest * incomeTaxSlab
         effectiveTaxRate = corpus > 0 ? (taxAmount / corpus) * 100 : 0
+        // Note: TDS calculation is done in the return statement section below
       } else {
         // Fallback to estimate (for backward compatibility)
         // This should rarely happen now, but keeping for safety
@@ -287,31 +310,32 @@ export const calculateTaxOnWithdrawal = (corpus, instrumentType, tenure, options
         effectiveTaxRate = (estimatedReturns / corpus) * incomeTaxSlab * 100
       }
       break
+    }
 
-    case 'capital_gains_exempt':
+    case 'capital_gains_exempt': {
       // 54EC Bonds - Capital gains exempt, interest taxable
       // Capital gains exemption is already applied at investment time (not at withdrawal)
       // Only interest portion is taxable as per income slab
-      
+
       // Try to get actual interest amount
       let bonds54ECInterest = null
-      
+
       if (returns !== null && returns !== undefined && returns > 0) {
         bonds54ECInterest = returns
       } else {
         let principalAmount = principal
-        
+
         if (principalAmount === null || principalAmount === undefined) {
-          principalAmount = investmentData?.principal || 
+          principalAmount = investmentData?.principal ||
                            investmentData?.investedAmount ||
                            0
         }
-        
+
         if (principalAmount && principalAmount > 0 && corpus > principalAmount) {
           bonds54ECInterest = corpus - principalAmount
         }
       }
-      
+
       if (bonds54ECInterest !== null && bonds54ECInterest > 0) {
         // Only interest is taxable (capital gains already exempt at investment)
         taxAmount = bonds54ECInterest * incomeTaxSlab
@@ -323,6 +347,7 @@ export const calculateTaxOnWithdrawal = (corpus, instrumentType, tenure, options
         effectiveTaxRate = corpus > 0 ? (taxAmount / corpus) * 100 : 0
       }
       break
+    }
 
     default:
       taxAmount = 0
@@ -331,11 +356,46 @@ export const calculateTaxOnWithdrawal = (corpus, instrumentType, tenure, options
 
   const postTaxCorpus = corpus - taxAmount
 
+  // Calculate TDS information for FD/SCSS (if applicable)
+  let tdsInfo = null
+  if (taxRule.type === 'interest' && (instrumentType === 'fd' || instrumentType === 'scss')) {
+    // Calculate TDS for display
+    let actualInterest = returns
+    if (actualInterest === null || actualInterest === undefined || actualInterest <= 0) {
+      let principalAmount = principal
+      if (principalAmount === null || principalAmount === undefined) {
+        principalAmount = investmentData?.principal ||
+                         investmentData?.investedAmount ||
+                         0
+      }
+      actualInterest = corpus > principalAmount ? corpus - principalAmount : 0
+    }
+
+    if (actualInterest > 0 && tenure > 0) {
+      const annualInterest = actualInterest / tenure
+      const tdsThreshold = 40000 // ₹40,000 (₹50,000 for senior citizens)
+      const tdsRate = 0.10 // 10% TDS
+
+      if (annualInterest > tdsThreshold) {
+        const totalTDS = annualInterest * tdsRate * Math.floor(tenure)
+        tdsInfo = {
+          applicable: true,
+          annualInterest: Math.round(annualInterest * 100) / 100,
+          tdsThreshold,
+          tdsRate: tdsRate * 100,
+          totalTDS: Math.round(totalTDS * 100) / 100,
+          note: 'TDS deducted at source. Credit available while filing ITR.'
+        }
+      }
+    }
+  }
+
   return {
     taxAmount: Math.round(taxAmount * 100) / 100,
     postTaxCorpus: Math.round(postTaxCorpus * 100) / 100,
     taxRate: Math.round(effectiveTaxRate * 100) / 100,
     taxRule: taxRule.notes,
+    tdsInfo, // TDS information for FD/SCSS
   }
 }
 
@@ -452,6 +512,74 @@ export const calculateTaxForMultipleInstruments = (
     return results
   }
 
+  // Equity instruments that share LTCG exemption (₹1L per FY)
+  const equityInstrumentTypes = ['equity', 'sip', 'elss', 'etf', 'ipo']
+  const equityInstruments = instruments.filter(instr => equityInstrumentTypes.includes(instr))
+
+  // Step 1: Calculate LTCG exemption for equity instruments
+  // LTCG exemption applies to capital gains (returns), not corpus
+  let totalEquityReturns = 0
+  let equityReturnsByInstrument = {}
+  const returnsByInstrument = options.returnsByInstrument || {}
+
+  // Get returns for each equity instrument
+  equityInstruments.forEach((instrumentType) => {
+    const corpus = corpusByInstrument[instrumentType] || 0
+    const investmentData = investments[instrumentType] || {}
+
+    // Try to get returns from options first (most accurate)
+    let returns = returnsByInstrument[instrumentType]
+
+    // If not available, try from investmentData
+    if (returns === null || returns === undefined) {
+      returns = investmentData.returns
+    }
+
+    // If still not available, estimate from corpus and principal
+    if (returns === null || returns === undefined) {
+      const principal = investmentData.investedAmount ||
+                       investmentData.principal ||
+                       (investmentData.monthlySIP ? investmentData.monthlySIP * 12 * (investmentData.tenure || 0) : 0) ||
+                       0
+      returns = corpus > principal ? corpus - principal : 0
+    }
+
+    // Only consider positive returns for exemption calculation
+    if (returns > 0) {
+      totalEquityReturns += returns
+      equityReturnsByInstrument[instrumentType] = returns
+    } else {
+      equityReturnsByInstrument[instrumentType] = 0
+    }
+  })
+
+  // Apply shared exemption (₹1L) once per financial year
+  // Exemption applies to capital gains (returns), not corpus
+  const ltcgExemptionLimit = 100000 // ₹1L
+  const sharedExemptionUsed = Math.min(ltcgExemptionLimit, totalEquityReturns)
+
+  // Calculate exemption per instrument proportionally based on returns
+  let exemptionUsedByInstrument = {}
+  if (totalEquityReturns > 0) {
+    equityInstruments.forEach((instrumentType) => {
+      const returns = equityReturnsByInstrument[instrumentType] || 0
+      if (returns > 0) {
+        // Proportional share of exemption based on returns
+        exemptionUsedByInstrument[instrumentType] = (returns / totalEquityReturns) * sharedExemptionUsed
+      } else {
+        exemptionUsedByInstrument[instrumentType] = 0
+      }
+    })
+  }
+
+  // For non-equity instruments, no exemption
+  instruments.forEach((instrumentType) => {
+    if (!equityInstrumentTypes.includes(instrumentType)) {
+      exemptionUsedByInstrument[instrumentType] = 0
+    }
+  })
+
+  // Step 2: Calculate tax for each instrument
   let totalTax = 0
   let totalPostTaxCorpus = 0
 
@@ -459,11 +587,17 @@ export const calculateTaxForMultipleInstruments = (
     const corpus = corpusByInstrument[instrumentType] || 0
     const investmentData = investments[instrumentType] || {}
 
+    // Prepare options with exemption tracking
+    const instrumentOptions = {
+      ...options,
+      ltcgExemptionUsed: exemptionUsedByInstrument[instrumentType] || 0,
+    }
+
     let taxResult
 
     switch (taxMethod) {
-      case 'accumulation':
-        taxResult = calculateTaxDuringAccumulation(investmentData, instrumentType, investmentData.tenure || 0, options)
+      case 'accumulation': {
+        taxResult = calculateTaxDuringAccumulation(investmentData, instrumentType, investmentData.tenure || 0, instrumentOptions)
         results.byInstrument[instrumentType] = {
           taxAmount: taxResult.totalTaxPaid,
           postTaxCorpus: taxResult.finalCorpus,
@@ -471,21 +605,30 @@ export const calculateTaxForMultipleInstruments = (
         totalTax += taxResult.totalTaxPaid
         totalPostTaxCorpus += taxResult.finalCorpus
         break
+      }
 
-      case 'both':
-        taxResult = calculateTaxBoth(corpus, investmentData, instrumentType, investmentData.tenure || 0, options)
+      case 'both': {
+        taxResult = calculateTaxBoth(corpus, investmentData, instrumentType, investmentData.tenure || 0, instrumentOptions)
         results.byInstrument[instrumentType] = taxResult
         totalTax += taxResult.withdrawal.taxAmount
         totalPostTaxCorpus += taxResult.withdrawal.postTaxCorpus
         break
+      }
 
       case 'withdrawal':
-      default:
-        taxResult = calculateTaxOnWithdrawal(corpus, instrumentType, investmentData.tenure || 0, options)
+      default: {
+        // Pass returns to tax calculation for accurate LTCG exemption
+        const instrumentReturns = returnsByInstrument[instrumentType]
+        const finalOptions = {
+          ...instrumentOptions,
+          returns: instrumentReturns !== undefined ? instrumentReturns : instrumentOptions.returns,
+        }
+        taxResult = calculateTaxOnWithdrawal(corpus, instrumentType, investmentData.tenure || 0, finalOptions)
         results.byInstrument[instrumentType] = taxResult
         totalTax += taxResult.taxAmount
         totalPostTaxCorpus += taxResult.postTaxCorpus
         break
+      }
     }
   })
 

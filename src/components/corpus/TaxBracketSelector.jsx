@@ -8,12 +8,14 @@ const TaxBracketSelector = () => {
   const { settings, updateSettings } = useCorpusCalculatorStore()
   const incomeTaxSlab = settings?.incomeTaxSlab || 0.30
 
-  // Indian tax slabs (FY 2024-25)
+  // Indian tax slabs (FY 2024-25 - New Tax Regime)
   const taxSlabs = [
-    { value: 0.0, label: '0% (No Tax)', description: 'Income up to ₹2.5L' },
-    { value: 0.05, label: '5%', description: 'Income ₹2.5L - ₹5L' },
-    { value: 0.20, label: '20%', description: 'Income ₹5L - ₹10L' },
-    { value: 0.30, label: '30%', description: 'Income above ₹10L' },
+    { value: 0.0, label: '0% (No Tax)', description: 'Income up to ₹3L' },
+    { value: 0.05, label: '5%', description: 'Income ₹3L - ₹7L' },
+    { value: 0.10, label: '10%', description: 'Income ₹7L - ₹12L' },
+    { value: 0.15, label: '15%', description: 'Income ₹12L - ₹15L' },
+    { value: 0.20, label: '20%', description: 'Income ₹15L - ₹20L' },
+    { value: 0.30, label: '30%', description: 'Income above ₹20L' },
   ]
 
   return (

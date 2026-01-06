@@ -11,7 +11,6 @@ import {
   calculateSIPFutureValue,
   calculateStepUpSIP,
   calculateNSC,
-  calculateSGB,
   calculateNPSFutureValue,
   calculateNPSWeightedReturn,
   calculateCompoundInterest,
@@ -42,18 +41,40 @@ const calculateExistingInvestmentFutureValue = (currentValue, rate, remainingYea
  */
 export const calculateInstrumentCorpus = (instrumentType, investmentData, timeHorizon = 0) => {
   if (!instrumentType || !investmentData) {
-    return { investedAmount: 0, maturityValue: 0, returns: 0, existingInvestmentValue: 0, futureInvestmentValue: 0 }
+    return {
+      investedAmount: 0,
+      maturityValue: 0,
+      returns: 0,
+      existingInvestmentValue: 0,
+      futureInvestmentValue: 0,
+      projectedInvestedAmount: 0,
+      projectedFutureInvestmentValue: 0,
+      isProjectedBeyondHorizon: false,
+    }
   }
 
   let investedAmount = 0
   let maturityValue = 0
   let existingInvestmentValue = 0
   let futureInvestmentValue = 0
+  let projectedInvestedAmount = 0
+  let projectedFutureInvestmentValue = 0
+  let isProjectedBeyondHorizon = false
 
   // Handle existing investment if present
   const hasExistingInvestment = investmentData.hasExistingInvestment && investmentData.existingInvestment?.currentValue > 0
   const planToInvestMore = investmentData.planToInvestMore !== false // Default to true for backward compatibility
-  
+
+  // Calculate effective tenure: cap tenure with timeHorizon
+  // This ensures investments don't exceed the withdrawal horizon
+  const getEffectiveTenure = (tenureValue) => {
+    if (!tenureValue || tenureValue <= 0) return 0
+    if (timeHorizon > 0) {
+      return Math.min(tenureValue, timeHorizon)
+    }
+    return tenureValue
+  }
+
   // Determine rate for projecting existing investment:
   // - If planning to invest more: use future investment's expected return (shared projection rate)
   //   This will be handled per instrument type below
@@ -64,21 +85,21 @@ export const calculateInstrumentCorpus = (instrumentType, investmentData, timeHo
     const currentValue = investmentData.existingInvestment.currentValue || 0
     const yearsInvested = investmentData.existingInvestment.yearsInvested || 0
     const remainingYears = Math.max(0, timeHorizon - yearsInvested)
-    
+
     // Get expected return rate from existing investment
     // For different instruments, this might be in different fields
-    let expectedReturnRate = investmentData.existingInvestment?.expectedReturnRate || 
-                             investmentData.existingInvestment?.currentReturnRate || 
+    let expectedReturnRate = investmentData.existingInvestment?.expectedReturnRate ||
+                             investmentData.existingInvestment?.currentReturnRate ||
                              investmentData.rate || 0
-    
+
     // For SGB, handle both gold appreciation and fixed rate
     if (instrumentType === 'sgb' && hasExistingInvestment && !planToInvestMore) {
-      const goldRate = investmentData.existingInvestment?.goldAppreciationRate || 
+      const goldRate = investmentData.existingInvestment?.goldAppreciationRate ||
                        investmentData.goldAppreciationRate || 0
       const fixedRate = investmentData.existingInvestment?.fixedRate || 2.5
       const goldRateDecimal = goldRate / 100
       const fixedRateDecimal = fixedRate / 100
-      
+
       const goldAppreciatedValue = currentValue * Math.pow(1 + goldRateDecimal, remainingYears)
       const fixedInterestAmount = currentValue * (Math.pow(1 + fixedRateDecimal / 2, remainingYears * 2) - 1)
       existingInvestmentValue = goldAppreciatedValue + fixedInterestAmount
@@ -100,34 +121,56 @@ export const calculateInstrumentCorpus = (instrumentType, investmentData, timeHo
       const rateDecimal = (rate || 0) / 100
       const stepUpDecimal = stepUpPercentage ? stepUpPercentage / 100 : 0
 
-      // If planning to invest more, use future investment rate for existing projection too
-      if (hasExistingInvestment && planToInvestMore && timeHorizon > 0) {
+      // Calculate effective tenure (capped by timeHorizon)
+      const effectiveTenure = getEffectiveTenure(tenure)
+
+      // Handle existing investment projection
+      if (hasExistingInvestment && timeHorizon > 0) {
         const currentValue = investmentData.existingInvestment.currentValue || 0
         const yearsInvested = investmentData.existingInvestment.yearsInvested || 0
-        const remainingYears = Math.max(0, timeHorizon - yearsInvested)
-        
-        existingInvestmentValue = calculateExistingInvestmentFutureValue(
-          currentValue,
-          rateDecimal,
-          remainingYears
-        )
+
+        if (planToInvestMore && effectiveTenure > 0) {
+          // Project existing investment for effectiveTenure period
+          const projectionYears = Math.max(0, Math.min(effectiveTenure, timeHorizon - yearsInvested))
+          if (projectionYears > 0) {
+            existingInvestmentValue = calculateExistingInvestmentFutureValue(
+              currentValue,
+              rateDecimal,
+              projectionYears
+            )
+          } else {
+            existingInvestmentValue = currentValue
+          }
+        } else {
+          // If NOT planning to invest more, use timeHorizon
+          const remainingYears = Math.max(0, timeHorizon - yearsInvested)
+          if (remainingYears > 0) {
+            existingInvestmentValue = calculateExistingInvestmentFutureValue(
+              currentValue,
+              rateDecimal,
+              remainingYears
+            )
+          } else {
+            existingInvestmentValue = currentValue
+          }
+        }
       }
 
-      if (planToInvestMore && yearlyInvestment && yearlyInvestment > 0 && tenure && tenure > 0) {
-        // Calculate total invested
+      if (planToInvestMore && yearlyInvestment && yearlyInvestment > 0 && effectiveTenure > 0) {
+        // Calculate total invested using effectiveTenure
         if (stepUpEnabled && stepUpDecimal > 0) {
-          for (let year = 0; year < tenure; year++) {
+          for (let year = 0; year < effectiveTenure; year++) {
             investedAmount += yearlyInvestment * Math.pow(1 + stepUpDecimal, year)
           }
         } else {
-          investedAmount = yearlyInvestment * tenure
+          investedAmount = yearlyInvestment * effectiveTenure
         }
 
-        // Calculate maturity value
+        // Calculate maturity value using effectiveTenure
         if (stepUpEnabled && stepUpDecimal > 0) {
-          futureInvestmentValue = calculatePPFWithStepUp(yearlyInvestment, stepUpDecimal, rateDecimal, tenure)
+          futureInvestmentValue = calculatePPFWithStepUp(yearlyInvestment, stepUpDecimal, rateDecimal, effectiveTenure)
         } else {
-          futureInvestmentValue = calculatePPF(yearlyInvestment, rateDecimal, tenure)
+          futureInvestmentValue = calculatePPF(yearlyInvestment, rateDecimal, effectiveTenure)
         }
       }
       break
@@ -138,20 +181,7 @@ export const calculateInstrumentCorpus = (instrumentType, investmentData, timeHo
       const migratedData = migrateFDData(investmentData)
       const { principal, rate, compoundingFrequency, tenureYears, tenureMonths, tenure, tenureUnit } = migratedData
       const rateDecimal = (rate || 0) / 100
-      
-      // If planning to invest more, use future investment rate for existing projection too
-      if (hasExistingInvestment && planToInvestMore && timeHorizon > 0) {
-        const currentValue = investmentData.existingInvestment.currentValue || 0
-        const yearsInvested = investmentData.existingInvestment.yearsInvested || 0
-        const remainingYears = Math.max(0, timeHorizon - yearsInvested)
-        
-        existingInvestmentValue = calculateExistingInvestmentFutureValue(
-          currentValue,
-          rateDecimal,
-          remainingYears
-        )
-      }
-      
+
       // Convert years+months to total years for calculation
       let totalYears = 0
       if (tenureYears !== undefined || tenureMonths !== undefined) {
@@ -160,10 +190,43 @@ export const calculateInstrumentCorpus = (instrumentType, investmentData, timeHo
         // Legacy format fallback
         totalYears = tenureUnit === 'months' ? tenure / 12 : tenure
       }
-      
-      if (planToInvestMore && principal && principal > 0 && totalYears > 0) {
+
+      // Calculate effective tenure (capped by timeHorizon)
+      const effectiveTenure = getEffectiveTenure(totalYears)
+
+      // Handle existing investment projection
+      if (hasExistingInvestment && timeHorizon > 0) {
+        const currentValue = investmentData.existingInvestment.currentValue || 0
+        const yearsInvested = investmentData.existingInvestment.yearsInvested || 0
+
+        if (planToInvestMore && effectiveTenure > 0) {
+          const projectionYears = Math.max(0, Math.min(effectiveTenure, timeHorizon - yearsInvested))
+          if (projectionYears > 0) {
+            existingInvestmentValue = calculateExistingInvestmentFutureValue(
+              currentValue,
+              rateDecimal,
+              projectionYears
+            )
+          } else {
+            existingInvestmentValue = currentValue
+          }
+        } else {
+          const remainingYears = Math.max(0, timeHorizon - yearsInvested)
+          if (remainingYears > 0) {
+            existingInvestmentValue = calculateExistingInvestmentFutureValue(
+              currentValue,
+              rateDecimal,
+              remainingYears
+            )
+          } else {
+            existingInvestmentValue = currentValue
+          }
+        }
+      }
+
+      if (planToInvestMore && principal && principal > 0 && effectiveTenure > 0) {
         investedAmount = principal
-        futureInvestmentValue = calculateFD(principal, rateDecimal, totalYears, compoundingFrequency || 'quarterly')
+        futureInvestmentValue = calculateFD(principal, rateDecimal, effectiveTenure, compoundingFrequency || 'quarterly')
       }
       break
     }
@@ -171,39 +234,61 @@ export const calculateInstrumentCorpus = (instrumentType, investmentData, timeHo
     case 'sip': {
       const { monthlySIP, tenure, tenureUnit, expectedReturn, stepUpEnabled, stepUpPercentage } = investmentData
       const rateDecimal = (expectedReturn || 0) / 100
-      
-      // If planning to invest more, use future investment rate for existing projection too
-      if (hasExistingInvestment && planToInvestMore && timeHorizon > 0) {
+
+      // Convert tenure to years
+      const years = tenureUnit === 'months' ? tenure / 12 : tenure
+
+      // Calculate effective tenure (capped by timeHorizon)
+      const effectiveTenure = getEffectiveTenure(years)
+      const effectiveMonths = effectiveTenure * 12
+
+      // Handle existing investment projection
+      if (hasExistingInvestment && timeHorizon > 0) {
         const currentValue = investmentData.existingInvestment.currentValue || 0
         const yearsInvested = investmentData.existingInvestment.yearsInvested || 0
-        const remainingYears = Math.max(0, timeHorizon - yearsInvested)
-        
-        existingInvestmentValue = calculateExistingInvestmentFutureValue(
-          currentValue,
-          rateDecimal,
-          remainingYears
-        )
+
+        if (planToInvestMore && effectiveTenure > 0) {
+          const projectionYears = Math.max(0, Math.min(effectiveTenure, timeHorizon - yearsInvested))
+          if (projectionYears > 0) {
+            existingInvestmentValue = calculateExistingInvestmentFutureValue(
+              currentValue,
+              rateDecimal,
+              projectionYears
+            )
+          } else {
+            existingInvestmentValue = currentValue
+          }
+        } else {
+          const remainingYears = Math.max(0, timeHorizon - yearsInvested)
+          if (remainingYears > 0) {
+            existingInvestmentValue = calculateExistingInvestmentFutureValue(
+              currentValue,
+              rateDecimal,
+              remainingYears
+            )
+          } else {
+            existingInvestmentValue = currentValue
+          }
+        }
       }
-      
-      if (planToInvestMore && monthlySIP && monthlySIP > 0 && tenure && tenure > 0) {
-        const years = tenureUnit === 'months' ? tenure / 12 : tenure
-        const months = tenureUnit === 'months' ? tenure : years * 12
+
+      if (planToInvestMore && monthlySIP && monthlySIP > 0 && effectiveTenure > 0) {
         const stepUpDecimal = stepUpPercentage ? stepUpPercentage / 100 : 0
 
-        // Calculate total invested
+        // Calculate total invested using effectiveTenure
         if (stepUpEnabled && stepUpDecimal > 0) {
-          for (let year = 0; year < years; year++) {
+          for (let year = 0; year < effectiveTenure; year++) {
             investedAmount += monthlySIP * Math.pow(1 + stepUpDecimal, year) * 12
           }
         } else {
-          investedAmount = monthlySIP * months
+          investedAmount = monthlySIP * effectiveMonths
         }
 
-        // Calculate maturity value
+        // Calculate maturity value using effectiveTenure
         if (stepUpEnabled && stepUpDecimal > 0) {
-          futureInvestmentValue = calculateStepUpSIP(monthlySIP, stepUpDecimal, years, rateDecimal)
+          futureInvestmentValue = calculateStepUpSIP(monthlySIP, stepUpDecimal, effectiveTenure, rateDecimal)
         } else {
-          futureInvestmentValue = calculateSIPFutureValue(monthlySIP, rateDecimal, months)
+          futureInvestmentValue = calculateSIPFutureValue(monthlySIP, rateDecimal, effectiveMonths)
         }
       }
       break
@@ -211,53 +296,91 @@ export const calculateInstrumentCorpus = (instrumentType, investmentData, timeHo
 
     case 'nsc': {
       const { principal, rate, tenure = 5 } = investmentData
-      
-      // If planning to invest more, use future investment rate for existing projection too
-      if (hasExistingInvestment && planToInvestMore && timeHorizon > 0) {
+      const rateDecimal = (rate || 0) / 100
+
+      // Calculate effective tenure (capped by timeHorizon)
+      const effectiveTenure = getEffectiveTenure(tenure)
+
+      // Handle existing investment projection
+      if (hasExistingInvestment && timeHorizon > 0) {
         const currentValue = investmentData.existingInvestment.currentValue || 0
         const yearsInvested = investmentData.existingInvestment.yearsInvested || 0
-        const remainingYears = Math.max(0, timeHorizon - yearsInvested)
-        const rateDecimal = (rate || 0) / 100
-        
-        existingInvestmentValue = calculateExistingInvestmentFutureValue(
-          currentValue,
-          rateDecimal,
-          remainingYears
-        )
+
+        if (planToInvestMore && effectiveTenure > 0) {
+          const projectionYears = Math.max(0, Math.min(effectiveTenure, timeHorizon - yearsInvested))
+          if (projectionYears > 0) {
+            existingInvestmentValue = calculateExistingInvestmentFutureValue(
+              currentValue,
+              rateDecimal,
+              projectionYears
+            )
+          } else {
+            existingInvestmentValue = currentValue
+          }
+        } else {
+          const remainingYears = Math.max(0, timeHorizon - yearsInvested)
+          if (remainingYears > 0) {
+            existingInvestmentValue = calculateExistingInvestmentFutureValue(
+              currentValue,
+              rateDecimal,
+              remainingYears
+            )
+          } else {
+            existingInvestmentValue = currentValue
+          }
+        }
       }
-      
-      if (planToInvestMore && principal && principal > 0) {
-        const rateDecimal = (rate || 0) / 100
+
+      if (planToInvestMore && principal && principal > 0 && effectiveTenure > 0) {
         investedAmount = principal
-        futureInvestmentValue = calculateNSC(principal, rateDecimal, tenure)
+        futureInvestmentValue = calculateNSC(principal, rateDecimal, effectiveTenure)
       }
       break
     }
 
     case 'scss': {
       const { principal, rate, tenure } = investmentData
-      
-      // If planning to invest more, use future investment rate for existing projection too
-      if (hasExistingInvestment && planToInvestMore && timeHorizon > 0) {
+      const rateDecimal = (rate || 0) / 100
+
+      // Calculate effective tenure (capped by timeHorizon)
+      const effectiveTenure = getEffectiveTenure(tenure)
+
+      // Handle existing investment projection
+      if (hasExistingInvestment && timeHorizon > 0) {
         const currentValue = investmentData.existingInvestment.currentValue || 0
         const yearsInvested = investmentData.existingInvestment.yearsInvested || 0
-        const remainingYears = Math.max(0, timeHorizon - yearsInvested)
-        const rateDecimal = (rate || 0) / 100
-        
-        existingInvestmentValue = calculateExistingInvestmentFutureValue(
-          currentValue,
-          rateDecimal,
-          remainingYears
-        )
+
+        if (planToInvestMore && effectiveTenure > 0) {
+          const projectionYears = Math.max(0, Math.min(effectiveTenure, timeHorizon - yearsInvested))
+          if (projectionYears > 0) {
+            existingInvestmentValue = calculateExistingInvestmentFutureValue(
+              currentValue,
+              rateDecimal,
+              projectionYears
+            )
+          } else {
+            existingInvestmentValue = currentValue
+          }
+        } else {
+          const remainingYears = Math.max(0, timeHorizon - yearsInvested)
+          if (remainingYears > 0) {
+            existingInvestmentValue = calculateExistingInvestmentFutureValue(
+              currentValue,
+              rateDecimal,
+              remainingYears
+            )
+          } else {
+            existingInvestmentValue = currentValue
+          }
+        }
       }
-      
-      if (planToInvestMore && principal && principal > 0 && tenure && tenure > 0) {
-        const rateDecimal = (rate || 0) / 100
+
+      if (planToInvestMore && principal && principal > 0 && effectiveTenure > 0) {
         investedAmount = principal
         // SCSS: Quarterly interest = Principal × (Rate / 4)
         // Total interest = Quarterly Interest × Number of Quarters
         const quarterlyInterest = principal * (rateDecimal / 4)
-        const numberOfQuarters = tenure * 4
+        const numberOfQuarters = effectiveTenure * 4
         const totalInterest = quarterlyInterest * numberOfQuarters
         futureInvestmentValue = principal + totalInterest
       }
@@ -266,32 +389,47 @@ export const calculateInstrumentCorpus = (instrumentType, investmentData, timeHo
 
     case 'sgb': {
       const { principal, goldAppreciationRate, tenure, fixedRate = 2.5 } = investmentData
-      
-      // If planning to invest more, use future investment rates for existing projection too
-      if (hasExistingInvestment && planToInvestMore && timeHorizon > 0) {
+      const goldRateDecimal = (goldAppreciationRate || 0) / 100
+      const fixedRateDecimal = fixedRate / 100
+
+      // Calculate effective tenure (capped by timeHorizon)
+      const effectiveTenure = getEffectiveTenure(tenure)
+
+      // Handle existing investment projection
+      if (hasExistingInvestment && timeHorizon > 0) {
         const currentValue = investmentData.existingInvestment.currentValue || 0
         const yearsInvested = investmentData.existingInvestment.yearsInvested || 0
-        const remainingYears = Math.max(0, timeHorizon - yearsInvested)
-        const goldRateDecimal = (goldAppreciationRate || 0) / 100
-        const fixedRateDecimal = fixedRate / 100
-        
-        // For SGB, project both gold appreciation and fixed interest
-        const goldAppreciatedValue = currentValue * Math.pow(1 + goldRateDecimal, remainingYears)
-        const fixedInterestAmount = currentValue * (Math.pow(1 + fixedRateDecimal / 2, remainingYears * 2) - 1)
-        existingInvestmentValue = goldAppreciatedValue + fixedInterestAmount
-      }
-      
-      if (planToInvestMore && principal && principal > 0 && tenure && tenure > 0) {
-        const goldRateDecimal = (goldAppreciationRate || 0) / 100
-        const fixedRateDecimal = fixedRate / 100
 
+        if (planToInvestMore && effectiveTenure > 0) {
+          const projectionYears = Math.max(0, Math.min(effectiveTenure, timeHorizon - yearsInvested))
+          if (projectionYears > 0) {
+            // For SGB, project both gold appreciation and fixed interest
+            const goldAppreciatedValue = currentValue * Math.pow(1 + goldRateDecimal, projectionYears)
+            const fixedInterestAmount = currentValue * (Math.pow(1 + fixedRateDecimal / 2, projectionYears * 2) - 1)
+            existingInvestmentValue = goldAppreciatedValue + fixedInterestAmount
+          } else {
+            existingInvestmentValue = currentValue
+          }
+        } else {
+          const remainingYears = Math.max(0, timeHorizon - yearsInvested)
+          if (remainingYears > 0) {
+            const goldAppreciatedValue = currentValue * Math.pow(1 + goldRateDecimal, remainingYears)
+            const fixedInterestAmount = currentValue * (Math.pow(1 + fixedRateDecimal / 2, remainingYears * 2) - 1)
+            existingInvestmentValue = goldAppreciatedValue + fixedInterestAmount
+          } else {
+            existingInvestmentValue = currentValue
+          }
+        }
+      }
+
+      if (planToInvestMore && principal && principal > 0 && effectiveTenure > 0) {
         investedAmount = principal
 
-        // Gold appreciation component
-        const goldAppreciatedValue = principal * Math.pow(1 + goldRateDecimal, tenure)
+        // Gold appreciation component using effectiveTenure
+        const goldAppreciatedValue = principal * Math.pow(1 + goldRateDecimal, effectiveTenure)
 
         // Fixed interest component: 2.5% p.a. paid semi-annually (compounds)
-        const fixedInterestAmount = principal * (Math.pow(1 + fixedRateDecimal / 2, tenure * 2) - 1)
+        const fixedInterestAmount = principal * (Math.pow(1 + fixedRateDecimal / 2, effectiveTenure * 2) - 1)
 
         futureInvestmentValue = goldAppreciatedValue + fixedInterestAmount
       }
@@ -334,22 +472,107 @@ export const calculateInstrumentCorpus = (instrumentType, investmentData, timeHo
         alternativeRet
       )
 
-      // If planning to invest more, use future investment rate for existing projection too
-      if (hasExistingInvestment && planToInvestMore && timeHorizon > 0) {
+      // Calculate effective tenure (capped by timeHorizon)
+      const effectiveTenure = getEffectiveTenure(tenure)
+
+      // Handle existing investment projection
+      if (hasExistingInvestment && timeHorizon > 0) {
         const currentValue = investmentData.existingInvestment.currentValue || 0
         const yearsInvested = investmentData.existingInvestment.yearsInvested || 0
-        const remainingYears = Math.max(0, timeHorizon - yearsInvested)
-        
-        existingInvestmentValue = calculateExistingInvestmentFutureValue(
-          currentValue,
-          weightedReturn,
-          remainingYears
-        )
+
+        if (planToInvestMore && effectiveTenure > 0) {
+          // Project existing investment for effectiveTenure period
+          const projectionYears = Math.max(0, Math.min(effectiveTenure, timeHorizon - yearsInvested))
+          if (projectionYears > 0) {
+            existingInvestmentValue = calculateExistingInvestmentFutureValue(
+              currentValue,
+              weightedReturn,
+              projectionYears
+            )
+          } else {
+            existingInvestmentValue = currentValue
+          }
+        } else {
+          // If NOT planning to invest more, use timeHorizon
+          const remainingYears = Math.max(0, timeHorizon - yearsInvested)
+          if (remainingYears > 0) {
+            // Use existing investment's return rate
+            const existingReturnRate = investmentData.existingInvestment?.expectedReturnRate ||
+                                       investmentData.existingInvestment?.currentReturnRate || 0
+            if (existingReturnRate > 0) {
+              existingInvestmentValue = calculateExistingInvestmentFutureValue(
+                currentValue,
+                existingReturnRate / 100,
+                remainingYears
+              )
+            } else {
+              existingInvestmentValue = currentValue
+            }
+          } else {
+            existingInvestmentValue = currentValue
+          }
+        }
+      } else if (hasExistingInvestment) {
+        existingInvestmentValue = investmentData.existingInvestment.currentValue || 0
       }
 
-      if (planToInvestMore && monthlyContribution && monthlyContribution > 0 && tenure && tenure > 0) {
-        investedAmount = monthlyContribution * 12 * tenure
-        futureInvestmentValue = calculateNPSFutureValue(monthlyContribution, weightedReturn, tenure)
+      // Calculate projected values at full tenure (for display with asterisk)
+      // This shows what the investment would be worth if continued beyond withdrawal horizon
+      isProjectedBeyondHorizon = timeHorizon > 0 && tenure > timeHorizon
+
+      if (isProjectedBeyondHorizon && planToInvestMore && monthlyContribution && monthlyContribution > 0) {
+        // Calculate what investment would be worth at full tenure (beyond horizon)
+        projectedInvestedAmount = monthlyContribution * 12 * tenure
+        projectedFutureInvestmentValue = calculateNPSFutureValue(monthlyContribution, weightedReturn, tenure)
+
+        // Also project existing investment to full tenure
+        if (hasExistingInvestment) {
+          const currentValue = investmentData.existingInvestment.currentValue || 0
+          const yearsInvested = investmentData.existingInvestment.yearsInvested || 0
+          const remainingYears = Math.max(0, tenure - yearsInvested)
+          if (remainingYears > 0) {
+            // Calculate projected existing investment value at full tenure
+            const projectedExistingValue = calculateExistingInvestmentFutureValue(
+              currentValue,
+              weightedReturn,
+              remainingYears
+            )
+            // Add only the growth portion to projected future value
+            projectedFutureInvestmentValue += projectedExistingValue - currentValue
+          }
+        }
+      }
+
+      // Handle future investments using effectiveTenure
+      // This calculates net worth at timeHorizon (even if investments continue beyond)
+      // If planToInvestMore is false, don't calculate future investments
+      // If effectiveTenure is 0, calculate based on actual tenure (for net worth estimation)
+      if (planToInvestMore && monthlyContribution && monthlyContribution > 0) {
+        if (effectiveTenure > 0) {
+          // Normal case: calculate future investments for effectiveTenure (net worth at timeHorizon)
+          investedAmount = monthlyContribution * 12 * effectiveTenure
+          futureInvestmentValue = calculateNPSFutureValue(monthlyContribution, weightedReturn, effectiveTenure)
+        } else {
+          // Edge case: effectiveTenure is 0 due to timeHorizon = 0 or tenure = 0
+          // If timeHorizon = 0, use full tenure (no cap - estimate current net worth)
+          if (timeHorizon === 0 && tenure > 0) {
+            investedAmount = monthlyContribution * 12 * tenure
+            futureInvestmentValue = calculateNPSFutureValue(monthlyContribution, weightedReturn, tenure)
+          } else if (tenure > 0) {
+            // tenure exists but effectiveTenure is 0 (edge case)
+            // Still calculate for net worth estimation
+            investedAmount = monthlyContribution * 12 * tenure
+            futureInvestmentValue = calculateNPSFutureValue(monthlyContribution, weightedReturn, tenure)
+          } else {
+            // tenure is 0 or undefined - explicitly set to 0
+            investedAmount = 0
+            futureInvestmentValue = 0
+          }
+        }
+      } else if (!planToInvestMore && hasExistingInvestment) {
+        // If NOT planning to invest more, investedAmount should be 0 (only existing investment)
+        investedAmount = 0
+        futureInvestmentValue = 0
       }
       break
     }
@@ -357,45 +580,64 @@ export const calculateInstrumentCorpus = (instrumentType, investmentData, timeHo
     case 'equity': {
       const { investmentType, amount, tenure, expectedCAGR, stepUpEnabled, stepUpPercentage } = investmentData
       const rateDecimal = (expectedCAGR || 0) / 100
-      
-      // If planning to invest more, use future investment rate for existing projection too
-      if (hasExistingInvestment && planToInvestMore && timeHorizon > 0) {
+
+      // Calculate effective tenure (capped by timeHorizon)
+      const effectiveTenure = getEffectiveTenure(tenure)
+      const effectiveMonths = effectiveTenure * 12
+
+      // Handle existing investment projection
+      if (hasExistingInvestment && timeHorizon > 0) {
         const currentValue = investmentData.existingInvestment.currentValue || 0
         const yearsInvested = investmentData.existingInvestment.yearsInvested || 0
-        const remainingYears = Math.max(0, timeHorizon - yearsInvested)
-        
-        existingInvestmentValue = calculateExistingInvestmentFutureValue(
-          currentValue,
-          rateDecimal,
-          remainingYears
-        )
+
+        if (planToInvestMore && effectiveTenure > 0) {
+          const projectionYears = Math.max(0, Math.min(effectiveTenure, timeHorizon - yearsInvested))
+          if (projectionYears > 0) {
+            existingInvestmentValue = calculateExistingInvestmentFutureValue(
+              currentValue,
+              rateDecimal,
+              projectionYears
+            )
+          } else {
+            existingInvestmentValue = currentValue
+          }
+        } else {
+          const remainingYears = Math.max(0, timeHorizon - yearsInvested)
+          if (remainingYears > 0) {
+            existingInvestmentValue = calculateExistingInvestmentFutureValue(
+              currentValue,
+              rateDecimal,
+              remainingYears
+            )
+          } else {
+            existingInvestmentValue = currentValue
+          }
+        }
       }
-      
-      if (planToInvestMore && amount && amount > 0 && tenure && tenure > 0) {
+
+      if (planToInvestMore && amount && amount > 0 && effectiveTenure > 0) {
         if (investmentType === 'sip') {
-          const years = tenure
-          const months = years * 12
           const stepUpDecimal = stepUpPercentage ? stepUpPercentage / 100 : 0
 
-          // Calculate total invested
+          // Calculate total invested using effectiveTenure
           if (stepUpEnabled && stepUpDecimal > 0) {
-            for (let year = 0; year < years; year++) {
+            for (let year = 0; year < effectiveTenure; year++) {
               investedAmount += amount * Math.pow(1 + stepUpDecimal, year) * 12
             }
           } else {
-            investedAmount = amount * months
+            investedAmount = amount * effectiveMonths
           }
 
-          // Calculate maturity value
+          // Calculate maturity value using effectiveTenure
           if (stepUpEnabled && stepUpDecimal > 0) {
-            futureInvestmentValue = calculateStepUpSIP(amount, stepUpDecimal, years, rateDecimal)
+            futureInvestmentValue = calculateStepUpSIP(amount, stepUpDecimal, effectiveTenure, rateDecimal)
           } else {
-            futureInvestmentValue = calculateSIPFutureValue(amount, rateDecimal, months)
+            futureInvestmentValue = calculateSIPFutureValue(amount, rateDecimal, effectiveMonths)
           }
         } else {
-          // Lumpsum
+          // Lumpsum using effectiveTenure
           investedAmount = amount
-          futureInvestmentValue = calculateCompoundInterest(amount, rateDecimal, tenure, 1)
+          futureInvestmentValue = calculateCompoundInterest(amount, rateDecimal, effectiveTenure, 1)
         }
       }
       break
@@ -405,48 +647,85 @@ export const calculateInstrumentCorpus = (instrumentType, investmentData, timeHo
       const { investmentType, amount, tenure, expectedReturn } = investmentData
       const rateDecimal = (expectedReturn || 0) / 100
 
-      // If planning to invest more, use future investment rate for existing projection too
-      if (hasExistingInvestment && planToInvestMore && timeHorizon > 0) {
+      // Calculate effective tenure (capped by timeHorizon)
+      const effectiveTenure = getEffectiveTenure(tenure)
+      const effectiveMonths = effectiveTenure * 12
+
+      // Handle existing investment projection
+      if (hasExistingInvestment && timeHorizon > 0) {
         const currentValue = investmentData.existingInvestment.currentValue || 0
         const yearsInvested = investmentData.existingInvestment.yearsInvested || 0
-        const remainingYears = Math.max(0, timeHorizon - yearsInvested)
-        
-        existingInvestmentValue = calculateExistingInvestmentFutureValue(
-          currentValue,
-          rateDecimal,
-          remainingYears
-        )
+
+        if (planToInvestMore && effectiveTenure > 0) {
+          const projectionYears = Math.max(0, Math.min(effectiveTenure, timeHorizon - yearsInvested))
+          if (projectionYears > 0) {
+            existingInvestmentValue = calculateExistingInvestmentFutureValue(
+              currentValue,
+              rateDecimal,
+              projectionYears
+            )
+          } else {
+            existingInvestmentValue = currentValue
+          }
+        } else {
+          const remainingYears = Math.max(0, timeHorizon - yearsInvested)
+          if (remainingYears > 0) {
+            existingInvestmentValue = calculateExistingInvestmentFutureValue(
+              currentValue,
+              rateDecimal,
+              remainingYears
+            )
+          } else {
+            existingInvestmentValue = currentValue
+          }
+        }
       }
 
-      if (planToInvestMore && amount && amount > 0 && tenure && tenure > 0) {
+      if (planToInvestMore && amount && amount > 0 && effectiveTenure > 0) {
         if (investmentType === 'sip') {
-          const years = tenure
-          const months = years * 12
-
-          investedAmount = amount * months
-          futureInvestmentValue = calculateSIPFutureValue(amount, rateDecimal, months)
+          investedAmount = amount * effectiveMonths
+          futureInvestmentValue = calculateSIPFutureValue(amount, rateDecimal, effectiveMonths)
         } else {
-          // Lumpsum
+          // Lumpsum using effectiveTenure
           investedAmount = amount
-          futureInvestmentValue = calculateCompoundInterest(amount, rateDecimal, tenure, 1)
+          futureInvestmentValue = calculateCompoundInterest(amount, rateDecimal, effectiveTenure, 1)
         }
       }
       break
     }
 
     default:
-      return { 
-        investedAmount: 0, 
-        maturityValue: 0, 
-        returns: 0, 
-        existingInvestmentValue: 0, 
-        futureInvestmentValue: 0 
+      return {
+        investedAmount: 0,
+        maturityValue: 0,
+        returns: 0,
+        existingInvestmentValue: 0,
+        futureInvestmentValue: 0,
+        projectedInvestedAmount: 0,
+        projectedFutureInvestmentValue: 0,
+        isProjectedBeyondHorizon: false,
       }
   }
 
   // Combine existing and future investments
   maturityValue = existingInvestmentValue + futureInvestmentValue
-  const returns = maturityValue - investedAmount - (investmentData.existingInvestment?.currentValue || 0)
+
+  // Calculate returns correctly:
+  // - For existing investments: returns = future value - current value (growth from now to future)
+  // - For future investments: returns = future value - invested amount (growth from investment to maturity)
+  // - Total returns = returns from existing + returns from future
+  // CRITICAL: Only calculate returns from future investments if we actually invested
+  const existingCurrentValue = investmentData.existingInvestment?.currentValue || 0
+  const returnsFromExisting = existingInvestmentValue - existingCurrentValue
+
+  // Only calculate returns from future if we actually have future investment
+  // If investedAmount is 0 but futureInvestmentValue is also 0, returnsFromFuture should be 0 (not negative)
+  // This ensures we never show negative returns incorrectly
+  const returnsFromFuture = (investedAmount > 0 && futureInvestmentValue > 0)
+    ? (futureInvestmentValue - investedAmount)
+    : (investedAmount === 0 && futureInvestmentValue === 0 ? 0 : (futureInvestmentValue - investedAmount))
+
+  const returns = returnsFromExisting + returnsFromFuture
 
   return {
     investedAmount: Math.round(investedAmount * 100) / 100,
@@ -454,6 +733,10 @@ export const calculateInstrumentCorpus = (instrumentType, investmentData, timeHo
     returns: Math.round(returns * 100) / 100,
     existingInvestmentValue: Math.round(existingInvestmentValue * 100) / 100,
     futureInvestmentValue: Math.round(futureInvestmentValue * 100) / 100,
+    // Projected values beyond withdrawal horizon (for display with asterisk)
+    projectedInvestedAmount: Math.round(projectedInvestedAmount * 100) / 100,
+    projectedFutureInvestmentValue: Math.round(projectedFutureInvestmentValue * 100) / 100,
+    isProjectedBeyondHorizon: isProjectedBeyondHorizon || false,
   }
 }
 
@@ -559,7 +842,16 @@ export const calculateCorpusFromInstruments = (instruments, investments, timeHor
 
     const corpus = calculateInstrumentCorpus(instrumentType, investmentData, timeHorizon)
     const existingCurrentValue = investmentData.existingInvestment?.currentValue || 0
-    
+
+    // Calculate projected maturity value and returns if beyond horizon
+    // Projected values show what the investment would be worth at full tenure
+    const projectedMaturityValue = corpus.isProjectedBeyondHorizon && corpus.projectedFutureInvestmentValue > 0
+      ? corpus.existingInvestmentValue + corpus.projectedFutureInvestmentValue
+      : 0
+    const projectedReturns = corpus.isProjectedBeyondHorizon && projectedMaturityValue > 0
+      ? projectedMaturityValue - existingCurrentValue - (corpus.projectedInvestedAmount || 0)
+      : 0
+
     byInstrument[instrumentType] = {
       investedAmount: corpus.investedAmount,
       maturityValue: corpus.maturityValue,
@@ -568,6 +860,12 @@ export const calculateCorpusFromInstruments = (instruments, investments, timeHor
       futureInvestmentValue: corpus.futureInvestmentValue,
       existingCurrentValue: existingCurrentValue,
       percentage: 0, // Will be calculated after total is known
+      // Projected values beyond withdrawal horizon (for display with asterisk)
+      projectedInvestedAmount: corpus.projectedInvestedAmount || 0,
+      projectedFutureInvestmentValue: corpus.projectedFutureInvestmentValue || 0,
+      projectedMaturityValue: projectedMaturityValue,
+      projectedReturns: projectedReturns,
+      isProjectedBeyondHorizon: corpus.isProjectedBeyondHorizon || false,
     }
 
     totalInvested += corpus.investedAmount
@@ -584,7 +882,10 @@ export const calculateCorpusFromInstruments = (instruments, investments, timeHor
     }
   })
 
-  const totalReturns = totalMaturityValue - totalInvested - totalExistingValue
+  // Sum returns from all instruments (they're already calculated correctly per instrument)
+  const totalReturns = Object.values(byInstrument).reduce((sum, instrument) => {
+    return sum + (instrument.returns || 0)
+  }, 0)
 
   return {
     totalInvested: Math.round(totalInvested * 100) / 100,

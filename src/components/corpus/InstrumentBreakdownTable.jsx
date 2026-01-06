@@ -41,20 +41,20 @@ const InstrumentBreakdownTable = ({ results, investments, instruments, settings 
     const taxMethod = settings?.taxMethod || 'withdrawal'
     const incomeTaxSlab = settings?.incomeTaxSlab || 0.30
     
-    if (taxMethod === 'withdrawal') {
-      // Handle FD tenure conversion (years + months to total years)
-      let tenure = 0
-      if (instrumentType === 'fd' && investmentData) {
-        const migratedData = migrateFDData(investmentData)
-        if (migratedData.tenureYears !== undefined || migratedData.tenureMonths !== undefined) {
-          tenure = convertYearsMonthsToYears(migratedData.tenureYears || 0, migratedData.tenureMonths || 0)
-        } else if (investmentData.tenure && investmentData.tenureUnit) {
-          tenure = investmentData.tenureUnit === 'months' ? investmentData.tenure / 12 : investmentData.tenure
-        }
-      } else {
-        tenure = investmentData?.tenure || 0
+    // Handle FD tenure conversion (years + months to total years)
+    let tenure = 0
+    if (instrumentType === 'fd' && investmentData) {
+      const migratedData = migrateFDData(investmentData)
+      if (migratedData.tenureYears !== undefined || migratedData.tenureMonths !== undefined) {
+        tenure = convertYearsMonthsToYears(migratedData.tenureYears || 0, migratedData.tenureMonths || 0)
+      } else if (investmentData.tenure && investmentData.tenureUnit) {
+        tenure = investmentData.tenureUnit === 'months' ? investmentData.tenure / 12 : investmentData.tenure
       }
-      
+    } else {
+      tenure = investmentData?.tenure || 0
+    }
+
+    if (taxMethod === 'withdrawal') {
       const taxResult = calculateTaxOnWithdrawal(
         maturityValue,
         instrumentType,
@@ -67,13 +67,36 @@ const InstrumentBreakdownTable = ({ results, investments, instruments, settings 
       )
       return taxResult
     }
-    
-    // For accumulation or both methods, return simplified result
-    return {
-      taxAmount: 0,
-      postTaxCorpus: maturityValue,
-      taxRate: 0,
+
+    if (taxMethod === 'both') {
+      // For 'both', show withdrawal tax in the breakdown table
+      // (CorpusResults component shows the comparison separately)
+      const taxResult = calculateTaxOnWithdrawal(
+        maturityValue,
+        instrumentType,
+        tenure,
+        {
+          incomeTaxSlab,
+          investmentData,
+          returns,
+        }
+      )
+      return taxResult
     }
+
+    // For accumulation method, calculate tax during accumulation
+    // Note: This is simplified - full implementation would require year-by-year calculation
+    const taxResult = calculateTaxOnWithdrawal(
+      maturityValue,
+      instrumentType,
+      tenure,
+      {
+        incomeTaxSlab,
+        investmentData,
+        returns,
+      }
+    )
+    return taxResult
   }
 
   // Get instrument display names
@@ -100,6 +123,10 @@ const InstrumentBreakdownTable = ({ results, investments, instruments, settings 
       const investmentData = investments[instrumentType] || {}
       const maturityValue = instrumentData.maturityValue || 0
       const returns = instrumentData.returns || 0 // Get actual returns from corpus calculation
+      const isProjectedBeyondHorizon = instrumentData.isProjectedBeyondHorizon || false
+      const projectedMaturityValue = instrumentData.projectedMaturityValue || 0
+      const projectedReturns = instrumentData.projectedReturns || 0
+      const projectedInvestedAmount = instrumentData.projectedInvestedAmount || 0
       const taxDetails = calculateTaxDetails(instrumentType, maturityValue, investmentData, returns)
 
       return {
@@ -112,6 +139,11 @@ const InstrumentBreakdownTable = ({ results, investments, instruments, settings 
         taxRule: taxRule.notes || 'N/A',
         taxDetails,
         isExpanded: expandedRows.has(instrumentType),
+        // Projected values beyond withdrawal horizon
+        isProjectedBeyondHorizon,
+        projectedMaturityValue,
+        projectedReturns,
+        projectedInvestedAmount,
       }
     })
     .filter(Boolean)
@@ -202,13 +234,44 @@ const InstrumentBreakdownTable = ({ results, investments, instruments, settings 
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-700 dark:text-gray-300 font-mono tabular-nums">
-                    {formatCurrency(row.investedAmount)}
+                    {row.isProjectedBeyondHorizon && row.projectedInvestedAmount > row.investedAmount ? (
+                      <div className="flex flex-col items-end">
+                        <span>{formatCurrency(row.investedAmount)}</span>
+                        <span className="text-xs text-blue-600 dark:text-blue-400 mt-0.5">
+                          *{formatCurrency(row.projectedInvestedAmount)} projected
+                        </span>
+                      </div>
+                    ) : (
+                      formatCurrency(row.investedAmount)
+                    )}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-green-600 dark:text-green-400 font-mono font-semibold tabular-nums">
-                    {formatCurrency(row.returns)}
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-right font-mono font-semibold tabular-nums">
+                    {row.isProjectedBeyondHorizon && row.projectedReturns > row.returns ? (
+                      <div className="flex flex-col items-end">
+                        <span className={row.returns >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}>
+                          {formatCurrency(row.returns)}
+                        </span>
+                        <span className="text-xs text-blue-600 dark:text-blue-400 mt-0.5">
+                          *{formatCurrency(row.projectedReturns)} projected
+                        </span>
+                      </div>
+                    ) : (
+                      <span className={row.returns >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}>
+                        {formatCurrency(row.returns)}
+                      </span>
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-gray-900 dark:text-white font-mono font-bold tabular-nums">
-                    {formatCurrency(row.maturityValue)}
+                    {row.isProjectedBeyondHorizon && row.projectedMaturityValue > row.maturityValue ? (
+                      <div className="flex flex-col items-end">
+                        <span>{formatCurrency(row.maturityValue)}</span>
+                        <span className="text-xs text-blue-600 dark:text-blue-400 mt-0.5">
+                          *{formatCurrency(row.projectedMaturityValue)} projected
+                        </span>
+                      </div>
+                    ) : (
+                      formatCurrency(row.maturityValue)
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-right text-red-600 dark:text-red-400 font-mono font-semibold tabular-nums">
                     {formatCurrency(row.taxDetails.taxAmount)}
@@ -233,83 +296,169 @@ const InstrumentBreakdownTable = ({ results, investments, instruments, settings 
                     </div>
                   </td>
                 </tr>
-                {row.isExpanded && (
-                  <tr className="bg-gray-50 dark:bg-gray-800/30">
-                    <td colSpan={9} className="px-6 py-4">
-                      <div className="ml-8 space-y-3">
-                        <div className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
-                          Tax Calculation Details
+                {row.isExpanded && (() => {
+                  const taxRule = getTaxRateForInstrument(row.instrumentType)
+                  const isPartialTax = taxRule?.type === 'partial' // NPS: 60% tax-free, 40% taxable
+                  const isInterestTax = taxRule?.type === 'interest' // FD, NSC, SCSS: Interest taxable
+                  const incomeTaxSlab = settings?.incomeTaxSlab || 0.30
+
+                  // For NPS, calculate taxable portion (40% of corpus)
+                  const taxablePortion = isPartialTax ? row.maturityValue * 0.40 : null
+
+                  return (
+                    <tr className="bg-gray-50 dark:bg-gray-800/30">
+                      <td colSpan={9} className="px-6 py-4">
+                        <div className="ml-8 space-y-3">
+                          <div className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
+                            Tax Calculation Details
+                          </div>
+                          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                            <div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                                {isPartialTax ? 'Returns Earned' : 'Interest Earned'}
+                              </div>
+                              <div className={`text-sm font-semibold font-mono ${
+                                row.returns >= 0
+                                  ? 'text-green-600 dark:text-green-400'
+                                  : 'text-red-600 dark:text-red-400'
+                              }`}>
+                                {formatCurrency(row.returns)}
+                              </div>
+                            </div>
+                            <div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
+                                {isPartialTax
+                                  ? 'Tax Rate on Taxable Portion (40%)'
+                                  : 'Tax Rate on Interest'}
+                              </div>
+                              <div className="text-sm font-semibold text-gray-900 dark:text-white">
+                                {row.taxDetails.taxAmount > 0
+                                  ? formatPercentage(incomeTaxSlab, 0)
+                                  : 'Tax-Free'}
+                              </div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                (Your tax bracket)
+                              </div>
+                            </div>
+                            <div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Effective Tax Rate</div>
+                              <div className="text-sm font-semibold text-red-600 dark:text-red-400">
+                                {row.taxDetails.taxRate > 0
+                                  ? formatPercentage(row.taxDetails.taxRate / 100, 2)
+                                  : 'Tax-Free'}
+                              </div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                (Tax ÷ Maturity Value)
+                              </div>
+                            </div>
+                            <div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Tax Amount</div>
+                              <div className="text-sm font-semibold text-red-600 dark:text-red-400 font-mono">
+                                {formatCurrency(row.taxDetails.taxAmount)}
+                              </div>
+                            </div>
+                            <div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Post-Tax Value</div>
+                              <div className="text-sm font-semibold text-green-600 dark:text-green-400 font-mono">
+                                {formatCurrency(row.taxDetails.postTaxCorpus)}
+                              </div>
+                            </div>
+                          </div>
+                          {/* Explanation */}
+                          <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                            <div className="text-xs text-blue-800 dark:text-blue-300">
+                              <strong>Understanding the Tax Rates:</strong>
+                              <ul className="list-disc list-inside mt-1 space-y-1">
+                                {isPartialTax ? (
+                                  <>
+                                    <li>
+                                      <strong>Tax Rate on Taxable Portion ({formatPercentage(incomeTaxSlab, 0)}):</strong> This is your income tax bracket rate, applied to 40% of your corpus (₹{formatCurrency(taxablePortion, false)}). The remaining 60% is tax-free.
+                                    </li>
+                                    <li>
+                                      <strong>Effective Tax Rate ({formatPercentage(row.taxDetails.taxRate / 100, 2)}):</strong> This shows what percentage of your total maturity value (₹{formatCurrency(row.maturityValue, false)}) goes to tax. It's lower because only 40% of the corpus is taxable, and 60% is tax-free.
+                                    </li>
+                                    <li>
+                                      <strong>Calculation:</strong> Tax = 40% of Corpus × Tax Bracket = ₹{formatCurrency(taxablePortion, false)} × {formatPercentage(incomeTaxSlab, 0)} = ₹{formatCurrency(row.taxDetails.taxAmount, false)}
+                                    </li>
+                                  </>
+                                ) : isInterestTax ? (
+                                  <>
+                                    <li>
+                                      <strong>Tax Rate on Interest ({formatPercentage(incomeTaxSlab, 0)}):</strong> This is your income tax bracket rate, applied to the interest earned (₹{formatCurrency(row.returns, false)}).
+                                    </li>
+                                    <li>
+                                      <strong>Effective Tax Rate ({formatPercentage(row.taxDetails.taxRate / 100, 2)}):</strong> This shows what percentage of your total maturity value (₹{formatCurrency(row.maturityValue, false)}) goes to tax. It's lower because tax is only on interest, not the principal.
+                                    </li>
+                                    <li>
+                                      <strong>Calculation:</strong> Tax = Interest × Tax Bracket = ₹{formatCurrency(row.returns, false)} × {formatPercentage(incomeTaxSlab, 0)} = ₹{formatCurrency(row.taxDetails.taxAmount, false)}
+                                    </li>
+                                  </>
+                                ) : (
+                                  <>
+                                    <li>
+                                      <strong>Tax Rate:</strong> {row.taxDetails.taxAmount > 0
+                                        ? `This instrument is taxed at ${formatPercentage(row.taxDetails.taxRate / 100, 2)} effective rate.`
+                                        : 'This instrument is tax-free.'}
+                                    </li>
+                                    <li>
+                                      <strong>Effective Tax Rate ({formatPercentage(row.taxDetails.taxRate / 100, 2)}):</strong> This shows what percentage of your total maturity value (₹{formatCurrency(row.maturityValue, false)}) goes to tax.
+                                    </li>
+                                    <li>
+                                      <strong>Tax Amount:</strong> ₹{formatCurrency(row.taxDetails.taxAmount, false)}
+                                    </li>
+                                  </>
+                                )}
+                              </ul>
+                            </div>
+                          </div>
+                          {row.taxDetails.tdsInfo && row.taxDetails.tdsInfo.applicable && (
+                            <div className="mt-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                              <div className="text-xs font-semibold text-yellow-800 dark:text-yellow-300 mb-2">
+                                ⚠️ TDS (Tax Deducted at Source) Information
+                              </div>
+                              <div className="text-xs text-yellow-700 dark:text-yellow-400 space-y-1">
+                                <div>Annual Interest: {formatCurrency(row.taxDetails.tdsInfo.annualInterest)}</div>
+                                <div>TDS Threshold: {formatCurrency(row.taxDetails.tdsInfo.tdsThreshold)}</div>
+                                <div>TDS Rate: {row.taxDetails.tdsInfo.tdsRate}%</div>
+                                <div className="font-semibold mt-2">Total TDS Deducted: {formatCurrency(row.taxDetails.tdsInfo.totalTDS)}</div>
+                                <div className="text-xs italic mt-2">{row.taxDetails.tdsInfo.note}</div>
+                              </div>
+                            </div>
+                          )}
+                          <div className="mt-3 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
+                            <div className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                              📋 Calculation Disclaimers
+                            </div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400 space-y-1">
+                              {(row.instrumentType === 'sip' || row.instrumentType === 'equity') && (
+                                <>
+                                  <div>• SIP tax calculation uses simplified method (not FIFO). Actual tax may vary based on individual installment dates.</div>
+                                  <div>• LTCG exemption of ₹1L is shared across all equity instruments.</div>
+                                </>
+                              )}
+                              {row.instrumentType === 'debt_mutual_fund' && (
+                                <div>• Indexation calculated using assumed 6% CII increase. Actual Cost Inflation Index (CII) may vary.</div>
+                              )}
+                              {row.instrumentType === 'nps' && (
+                                <div>• 40% taxable portion can be used to purchase annuity. Annuity income is taxable annually.</div>
+                              )}
+                              <div>• Tax calculations are estimates based on current tax laws (FY 2024-25). Actual tax liability may vary.</div>
+                              <div>• Surcharge and cess are not included in calculations.</div>
+                              <div>• For accurate tax planning, consult a qualified Chartered Accountant.</div>
+                            </div>
+                          </div>
+                          {row.taxRule && (
+                            <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+                              <div className="text-xs text-gray-500 dark:text-gray-400">
+                                <strong>Tax Rule:</strong> {row.taxRule}
+                              </div>
+                            </div>
+                          )}
                         </div>
-                        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                          <div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Interest Earned</div>
-                            <div className="text-sm font-semibold text-green-600 dark:text-green-400 font-mono">
-                              {formatCurrency(row.returns)}
-                            </div>
-                          </div>
-                          <div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Tax Rate on Interest</div>
-                            <div className="text-sm font-semibold text-gray-900 dark:text-white">
-                              {row.taxDetails.taxAmount > 0 && row.returns > 0
-                                ? formatPercentage((settings?.incomeTaxSlab || 0.30), 0)
-                                : 'Tax-Free'}
-                            </div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                              (Your tax bracket)
-                            </div>
-                          </div>
-                          <div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Effective Tax Rate</div>
-                            <div className="text-sm font-semibold text-red-600 dark:text-red-400">
-                              {row.taxDetails.taxRate > 0 
-                                ? formatPercentage(row.taxDetails.taxRate / 100, 2) 
-                                : 'Tax-Free'}
-                            </div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                              (Tax ÷ Maturity Value)
-                            </div>
-                          </div>
-                          <div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Tax Amount</div>
-                            <div className="text-sm font-semibold text-red-600 dark:text-red-400 font-mono">
-                              {formatCurrency(row.taxDetails.taxAmount)}
-                            </div>
-                          </div>
-                          <div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Post-Tax Value</div>
-                            <div className="text-sm font-semibold text-green-600 dark:text-green-400 font-mono">
-                              {formatCurrency(row.taxDetails.postTaxCorpus)}
-                            </div>
-                          </div>
-                        </div>
-                        {/* Explanation */}
-                        <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-                          <div className="text-xs text-blue-800 dark:text-blue-300">
-                            <strong>Understanding the Tax Rates:</strong>
-                            <ul className="list-disc list-inside mt-1 space-y-1">
-                              <li>
-                                <strong>Tax Rate on Interest ({formatPercentage((settings?.incomeTaxSlab || 0.30), 0)}):</strong> This is your income tax bracket rate, applied to the interest earned (₹{formatCurrency(row.returns, false)}).
-                              </li>
-                              <li>
-                                <strong>Effective Tax Rate ({formatPercentage(row.taxDetails.taxRate / 100, 2)}):</strong> This shows what percentage of your total maturity value (₹{formatCurrency(row.maturityValue, false)}) goes to tax. It's lower because tax is only on interest, not the principal.
-                              </li>
-                              <li>
-                                <strong>Calculation:</strong> Tax = Interest × Tax Bracket = ₹{formatCurrency(row.returns, false)} × {formatPercentage((settings?.incomeTaxSlab || 0.30), 0)} = ₹{formatCurrency(row.taxDetails.taxAmount, false)}
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        {row.taxRule && (
-                          <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
-                            <div className="text-xs text-gray-500 dark:text-gray-400">
-                              <strong>Tax Rule:</strong> {row.taxRule}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                )}
+                      </td>
+                    </tr>
+                  )
+                })()}
               </React.Fragment>
             ))}
           </tbody>
@@ -346,8 +495,9 @@ const InstrumentBreakdownTable = ({ results, investments, instruments, settings 
       {/* Additional Info */}
       <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
         <p className="text-xs text-gray-600 dark:text-gray-400">
-          <strong>Note:</strong> Tax status shown is general information. Actual tax liability depends
-          on your income tax slab, holding period, and other factors.{' '}
+          <strong>Note:</strong> This calculator estimates your <strong>net worth at the specified time horizon</strong> ({settings?.timeHorizon || 10} years).
+          Values marked with <span className="text-blue-600 dark:text-blue-400 font-semibold">*projected</span> show what investments would be worth
+          if continued beyond the withdrawal horizon.{' '}
           <button
             type="button"
             onClick={() => setShowTaxEducationPanel(true)}
