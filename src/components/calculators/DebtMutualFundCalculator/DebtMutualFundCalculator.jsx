@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import CalculatorLayout from '@/components/common/Layout/CalculatorLayout'
 import InputField from '@/components/common/InputField/InputField'
 import Slider from '@/components/common/Slider/Slider'
+import ToggleSwitch from '@/components/common/ToggleSwitch/ToggleSwitch'
 import DebtMutualFundCalculatorResults from './DebtMutualFundCalculatorResults'
 import DebtMutualFundCalculatorInfo from './DebtMutualFundCalculatorInfo'
 import DebtMutualFundCalculatorTable from './DebtMutualFundCalculatorTable'
@@ -69,7 +70,7 @@ const DebtMutualFundCalculator = () => {
       // Only update if current value is close to old default
       setValue('expectedReturn', newDefaultReturn, { shouldValidate: true })
     }
-  }, [fundType, setValue])
+  }, [fundType, expectedReturnNum, setValue])
 
   // Calculate results using custom hook
   const results = useDebtMutualFundCalculator(

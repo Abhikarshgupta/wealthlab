@@ -31,7 +31,7 @@ const useCorpusPersistence = ({
         const parsed = JSON.parse(saved)
         return parsed.selectedInstruments?.length > 0 || Object.keys(parsed.investments || {}).length > 0
       }
-    } catch (error) {
+    } catch {
       // Ignore errors
     }
     return false

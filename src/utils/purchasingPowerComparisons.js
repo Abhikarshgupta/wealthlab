@@ -6,7 +6,6 @@
 
 import {
   getExamplePrice,
-  getCategoryExamples,
   getCityInfo,
   PURCHASING_POWER_EXAMPLES,
 } from '@/constants/purchasingPowerExamples'

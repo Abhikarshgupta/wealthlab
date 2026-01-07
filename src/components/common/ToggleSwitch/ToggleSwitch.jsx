@@ -38,8 +38,8 @@ const ToggleSwitch = ({
 
   if (label || description) {
     return (
-      <div className={`flex items-center justify-between ${className}`}>
-        <div className="flex flex-col">
+      <div className={`flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 ${className}`}>
+        <div className="flex flex-col flex-1 min-w-0">
           {label && (
             <label className="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
               {label}
@@ -57,9 +57,10 @@ const ToggleSwitch = ({
           aria-checked={checked}
           onClick={() => onChange(!checked)}
           className={`
-            relative inline-flex ${sizeConfig.container} items-center rounded-full transition-colors
+            relative inline-flex ${sizeConfig.container} items-center rounded-full transition-colors flex-shrink-0
             focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2
             ${checked ? 'bg-green-500 dark:bg-green-600' : 'bg-gray-300 dark:bg-gray-600'}
+            self-start sm:self-center
           `}
         >
           <span

@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { calculateCompoundInterest } from '@/utils/calculations'
 
 /**
  * Custom hook for REITs Calculator calculations

@@ -15,8 +15,7 @@ import {
   convertYearsMonthsToYears, 
   convertYearsMonthsToMonths,
   normalizeYearsMonths,
-  formatTenureDisplay,
-  migrateFDData 
+  formatTenureDisplay
 } from '@/utils/fdTenureUtils'
 
 /**

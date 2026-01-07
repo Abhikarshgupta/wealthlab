@@ -1,5 +1,4 @@
 import { investmentInfo } from '@/constants/investmentInfo'
-import { investmentRates } from '@/constants/investmentRates'
 
 /**
  * IPO Calculator Information Panel

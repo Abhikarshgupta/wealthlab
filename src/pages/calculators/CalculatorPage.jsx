@@ -44,17 +44,19 @@ const CalculatorPage = ({ calculatorType }) => {
   }, [calculatorType])
 
   // Calculator configuration with icons and details
+  // Popularity: Lower number = more popular (sorted ascending)
   const calculators = [
     {
-      id: 'ppf',
-      name: 'PPF',
-      fullName: 'Public Provident Fund',
-      description: investmentInfo.ppf.description,
-      route: routes.calculators.ppf,
+      id: 'sip',
+      name: 'SIP',
+      fullName: 'Systematic Investment Plan',
+      description: investmentInfo.sip.description,
+      route: routes.calculators.sip,
       status: 'complete',
+      popularity: 1,
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
         </svg>
       )
     },
@@ -65,6 +67,7 @@ const CalculatorPage = ({ calculatorType }) => {
       description: investmentInfo.fd.description,
       route: routes.calculators.fd,
       status: 'complete',
+      popularity: 2,
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -72,67 +75,16 @@ const CalculatorPage = ({ calculatorType }) => {
       )
     },
     {
-      id: 'sip',
-      name: 'SIP',
-      fullName: 'Systematic Investment Plan',
-      description: investmentInfo.sip.description,
-      route: routes.calculators.sip,
+      id: 'ppf',
+      name: 'PPF',
+      fullName: 'Public Provident Fund',
+      description: investmentInfo.ppf.description,
+      route: routes.calculators.ppf,
       status: 'complete',
+      popularity: 3,
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-        </svg>
-      )
-    },
-    {
-      id: 'ssy',
-      name: 'SSY',
-      fullName: 'Sukanya Samriddhi Yojana',
-      description: investmentInfo.ssy.description,
-      route: routes.calculators.ssy,
-      status: 'complete',
-      icon: (
-        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-        </svg>
-      )
-    },
-    {
-      id: 'nsc',
-      name: 'NSC',
-      fullName: 'National Savings Certificate',
-      description: investmentInfo.nsc.description,
-      route: routes.calculators.nsc,
-      status: 'complete',
-      icon: (
-        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      )
-    },
-    {
-      id: 'scss',
-      name: 'SCSS',
-      fullName: 'Senior Citizens Savings Scheme',
-      description: investmentInfo.scss.description,
-      route: routes.calculators.scss,
-      status: 'complete',
-      icon: (
-        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-        </svg>
-      )
-    },
-    {
-      id: 'sgb',
-      name: 'SGB',
-      fullName: 'Sovereign Gold Bonds',
-      description: investmentInfo.sgb.description,
-      route: routes.calculators.sgb,
-      status: 'complete',
-      icon: (
-        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       )
     },
@@ -143,6 +95,7 @@ const CalculatorPage = ({ calculatorType }) => {
       description: investmentInfo.equity.description,
       route: routes.calculators.equity,
       status: 'complete',
+      popularity: 4,
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
@@ -156,22 +109,10 @@ const CalculatorPage = ({ calculatorType }) => {
       description: investmentInfo.elss.description,
       route: routes.calculators.elss,
       status: 'complete',
+      popularity: 5,
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-        </svg>
-      )
-    },
-    {
-      id: 'nps',
-      name: 'NPS',
-      fullName: 'National Pension System',
-      description: investmentInfo.nps.description,
-      route: routes.calculators.nps,
-      status: 'complete',
-      icon: (
-        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       )
     },
@@ -182,6 +123,7 @@ const CalculatorPage = ({ calculatorType }) => {
       description: investmentInfo.rd.description,
       route: routes.calculators.rd,
       status: 'complete',
+      popularity: 6,
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
@@ -189,15 +131,44 @@ const CalculatorPage = ({ calculatorType }) => {
       )
     },
     {
-      id: 'pomis',
-      name: 'POMIS',
-      fullName: 'Post Office Monthly Income Scheme',
-      description: investmentInfo.pomis.description,
-      route: routes.calculators.pomis,
+      id: 'nps',
+      name: 'NPS',
+      fullName: 'National Pension System',
+      description: investmentInfo.nps.description,
+      route: routes.calculators.nps,
       status: 'complete',
+      popularity: 7,
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      )
+    },
+    {
+      id: 'ssy',
+      name: 'SSY',
+      fullName: 'Sukanya Samriddhi Yojana',
+      description: investmentInfo.ssy.description,
+      route: routes.calculators.ssy,
+      status: 'complete',
+      popularity: 8,
+      icon: (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+      )
+    },
+    {
+      id: 'nsc',
+      name: 'NSC',
+      fullName: 'National Savings Certificate',
+      description: investmentInfo.nsc.description,
+      route: routes.calculators.nsc,
+      status: 'complete',
+      popularity: 9,
+      icon: (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       )
     },
@@ -208,9 +179,52 @@ const CalculatorPage = ({ calculatorType }) => {
       description: investmentInfo.etf.description,
       route: routes.calculators.etf,
       status: 'complete',
+      popularity: 11,
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+      )
+    },
+    {
+      id: 'scss',
+      name: 'SCSS',
+      fullName: 'Senior Citizens Savings Scheme',
+      description: investmentInfo.scss.description,
+      route: routes.calculators.scss,
+      status: 'complete',
+      popularity: 12,
+      icon: (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+      )
+    },
+    {
+      id: 'sgb',
+      name: 'SGB',
+      fullName: 'Sovereign Gold Bonds',
+      description: investmentInfo.sgb.description,
+      route: routes.calculators.sgb,
+      status: 'complete',
+      popularity: 10,
+      icon: (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+        </svg>
+      )
+    },
+    {
+      id: 'pomis',
+      name: 'POMIS',
+      fullName: 'Post Office Monthly Income Scheme',
+      description: investmentInfo.pomis.description,
+      route: routes.calculators.pomis,
+      status: 'complete',
+      popularity: 13,
+      icon: (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
       )
     },
@@ -221,6 +235,7 @@ const CalculatorPage = ({ calculatorType }) => {
       description: investmentInfo.debtMutualFund.description,
       route: routes.calculators.debtMutualFund,
       status: 'complete',
+      popularity: 14,
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -234,6 +249,7 @@ const CalculatorPage = ({ calculatorType }) => {
       description: investmentInfo.reits.description,
       route: routes.calculators.reits,
       status: 'complete',
+      popularity: 16,
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -247,6 +263,7 @@ const CalculatorPage = ({ calculatorType }) => {
       description: investmentInfo.ipo.description,
       route: routes.calculators.ipo,
       status: 'complete',
+      popularity: 15,
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -260,6 +277,7 @@ const CalculatorPage = ({ calculatorType }) => {
       description: investmentInfo.bonds54EC.description,
       route: routes.calculators.bonds54EC,
       status: 'complete',
+      popularity: 17,
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -267,6 +285,15 @@ const CalculatorPage = ({ calculatorType }) => {
       )
     }
   ]
+
+  // Sort calculators by popularity (lower number = more popular)
+  const sortedCalculators = [...calculators].sort((a, b) => {
+    // First sort by status (complete first)
+    if (a.status === 'complete' && b.status !== 'complete') return -1
+    if (a.status !== 'complete' && b.status === 'complete') return 1
+    // Then sort by popularity
+    return (a.popularity || 999) - (b.popularity || 999)
+  })
 
   // If calculatorType is provided, render the specific calculator
   if (calculatorType) {
@@ -413,7 +440,7 @@ const CalculatorPage = ({ calculatorType }) => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {calculators.map((calculator) => {
+        {sortedCalculators.map((calculator) => {
           const isComplete = calculator.status === 'complete'
           return (
             <div
@@ -438,9 +465,9 @@ const CalculatorPage = ({ calculatorType }) => {
                 }
               `}
             >
-              <div className="flex items-start justify-between mb-4">
+              <div className="mb-4">
                 <div className={`
-                  p-3 rounded-xl
+                  p-3 rounded-xl inline-block
                   ${isComplete 
                     ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400' 
                     : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400'
@@ -448,11 +475,6 @@ const CalculatorPage = ({ calculatorType }) => {
                 `}>
                   {calculator.icon}
                 </div>
-                {isComplete && (
-                  <span className="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300">
-                    Ready
-                  </span>
-                )}
               </div>
 
               <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
