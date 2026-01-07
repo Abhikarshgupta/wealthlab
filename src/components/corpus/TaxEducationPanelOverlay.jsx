@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { getTaxRateForInstrument } from '@/utils/taxCalculations'
 
 /**
  * Tax Education Panel Overlay Component
@@ -229,7 +228,6 @@ const TaxEducationPanelOverlay = ({ isOpen, onClose }) => {
               </p>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-4">
                 {instruments.map((instrument) => {
-                  const taxRule = getTaxRateForInstrument(instrument.key)
                   const isSelected = selectedInstrument === instrument.key
 
                   return (

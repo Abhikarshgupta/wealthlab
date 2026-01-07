@@ -71,7 +71,7 @@ const validateFutureInvestment = (instrumentId, instrumentData) => {
         isValid = false
       }
       break
-    case 'fd':
+    case 'fd': {
       if (!instrumentData.principal || instrumentData.principal <= 0) {
         errors.push('Principal Amount')
         isValid = false
@@ -97,6 +97,7 @@ const validateFutureInvestment = (instrumentId, instrumentData) => {
         isValid = false
       }
       break
+    }
     case 'sip':
       if (!instrumentData.monthlySIP || instrumentData.monthlySIP <= 0) {
         errors.push('Monthly SIP Amount')
@@ -145,7 +146,7 @@ const validateFutureInvestment = (instrumentId, instrumentData) => {
         isValid = false
       }
       break
-    case 'nps':
+    case 'nps': {
       if (!instrumentData.monthlyContribution || instrumentData.monthlyContribution <= 0) {
         errors.push('Monthly Contribution')
         isValid = false
@@ -164,8 +165,9 @@ const validateFutureInvestment = (instrumentId, instrumentData) => {
         isValid = false
       }
       break
+    }
     case 'equity':
-    case 'elss':
+    case 'elss': {
       const investmentType = instrumentData.investmentType || 'sip'
       if (investmentType === 'sip') {
         // SIP mode: form uses 'amount' field for SIP (not 'monthlySIP')
@@ -190,6 +192,7 @@ const validateFutureInvestment = (instrumentId, instrumentData) => {
         isValid = false
       }
       break
+    }
     default:
       // Unknown instrument type - consider invalid
       isValid = false

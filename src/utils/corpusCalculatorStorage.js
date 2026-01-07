@@ -186,7 +186,7 @@ export const getStorageInfo = () => {
       dataSize,
       dataSizeKB: (dataSize / 1024).toFixed(2),
     }
-  } catch (error) {
+  } catch {
     return {
       count: 0,
       maxCount: MAX_SAVED_CALCULATIONS,

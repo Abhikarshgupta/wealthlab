@@ -10,12 +10,10 @@ import {
   calculateSIPFutureValue,
   calculateStepUpSIP,
   calculateNSC,
-  calculateSGB,
   calculateNPSFutureValue,
   calculateNPSWeightedReturn,
   calculateCompoundInterest,
 } from '@/utils/calculations'
-import { investmentRates } from '@/constants/investmentRates'
 
 /**
  * Calculate current value of existing investment based on instrument type

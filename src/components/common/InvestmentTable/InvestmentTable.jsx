@@ -31,9 +31,6 @@ const InvestmentTable = ({
   const adjustedFinalBalance = adjustInflation
     ? adjustForInflation(finalBalance, inflationRateDecimal, finalYear)
     : null
-  const adjustedTotalInterest = adjustInflation
-    ? adjustForInflation(totalInterest, inflationRateDecimal, finalYear)
-    : null
 
   // Determine if this is monthly or yearly breakdown
   const isMonthly = data.length > 0 && data[0].label && data[0].label.startsWith('Month')

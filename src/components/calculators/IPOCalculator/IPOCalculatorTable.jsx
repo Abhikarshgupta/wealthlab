@@ -8,7 +8,7 @@ import { formatCurrency, formatPercentageValue } from '@/utils/formatters'
  * @param {Array} evolution - Evolution data from useIPOCalculator hook
  * @param {number} tenure - Investment tenure in years
  */
-const IPOCalculatorTable = ({ evolution, tenure }) => {
+const IPOCalculatorTable = ({ evolution, tenure: _tenure }) => {
   if (!evolution || evolution.length === 0) {
     return null
   }

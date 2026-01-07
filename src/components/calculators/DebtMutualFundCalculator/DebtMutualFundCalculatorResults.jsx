@@ -29,8 +29,7 @@ const DebtMutualFundCalculatorResults = ({ results }) => {
     xirr,
     realCorpusValue,
     realReturns,
-    realReturnRate,
-    fundType
+    realReturnRate
   } = results
 
   // Prepare pie chart data

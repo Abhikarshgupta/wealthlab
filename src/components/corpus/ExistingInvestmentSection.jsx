@@ -10,7 +10,7 @@ import { checkTenureLimit, calculateExistingInvestmentCurrentValue } from '@/uti
  * @param {Function} props.updateInvestment - Function to update investment data
  * @param {Object} props.instrument - Instrument info object (name, fullName, etc.)
  */
-const ExistingInvestmentSection = ({ instrumentId, instrumentData, updateInvestment, instrument }) => {
+const ExistingInvestmentSection = ({ instrumentId, instrumentData, updateInvestment, instrument: _instrument }) => {
   const hasExistingInvestment = instrumentData.hasExistingInvestment || false
   const existingData = instrumentData.existingInvestment || {}
   const yearsInvested = existingData.yearsInvested || 0

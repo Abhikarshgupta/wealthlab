@@ -4,7 +4,6 @@ import {
   calculateRealReturn
 } from '@/utils/calculations'
 import useUserPreferencesStore from '@/store/userPreferencesStore'
-import { calculateTaxOnWithdrawal } from '@/utils/taxCalculations'
 
 /**
  * Custom hook for 54EC Bonds Calculator calculations
@@ -87,7 +86,6 @@ const use54ECBondsCalculator = (
 
     // Calculate evolution table
     const evolution = []
-    let openingBalance = 0
     
     for (let year = 1; year <= tenure; year++) {
       const previousBalance = year === 1 ? 0 : calculateCompoundInterest(investmentAmount, annualRate, year - 1, 1)
