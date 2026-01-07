@@ -5,6 +5,7 @@ import {
   calculateRealReturn
 } from '@/utils/calculations'
 import useUserPreferencesStore from '@/store/userPreferencesStore'
+import { calculateTaxOnWithdrawal } from '@/utils/taxCalculations'
 
 /**
  * Custom hook for NSC Calculator calculations
@@ -19,7 +20,7 @@ const useNSCalculator = (
   rate
 ) => {
   const [results, setResults] = useState(null)
-  const { defaultInflationRate, adjustInflation } = useUserPreferencesStore()
+  const { defaultInflationRate, adjustInflation, incomeTaxSlab } = useUserPreferencesStore()
   const inflationRate = defaultInflationRate / 100 // Convert to decimal
   const tenure = 5 // Fixed tenure for NSC
 
@@ -47,10 +48,26 @@ const useNSCalculator = (
       ? ((maturityAmount - principal) / principal) * 100
       : 0
 
+    // Calculate tax on withdrawal
+    const taxCalculation = calculateTaxOnWithdrawal(
+      maturityAmount,
+      'nsc',
+      tenure,
+      {
+        incomeTaxSlab,
+        principal,
+        returns: interestEarned,
+      }
+    )
+
+    const postTaxAmount = taxCalculation.postTaxCorpus
+    const taxAmount = taxCalculation.taxAmount
+
     // Adjust for inflation if enabled
     let realMaturityAmount = maturityAmount
     let realInterestEarned = interestEarned
     let realReturnRate = annualRate
+    let actualSpendingPower = null
     
     if (adjustInflation) {
       // Calculate real return rate (annualized)
@@ -62,6 +79,9 @@ const useNSCalculator = (
       
       // Real interest = real maturity amount - principal
       realInterestEarned = realMaturityAmount - principal
+
+      // Calculate actual spending power (post-tax, inflation-adjusted)
+      actualSpendingPower = postTaxAmount / Math.pow(1 + inflationRate, tenure)
     }
 
     // Calculate evolution table
@@ -75,13 +95,20 @@ const useNSCalculator = (
       realReturnRate: realReturnRate * 100, // Convert to percentage
       realMaturityAmount: adjustInflation ? Math.round(realMaturityAmount * 100) / 100 : null,
       realInterestEarned: adjustInflation ? Math.round(realInterestEarned * 100) / 100 : null,
+      // Tax calculation results
+      taxAmount: Math.round(taxAmount * 100) / 100,
+      postTaxAmount: Math.round(postTaxAmount * 100) / 100,
+      taxRate: taxCalculation.taxRate,
+      taxRule: taxCalculation.taxRule,
+      actualSpendingPower: actualSpendingPower !== null ? Math.round(actualSpendingPower * 100) / 100 : null,
       evolution,
     })
   }, [
     principal,
     rate,
     adjustInflation,
-    inflationRate
+    inflationRate,
+    incomeTaxSlab
   ])
 
   return results

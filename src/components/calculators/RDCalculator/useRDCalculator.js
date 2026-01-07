@@ -6,6 +6,7 @@ import {
 } from '@/utils/calculations'
 import useUserPreferencesStore from '@/store/userPreferencesStore'
 import { convertYearsMonthsToYears, convertYearsMonthsToMonths } from '@/utils/fdTenureUtils'
+import { calculateTaxOnWithdrawal } from '@/utils/taxCalculations'
 
 /**
  * Custom hook for RD Calculator calculations
@@ -26,7 +27,7 @@ const useRDCalculator = (
   compoundingFrequency
 ) => {
   const [results, setResults] = useState(null)
-  const { defaultInflationRate, adjustInflation } = useUserPreferencesStore()
+  const { defaultInflationRate, adjustInflation, incomeTaxSlab } = useUserPreferencesStore()
   const inflationRate = defaultInflationRate / 100 // Convert to decimal
 
   useEffect(() => {
@@ -65,10 +66,26 @@ const useRDCalculator = (
       ? ((maturityAmount - totalInvestment) / totalInvestment) * 100
       : 0
 
+    // Calculate tax on withdrawal
+    const taxCalculation = calculateTaxOnWithdrawal(
+      maturityAmount,
+      'rd',
+      years,
+      {
+        incomeTaxSlab,
+        principal: totalInvestment,
+        returns: interestEarned,
+      }
+    )
+
+    const postTaxAmount = taxCalculation.postTaxCorpus
+    const taxAmount = taxCalculation.taxAmount
+
     // Adjust for inflation if enabled
     let realMaturityAmount = maturityAmount
     let realInterestEarned = interestEarned
     let realReturnRate = annualRate
+    let actualSpendingPower = null
     
     if (adjustInflation) {
       // Calculate real return rate (annualized)
@@ -80,6 +97,9 @@ const useRDCalculator = (
       
       // Real interest = real maturity amount - total investment
       realInterestEarned = realMaturityAmount - totalInvestment
+
+      // Calculate actual spending power (post-tax, inflation-adjusted)
+      actualSpendingPower = postTaxAmount / Math.pow(1 + inflationRate, years)
     }
 
     // Calculate evolution table (only if tenure is >= 1 year, otherwise show monthly breakdown)
@@ -100,6 +120,12 @@ const useRDCalculator = (
       realReturnRate: realReturnRate * 100, // Convert to percentage
       realMaturityAmount: adjustInflation ? Math.round(realMaturityAmount * 100) / 100 : null,
       realInterestEarned: adjustInflation ? Math.round(realInterestEarned * 100) / 100 : null,
+      // Tax calculation results
+      taxAmount: Math.round(taxAmount * 100) / 100,
+      postTaxAmount: Math.round(postTaxAmount * 100) / 100,
+      taxRate: taxCalculation.taxRate,
+      taxRule: taxCalculation.taxRule,
+      actualSpendingPower: actualSpendingPower !== null ? Math.round(actualSpendingPower * 100) / 100 : null,
       evolution,
       tenureYears: tenureYearsDisplay, // Store for display purposes
       tenureYearsInput: tenureYears,
@@ -113,7 +139,8 @@ const useRDCalculator = (
     rate,
     compoundingFrequency,
     adjustInflation,
-    inflationRate
+    inflationRate,
+    incomeTaxSlab
   ])
 
   return results

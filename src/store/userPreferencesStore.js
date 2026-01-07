@@ -18,6 +18,9 @@ const useUserPreferencesStore = create(
       inflationOverlayDismissed: false,
       lastInflationRateChange: null,
 
+      // Global income tax slab (as decimal, e.g., 0.30 for 30%)
+      incomeTaxSlab: 0.30, // Default 30% slab
+
       // Category-specific inflation rates (as percentages)
       educationInflationRate: DEFAULT_INFLATION_RATES.education,
       healthcareInflationRate: DEFAULT_INFLATION_RATES.healthcare,
@@ -43,6 +46,9 @@ const useUserPreferencesStore = create(
       },
       setInflationOverlayDismissed: (dismissed) =>
         set({ inflationOverlayDismissed: dismissed }),
+
+      // Tax slab actions
+      setIncomeTaxSlab: (slab) => set({ incomeTaxSlab: slab }),
 
       // Category-specific inflation rate actions
       setEducationInflationRate: (rate) => set({ educationInflationRate: rate }),
@@ -72,6 +78,7 @@ const useUserPreferencesStore = create(
         inflationToggleClicks: state.inflationToggleClicks,
         inflationOverlayDismissed: state.inflationOverlayDismissed,
         lastInflationRateChange: state.lastInflationRateChange,
+        incomeTaxSlab: state.incomeTaxSlab,
       }),
     }
   )

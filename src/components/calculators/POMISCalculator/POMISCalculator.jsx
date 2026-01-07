@@ -181,7 +181,7 @@ const POMISCalculator = () => {
             <POMISCalculatorInfo />
           }
           evolutionTable={
-            <POMISCalculatorTable evolution={results?.evolution} tenure={5} />
+            <POMISCalculatorTable evolution={results?.evolution} tenure={5} results={results} />
           }
         />
     </div>

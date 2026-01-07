@@ -147,12 +147,20 @@ const InflationToggle = () => {
 
         {/* Rate Adjustment Popover */}
         {showRatePopover && (
-          <div className="absolute top-full right-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-4 z-50 min-w-[200px]">
-            <RateAdjustmentPopover
-              currentRate={defaultInflationRate}
-              onClose={() => setShowRatePopover(false)}
+          <>
+            {/* Backdrop to close on outside click */}
+            <div
+              className="fixed inset-0 z-[45]"
+              onClick={() => setShowRatePopover(false)}
+              aria-hidden="true"
             />
-          </div>
+            <div className="absolute top-full right-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-4 z-[60] min-w-[200px]">
+              <RateAdjustmentPopover
+                currentRate={defaultInflationRate}
+                onClose={() => setShowRatePopover(false)}
+              />
+            </div>
+          </>
         )}
       </div>
 

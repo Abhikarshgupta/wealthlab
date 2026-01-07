@@ -281,6 +281,7 @@ const RDCalculator = () => {
             <RDCalculatorTable 
               evolution={results?.evolution} 
               tenure={results?.tenureYears || convertYearsMonthsToYears(normalizedTenure.years, normalizedTenure.months)}
+              results={results}
             />
           }
         />

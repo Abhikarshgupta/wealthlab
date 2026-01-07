@@ -157,7 +157,7 @@ const NSCalculator = () => {
             <NSCalculatorInfo />
           }
           evolutionTable={
-            <NSCalculatorTable evolution={results?.evolution} tenure={5} />
+            <NSCalculatorTable evolution={results?.evolution} tenure={5} results={results} />
           }
         />
     </div>

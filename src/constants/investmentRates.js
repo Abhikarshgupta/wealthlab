@@ -58,6 +58,14 @@ export const investmentRates = {
     minInvestment: 1000,
     maxInvestment: null,
   },
+  rd: {
+    // Recurring Deposit - typically similar to FD rates
+    rate: 6.5,
+    compounding: 'quarterly',
+    lastUpdated: '2025-11-01',
+    minInvestment: 500,
+    maxInvestment: null,
+  },
   nps: {
     // Market-linked, expected returns
     equity: 12,

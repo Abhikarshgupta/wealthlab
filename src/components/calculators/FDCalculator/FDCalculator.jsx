@@ -281,7 +281,7 @@ const FDCalculator = () => {
             <FDCalculatorInfo />
           }
           evolutionTable={
-            <FDCalculatorTable evolution={results?.evolution} tenure={totalYears} />
+            <FDCalculatorTable evolution={results?.evolution} tenure={totalYears} results={results} />
           }
         />
     </div>

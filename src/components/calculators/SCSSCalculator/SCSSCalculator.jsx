@@ -246,7 +246,7 @@ const SCSSCalculator = () => {
             <SCSSCalculatorInfo />
           }
           evolutionTable={
-            <SCSSCalculatorTable evolution={results?.evolution} tenure={tenureNum} />
+            <SCSSCalculatorTable evolution={results?.evolution} tenure={tenureNum} results={results} />
           }
         />
     </div>

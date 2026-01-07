@@ -4,6 +4,7 @@ import {
   calculateCAGR
 } from '@/utils/calculations'
 import useUserPreferencesStore from '@/store/userPreferencesStore'
+import { calculateTaxOnWithdrawal } from '@/utils/taxCalculations'
 
 /**
  * Calculate SCSS maturity amount
@@ -98,7 +99,7 @@ const useSCSSCalculator = (
   isDefensePersonnel = false
 ) => {
   const [results, setResults] = useState(null)
-  const { defaultInflationRate, adjustInflation } = useUserPreferencesStore()
+  const { defaultInflationRate, adjustInflation, incomeTaxSlab } = useUserPreferencesStore()
   const inflationRate = defaultInflationRate / 100 // Convert to decimal
 
   useEffect(() => {
@@ -123,10 +124,26 @@ const useSCSSCalculator = (
       ? calculateCAGR(principal, maturityAmount, tenure)
       : 0
 
+    // Calculate tax on withdrawal
+    const taxCalculation = calculateTaxOnWithdrawal(
+      maturityAmount,
+      'scss',
+      tenure,
+      {
+        incomeTaxSlab,
+        principal,
+        returns: totalInterest,
+      }
+    )
+
+    const postTaxAmount = taxCalculation.postTaxCorpus
+    const taxAmount = taxCalculation.taxAmount
+
     // Adjust for inflation if enabled
     let realMaturityAmount = maturityAmount
     let realTotalInterest = totalInterest
     let realReturnRate = annualRate
+    let actualSpendingPower = null
     
     if (adjustInflation) {
       // Calculate real return rate (annualized)
@@ -137,6 +154,9 @@ const useSCSSCalculator = (
       
       // Real interest = real maturity amount - principal
       realTotalInterest = realMaturityAmount - principal
+
+      // Calculate actual spending power (post-tax, inflation-adjusted)
+      actualSpendingPower = postTaxAmount / Math.pow(1 + inflationRate, tenure)
     }
 
     // Calculate evolution table
@@ -151,6 +171,13 @@ const useSCSSCalculator = (
       realReturnRate: realReturnRate * 100, // Convert to percentage
       realMaturityAmount: adjustInflation ? Math.round(realMaturityAmount * 100) / 100 : null,
       realTotalInterest: adjustInflation ? Math.round(realTotalInterest * 100) / 100 : null,
+      // Tax calculation results
+      taxAmount: Math.round(taxAmount * 100) / 100,
+      postTaxAmount: Math.round(postTaxAmount * 100) / 100,
+      taxRate: taxCalculation.taxRate,
+      taxRule: taxCalculation.taxRule,
+      tdsInfo: taxCalculation.tdsInfo,
+      actualSpendingPower: actualSpendingPower !== null ? Math.round(actualSpendingPower * 100) / 100 : null,
       evolution,
     })
   }, [
@@ -160,7 +187,8 @@ const useSCSSCalculator = (
     rate,
     adjustInflation,
     isDefensePersonnel,
-    inflationRate
+    inflationRate,
+    incomeTaxSlab
   ])
 
   return results

@@ -1,7 +1,7 @@
 /**
  * Tax Calculation Utilities
  * Calculates tax implications for different investment instruments
- * Based on Indian tax rules (FY 2024-25)
+ * Based on Indian tax rules (FY 2025-26 & 2026-27)
  */
 
 /**
@@ -92,6 +92,16 @@ export const getTaxRateForInstrument = (instrumentType) => {
       type: 'interest',
       rate: null, // Depends on income slab
       notes: 'Interest taxable quarterly as per income slab',
+    },
+    rd: {
+      type: 'interest',
+      rate: null, // Depends on income slab
+      notes: 'Interest taxed as per income slab',
+    },
+    pomis: {
+      type: 'interest',
+      rate: null, // Depends on income slab
+      notes: 'Interest taxed monthly as per income slab. TDS applicable if annual interest > ₹40,000',
     },
     ipo: {
       type: 'ltcg',
