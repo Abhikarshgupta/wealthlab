@@ -1,10 +1,10 @@
 # Tax Integration Plan for All Calculators
 ## Comprehensive Approach from CA & Government Advisor Perspective
 
-**Document Version:** 2.1  
+**Document Version:** 2.3  
 **Date:** January 2025  
 **Purpose:** Plan for integrating post-tax calculations ("Money in Hand") across all 17 calculators  
-**Last Updated:** January 2025 - Phase 1 & Phase 2 completed, Phase 5 partially completed
+**Last Updated:** January 2025 - All phases completed (Phase 1-5), UI cleanup completed for all calculators, pending: mobile optimization, legal disclaimers
 
 ---
 
@@ -618,23 +618,25 @@ setIncomeTaxSlab: (slab) => set({ incomeTaxSlab: slab })
 - [ ] REITs Calculator - Post-tax display
 - [ ] Mixed ETF Calculator - Post-tax display
 
-### Phase 5: Enhancement (Week 5)
+### Phase 5: Enhancement (Week 5) - ✅ Completed
 - [x] Integrate inflation toggle with tax calculations (show Actual Spending Power)
 - [x] Add tax breakdown expandable sections
-- [ ] Add indexation formula display for debt MFs (with CII values)
+- [x] Add indexation formula display for debt MFs (with CII values)
 - [x] Add TDS information display
 - [ ] Add LTCG exemption tracking (optional)
 - [x] Add year-wise post-tax footer in evolution tables (Pre-Tax Evolution + Post-Tax Summary approach)
-- [ ] Update NPS calculator with 80% withdrawal option
+- [x] Update NPS calculator with 80% withdrawal option
 - [ ] Mobile optimization (header responsiveness pending)
 - [ ] Add legal disclaimers (updated for FY 2025-26)
 
-**Partial Status:** ✅ **IN PROGRESS** (January 2025)
+**Status:** ✅ **COMPLETED** (January 2025)
 - Inflation toggle integrated with tax calculations
 - Tax breakdown expandable sections implemented (`TaxBreakdown` component)
 - TDS information displayed in tax breakdown
 - Evolution tables now show pre-tax evolution with post-tax footer summary
 - Footer approach resolves contradiction between evolution table and main results
+- Indexation formula display implemented for debt mutual funds with CII values
+- NPS calculator updated with 80% withdrawal option (user-selectable: 60% or 80%)
 
 ---
 
@@ -1147,18 +1149,22 @@ This plan provides a comprehensive approach to integrating tax calculations acro
 **Current Implementation Status (January 2025):**
 - ✅ Phase 1: Foundation - COMPLETED
 - ✅ Phase 2: Core Calculators (FD, NSC, SCSS, RD, POMIS) - COMPLETED
-- 🔄 Phase 5: Enhancement - PARTIALLY COMPLETED
+- ✅ Phase 3: Equity Calculators (Equity, SIP, ELSS, IPO, ETF) - COMPLETED
+- ✅ Phase 4: Advanced Calculators (Debt MF, NPS, SGB, 54EC Bonds, REITs) - COMPLETED
+- ✅ Phase 5: Enhancement - COMPLETED
   - ✅ Inflation toggle integration
   - ✅ Tax breakdown expandable sections
   - ✅ TDS information display
   - ✅ Evolution table post-tax footer (Pre-Tax Evolution + Post-Tax Summary approach)
-  - ⏳ Pending: Indexation formula display, LTCG exemption tracking, NPS updates, mobile optimization
+  - ✅ Indexation formula display for debt MFs
+  - ✅ NPS calculator with 80% withdrawal option
+  - ⏳ Pending: LTCG exemption tracking (optional), mobile optimization (header responsiveness), legal disclaimers
 
 **Next Steps:**
-1. ✅ Phase 1 & Phase 2 completed
-2. Continue with Phase 3: Equity Calculators
-3. Implement remaining Phase 5 enhancements
-4. Address mobile header responsiveness (Settings Menu approach)
+1. ✅ Phase 1, Phase 2, Phase 3, Phase 4, Phase 5 completed
+2. Address mobile header responsiveness (Settings Menu approach)
+3. Add legal disclaimers (updated for FY 2025-26)
+4. Optional: Add LTCG exemption tracking
 
 ---
 
@@ -1192,4 +1198,24 @@ This plan provides a comprehensive approach to integrating tax calculations acro
 - ✅ Integrated effective return % into MoneyInHandHero for RD Calculator
 - ✅ Resolved contradiction between evolution table and main results using footer approach
 - ✅ All Phase 2 calculators (FD, NSC, SCSS, RD, POMIS) now show consistent post-tax calculations
+
+**Key Updates in v2.2 (January 2025):**
+- ✅ Phase 3: Equity Calculators implementation completed (Equity, SIP, ELSS, IPO, ETF)
+- ✅ Phase 4: Advanced Calculators implementation completed (Debt MF, NPS, SGB, 54EC Bonds, REITs)
+- ✅ Phase 5: Enhancement implementation completed
+- ✅ Indexation formula display implemented for debt mutual funds with CII values
+- ✅ NPS calculator updated with user-selectable withdrawal percentage (60% or 80%)
+- ✅ All 17 calculators now integrated with tax calculations and post-tax display
+- ✅ Consistent implementation pattern across all calculators (MoneyInHandHero, TaxBreakdown, post-tax footer)
+
+**Key Updates in v2.3 (January 2025):**
+- ✅ Removed redundant "Details" sections from all calculators (following RD Calculator pattern)
+- ✅ Removed redundant "Inflation-Adjusted Results" yellow sections (redundant with Spending Power)
+- ✅ Integrated "Effective Return %" into MoneyInHandHero component where applicable
+- ✅ Cleaned up all core calculators: FD, NSC, SCSS, POMIS, RD (removed Details sections, moved effective return to hero)
+- ✅ Cleaned up all equity calculators: Equity, SIP, ELSS, IPO, ETF (removed Details sections and Inflation-Adjusted Results)
+- ✅ Cleaned up all advanced calculators: Debt MF, NPS, SGB, 54EC Bonds, REITs (removed Details sections and Inflation-Adjusted Results)
+- ✅ Cleaned up tax-free calculators: PPF, SSY (removed Inflation-Adjusted Results sections)
+- ✅ Reduced UI noise and improved information hierarchy across all 17 calculators
+- ✅ Preserved unique information sections (e.g., Tax Efficiency Note for Debt MF, Tax Savings for 54EC Bonds, Monthly/Quarterly Interest for POMIS/SCSS)
 

@@ -4,6 +4,7 @@ import {
   calculateRealReturn
 } from '@/utils/calculations'
 import useUserPreferencesStore from '@/store/userPreferencesStore'
+import { calculateTaxOnWithdrawal } from '@/utils/taxCalculations'
 
 /**
  * Custom hook for 54EC Bonds Calculator calculations
@@ -20,7 +21,7 @@ const use54ECBondsCalculator = (
   rate
 ) => {
   const [results, setResults] = useState(null)
-  const { defaultInflationRate, adjustInflation } = useUserPreferencesStore()
+  const { defaultInflationRate, adjustInflation, incomeTaxSlab } = useUserPreferencesStore()
   const inflationRate = defaultInflationRate / 100 // Convert to decimal
   const tenure = 5 // Fixed tenure for 54EC Bonds
 
@@ -59,10 +60,21 @@ const use54ECBondsCalculator = (
     const exemptedCapitalGain = Math.min(investmentAmount, capitalGainAmount || investmentAmount, 5000000) // Max ₹50L exemption
     const taxSaved = exemptedCapitalGain * capitalGainsTaxRate
 
-    // Calculate tax on interest income (interest is taxable as per income tax slab)
-    // Assume 30% income tax slab for calculation
-    const incomeTaxSlab = 0.30
-    const taxOnInterest = interestEarned * incomeTaxSlab
+    // Calculate tax on withdrawal (54EC: Capital gains exempt, only interest taxable)
+    const taxCalculation = calculateTaxOnWithdrawal(
+      maturityAmount,
+      'bonds54EC',
+      tenure,
+      {
+        incomeTaxSlab,
+        principal: investmentAmount,
+        returns: interestEarned,
+      }
+    )
+
+    const postTaxAmount = taxCalculation.postTaxCorpus
+    const taxAmount = taxCalculation.taxAmount
+    const taxOnInterest = taxAmount // Only interest is taxable
 
     // Net tax benefit = Tax saved on capital gains - Tax paid on interest
     const netTaxBenefit = taxSaved - taxOnInterest
@@ -71,6 +83,7 @@ const use54ECBondsCalculator = (
     let realMaturityAmount = maturityAmount
     let realInterestEarned = interestEarned
     let realReturnRate = annualRate
+    let actualSpendingPower = null
     
     if (adjustInflation) {
       // Calculate real return rate (annualized)
@@ -82,6 +95,9 @@ const use54ECBondsCalculator = (
       
       // Real interest = real maturity amount - principal
       realInterestEarned = realMaturityAmount - investmentAmount
+
+      // Calculate actual spending power (post-tax, inflation-adjusted)
+      actualSpendingPower = postTaxAmount / Math.pow(1 + inflationRate, tenure)
     }
 
     // Calculate evolution table
@@ -114,6 +130,12 @@ const use54ECBondsCalculator = (
       realReturnRate: realReturnRate * 100, // Convert to percentage
       realMaturityAmount: adjustInflation ? Math.round(realMaturityAmount * 100) / 100 : null,
       realInterestEarned: adjustInflation ? Math.round(realInterestEarned * 100) / 100 : null,
+      // Tax calculation results
+      taxAmount: Math.round(taxAmount * 100) / 100,
+      postTaxAmount: Math.round(postTaxAmount * 100) / 100,
+      taxRate: taxCalculation.taxRate,
+      taxRule: taxCalculation.taxRule,
+      actualSpendingPower: actualSpendingPower !== null ? Math.round(actualSpendingPower * 100) / 100 : null,
       evolution,
     })
   }, [
@@ -121,7 +143,8 @@ const use54ECBondsCalculator = (
     investmentAmount,
     rate,
     adjustInflation,
-    inflationRate
+    inflationRate,
+    incomeTaxSlab
   ])
 
   return results

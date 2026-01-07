@@ -231,7 +231,7 @@ const Bonds54ECCalculator = () => {
             <Bonds54ECCalculatorInfo />
           }
           evolutionTable={
-            <Bonds54ECCalculatorTable evolution={results?.evolution} tenure={5} />
+            <Bonds54ECCalculatorTable evolution={results?.evolution} tenure={5} results={results} />
           }
         />
     </div>

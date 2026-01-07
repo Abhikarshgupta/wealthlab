@@ -9,6 +9,7 @@ import {
   calculateCAGR
 } from '@/utils/calculations'
 import useUserPreferencesStore from '@/store/userPreferencesStore'
+import { calculateTaxOnWithdrawal } from '@/utils/taxCalculations'
 
 /**
  * Custom hook for ETF Calculator calculations
@@ -35,7 +36,7 @@ const useETFCalculator = (
   stepUpPercentage
 ) => {
   const [results, setResults] = useState(null)
-  const { defaultInflationRate, adjustInflation } = useUserPreferencesStore()
+  const { defaultInflationRate, adjustInflation, incomeTaxSlab } = useUserPreferencesStore()
   const inflationRate = defaultInflationRate / 100 // Convert to decimal
 
   useEffect(() => {
@@ -92,6 +93,28 @@ const useETFCalculator = (
       ? calculateCAGR(totalInvested, futureValue, tenure)
       : 0
 
+    // Determine instrument type for tax calculation based on ETF type
+    // Equity and International ETFs use equity tax rules
+    // Debt and Gold ETFs use debt mutual fund tax rules (with indexation)
+    const instrumentTypeForTax = (etfType === 'equity' || etfType === 'international') 
+      ? 'equity' 
+      : 'debtMutualFund'
+
+    // Calculate tax on withdrawal
+    const taxCalculation = calculateTaxOnWithdrawal(
+      futureValue,
+      instrumentTypeForTax,
+      tenure,
+      {
+        incomeTaxSlab,
+        principal: totalInvested,
+        returns: returnsEarned,
+      }
+    )
+
+    const postTaxAmount = taxCalculation.postTaxCorpus
+    const taxAmount = taxCalculation.taxAmount
+
     // Calculate total expense paid over tenure
     let totalExpensePaid = 0
     if (investmentType === 'sip') {
@@ -120,6 +143,7 @@ const useETFCalculator = (
     let realFutureValue = futureValue
     let realReturns = returnsEarned
     let realReturnRate = netAnnualRate
+    let actualSpendingPower = null
     
     if (adjustInflation) {
       // Calculate real return rate (annualized)
@@ -130,6 +154,9 @@ const useETFCalculator = (
       
       // Real returns = real future value - total invested
       realReturns = realFutureValue - totalInvested
+
+      // Calculate actual spending power (post-tax, inflation-adjusted)
+      actualSpendingPower = postTaxAmount / Math.pow(1 + inflationRate, tenure)
     }
 
     setResults({
@@ -143,6 +170,12 @@ const useETFCalculator = (
       totalExpensePaid: Math.round(totalExpensePaid * 100) / 100,
       expenseRatio: expenseRatio,
       etfType: etfType,
+      // Tax calculation results
+      taxAmount: Math.round(taxAmount * 100) / 100,
+      postTaxAmount: Math.round(postTaxAmount * 100) / 100,
+      taxRate: taxCalculation.taxRate,
+      taxRule: taxCalculation.taxRule,
+      actualSpendingPower: actualSpendingPower !== null ? Math.round(actualSpendingPower * 100) / 100 : null,
       evolution,
     })
   }, [
@@ -155,7 +188,8 @@ const useETFCalculator = (
     stepUpEnabled,
     stepUpPercentage,
     adjustInflation,
-    inflationRate
+    inflationRate,
+    incomeTaxSlab
   ])
 
   return results

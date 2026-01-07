@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { calculateCompoundInterest, calculateCAGR, calculateRealReturn } from '@/utils/calculations'
 import useUserPreferencesStore from '@/store/userPreferencesStore'
+import { calculateTaxOnWithdrawal } from '@/utils/taxCalculations'
 
 /**
  * Custom hook for IPO/FPO Calculator calculations
@@ -25,7 +26,7 @@ const useIPOCalculator = (
   expectedCAGR
 ) => {
   const [results, setResults] = useState(null)
-  const { defaultInflationRate, adjustInflation } = useUserPreferencesStore()
+  const { defaultInflationRate, adjustInflation, incomeTaxSlab } = useUserPreferencesStore()
   const inflationRate = defaultInflationRate / 100 // Convert to decimal
 
   useEffect(() => {
@@ -112,27 +113,27 @@ const useIPOCalculator = (
       ? calculateCAGR(initialInvestment, finalValue, holdingPeriod) * 100
       : listingGainPercentage
 
-    // Tax calculations
-    const isLongTerm = holdingPeriod >= 1
-    const ltcgExemptionLimit = 100000 // ₹1L exemption
-    const taxableGains = Math.max(0, totalReturns - ltcgExemptionLimit)
-    
-    let taxAmount = 0
-    if (isLongTerm) {
-      // LTCG: 10% above ₹1L exemption
-      taxAmount = taxableGains * 0.10
-    } else {
-      // STCG: 15% on all gains
-      taxAmount = totalReturns * 0.15
-    }
+    // Calculate tax on withdrawal using standard tax calculation function
+    const taxCalculation = calculateTaxOnWithdrawal(
+      finalValue,
+      'ipo',
+      holdingPeriod,
+      {
+        incomeTaxSlab,
+        principal: initialInvestment,
+        returns: totalReturns,
+      }
+    )
 
-    const postTaxValue = finalValue - taxAmount
-    const postTaxReturns = totalReturns - taxAmount
+    const postTaxValue = taxCalculation.postTaxCorpus
+    const taxAmount = taxCalculation.taxAmount
+    const isLongTerm = holdingPeriod >= 1
 
     // Adjust for inflation if enabled
     let realFinalValue = finalValue
     let realReturns = totalReturns
     let realReturnRate = overallCAGR / 100
+    let actualSpendingPower = null
     
     if (adjustInflation && holdingPeriod > 0) {
       // Calculate real return rate (annualized)
@@ -144,6 +145,9 @@ const useIPOCalculator = (
       
       // Real returns = real final value - initial investment
       realReturns = realFinalValue - initialInvestment
+
+      // Calculate actual spending power (post-tax, inflation-adjusted)
+      actualSpendingPower = postTaxValue / Math.pow(1 + inflationRate, holdingPeriod)
     }
 
     setResults({
@@ -158,11 +162,14 @@ const useIPOCalculator = (
       overallCAGR: Math.round(overallCAGR * 100) / 100,
       taxAmount: Math.round(taxAmount * 100) / 100,
       postTaxValue: Math.round(postTaxValue * 100) / 100,
-      postTaxReturns: Math.round(postTaxReturns * 100) / 100,
+      postTaxReturns: Math.round((totalReturns - taxAmount) * 100) / 100,
+      taxRate: taxCalculation.taxRate,
+      taxRule: taxCalculation.taxRule,
       isLongTerm,
       realReturnRate: adjustInflation ? Math.round(realReturnRate * 100 * 100) / 100 : null,
       realFinalValue: adjustInflation ? Math.round(realFinalValue * 100) / 100 : null,
       realReturns: adjustInflation ? Math.round(realReturns * 100) / 100 : null,
+      actualSpendingPower: actualSpendingPower !== null ? Math.round(actualSpendingPower * 100) / 100 : null,
       evolution,
     })
   }, [
@@ -174,7 +181,8 @@ const useIPOCalculator = (
     holdingPeriod,
     expectedCAGR,
     adjustInflation,
-    inflationRate
+    inflationRate,
+    incomeTaxSlab
   ])
 
   return results

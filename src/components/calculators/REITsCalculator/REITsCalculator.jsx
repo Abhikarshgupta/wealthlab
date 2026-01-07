@@ -266,7 +266,7 @@ const REITsCalculator = () => {
             <REITsCalculatorInfo />
           }
           evolutionTable={
-            <REITsCalculatorTable evolution={results?.evolution} />
+            <REITsCalculatorTable evolution={results?.evolution} tenure={tenureNum} results={results} />
           }
         />
     </div>

@@ -216,7 +216,7 @@ const ELSSCalculator = () => {
           <ELSSCalculatorInfo />
         }
         evolutionTable={
-          <ELSSCalculatorTable evolution={results?.evolution} tenure={tenureNum} />
+          <ELSSCalculatorTable evolution={results?.evolution} tenure={tenureNum} results={results} />
         }
       />
     </div>

@@ -369,7 +369,7 @@ const DebtMutualFundCalculator = () => {
             <DebtMutualFundCalculatorInfo />
           }
           evolutionTable={
-            <DebtMutualFundCalculatorTable evolution={results?.evolution} tenure={tenureNum} />
+            <DebtMutualFundCalculatorTable evolution={results?.evolution} tenure={tenureNum} results={results} />
           }
         />
     </div>

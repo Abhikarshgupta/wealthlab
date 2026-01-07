@@ -8,6 +8,7 @@ import {
   calculateCAGR
 } from '@/utils/calculations'
 import useUserPreferencesStore from '@/store/userPreferencesStore'
+import { calculateTaxOnWithdrawal } from '@/utils/taxCalculations'
 
 /**
  * Custom hook for ELSS Calculator calculations
@@ -26,7 +27,7 @@ const useELSSCalculator = (
   expectedReturn
 ) => {
   const [results, setResults] = useState(null)
-  const { defaultInflationRate, adjustInflation } = useUserPreferencesStore()
+  const { defaultInflationRate, adjustInflation, incomeTaxSlab } = useUserPreferencesStore()
   const inflationRate = defaultInflationRate / 100 // Convert to decimal
 
   useEffect(() => {
@@ -74,10 +75,26 @@ const useELSSCalculator = (
       ? calculateCAGR(totalInvested, futureValue, tenure)
       : 0
 
+    // Calculate tax on withdrawal (ELSS has 3-year lock-in)
+    const taxCalculation = calculateTaxOnWithdrawal(
+      futureValue,
+      'elss',
+      tenure,
+      {
+        incomeTaxSlab,
+        principal: totalInvested,
+        returns: returnsEarned,
+      }
+    )
+
+    const postTaxAmount = taxCalculation.postTaxCorpus
+    const taxAmount = taxCalculation.taxAmount
+
     // Adjust for inflation if enabled
     let realFutureValue = futureValue
     let realReturns = returnsEarned
     let realReturnRate = annualRate
+    let actualSpendingPower = null
     
     if (adjustInflation) {
       // Calculate real return rate (annualized)
@@ -88,6 +105,9 @@ const useELSSCalculator = (
       
       // Real returns = real future value - total invested
       realReturns = realFutureValue - totalInvested
+
+      // Calculate actual spending power (post-tax, inflation-adjusted)
+      actualSpendingPower = postTaxAmount / Math.pow(1 + inflationRate, tenure)
     }
 
     setResults({
@@ -98,6 +118,12 @@ const useELSSCalculator = (
       realReturnRate: realReturnRate * 100, // Convert to percentage
       realCorpusValue: adjustInflation ? Math.round(realFutureValue * 100) / 100 : null,
       realReturns: adjustInflation ? Math.round(realReturns * 100) / 100 : null,
+      // Tax calculation results
+      taxAmount: Math.round(taxAmount * 100) / 100,
+      postTaxAmount: Math.round(postTaxAmount * 100) / 100,
+      taxRate: taxCalculation.taxRate,
+      taxRule: taxCalculation.taxRule,
+      actualSpendingPower: actualSpendingPower !== null ? Math.round(actualSpendingPower * 100) / 100 : null,
       evolution,
     })
   }, [
@@ -106,7 +132,8 @@ const useELSSCalculator = (
     tenure,
     expectedReturn,
     adjustInflation,
-    inflationRate
+    inflationRate,
+    incomeTaxSlab
   ])
 
   return results

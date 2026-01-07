@@ -1,4 +1,5 @@
 import InvestmentTable from '@/components/common/InvestmentTable/InvestmentTable'
+import useUserPreferencesStore from '@/store/userPreferencesStore'
 import { formatCurrency, formatPercentageValue } from '@/utils/formatters'
 
 /**
@@ -7,11 +8,21 @@ import { formatCurrency, formatPercentageValue } from '@/utils/formatters'
  * 
  * @param {Array} evolution - Evolution data from useIPOCalculator hook
  * @param {number} tenure - Investment tenure in years
+ * @param {Object} results - Full calculation results from useIPOCalculator hook (optional, for post-tax footer)
  */
-const IPOCalculatorTable = ({ evolution, tenure: _tenure }) => {
+const IPOCalculatorTable = ({ evolution, tenure: _tenure, results = null }) => {
+  const { adjustInflation, incomeTaxSlab, defaultInflationRate } = useUserPreferencesStore()
+
   if (!evolution || evolution.length === 0) {
     return null
   }
+
+  // Extract post-tax values from results if available
+  const preTaxMaturity = results?.finalValue || null
+  const taxAmount = results?.taxAmount || null
+  const postTaxAmount = results?.postTaxValue || null
+  const postTaxSpendingPower = results?.actualSpendingPower || null
+  const showPostTaxFooter = preTaxMaturity !== null && taxAmount !== null && postTaxAmount !== null
 
   // Transform evolution data for InvestmentTable component
   const tableData = evolution.map((item) => ({
@@ -99,6 +110,62 @@ const IPOCalculatorTable = ({ evolution, tenure: _tenure }) => {
               </tr>
             ))}
           </tbody>
+          {showPostTaxFooter && (
+            <tfoot>
+              <tr className="bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-yellow-900/20 dark:to-amber-900/20 border-t-2 border-yellow-300 dark:border-yellow-700">
+                <td colSpan={6} className="px-6 py-3">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-lg">💰</span>
+                    <span className="text-sm font-bold text-gray-900 dark:text-white">
+                      Post-Tax Summary (At Maturity)
+                    </span>
+                  </div>
+                </td>
+              </tr>
+              <tr className="bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-yellow-900/20 dark:to-amber-900/20">
+                <td className="px-6 py-3 text-sm font-semibold text-gray-700 dark:text-gray-300" colSpan={5}>
+                  Final Pre-Tax Value
+                </td>
+                <td className="px-6 py-3 text-sm text-right font-bold text-gray-900 dark:text-white font-mono tabular-nums">
+                  {formatCurrency(preTaxMaturity)}
+                </td>
+              </tr>
+              <tr className="bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-yellow-900/20 dark:to-amber-900/20">
+                <td className="px-6 py-3 text-sm font-semibold text-red-600 dark:text-red-400" colSpan={5}>
+                  Tax at Maturity
+                </td>
+                <td className="px-6 py-3 text-sm text-right font-bold text-red-600 dark:text-red-400 font-mono tabular-nums">
+                  -{formatCurrency(taxAmount)}
+                  {incomeTaxSlab && (
+                    <span className="block text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                      (@ {Math.round(incomeTaxSlab * 100)}% slab)
+                    </span>
+                  )}
+                </td>
+              </tr>
+              <tr className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-t border-green-200 dark:border-green-800">
+                <td className="px-6 py-3 text-sm font-semibold text-green-700 dark:text-green-400" colSpan={5}>
+                  Final Post-Tax Amount
+                </td>
+                <td className="px-6 py-3 text-sm text-right font-bold text-green-700 dark:text-green-400 font-mono text-lg tabular-nums">
+                  {formatCurrency(postTaxAmount)}
+                </td>
+              </tr>
+              {adjustInflation && postTaxSpendingPower !== null && (
+                <tr className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-t border-blue-200 dark:border-blue-800">
+                  <td className="px-6 py-3 text-sm font-semibold text-blue-700 dark:text-blue-400" colSpan={5}>
+                    Post-Tax Spending Power
+                    <span className="block text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                      (@ {defaultInflationRate}% inflation)
+                    </span>
+                  </td>
+                  <td className="px-6 py-3 text-sm text-right font-bold text-blue-700 dark:text-blue-400 font-mono text-lg tabular-nums">
+                    {formatCurrency(postTaxSpendingPower)}
+                  </td>
+                </tr>
+              )}
+            </tfoot>
+          )}
         </table>
       </div>
     </div>

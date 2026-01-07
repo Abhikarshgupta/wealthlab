@@ -139,6 +139,14 @@ export const npsSchema = Joi.object({
   
   useAgeBasedCaps: Joi.boolean().default(false),
   
+  withdrawalPercentage: Joi.number()
+    .valid(60, 80, 100)
+    .default(80)
+    .messages({
+      'any.only': 'Withdrawal percentage must be 60%, 80%, or 100%',
+      'number.base': 'Withdrawal percentage must be a number'
+    }),
+  
   adjustInflation: Joi.boolean().default(false)
 }).custom((value, helpers) => {
   // Custom validation: Total allocation must equal 100%

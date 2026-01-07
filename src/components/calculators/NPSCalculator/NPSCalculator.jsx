@@ -55,6 +55,7 @@ const NPSCalculator = () => {
       governmentBondsReturn: investmentRates.nps.debt || 8,
       alternativeReturn: 7,
       useAgeBasedCaps: false,
+      withdrawalPercentage: 80, // Default to 80% (new rule)
     },
     mode: 'onChange'
   })
@@ -72,6 +73,7 @@ const NPSCalculator = () => {
   const governmentBondsReturn = watch('governmentBondsReturn')
   const alternativeReturn = watch('alternativeReturn')
   const useAgeBasedCaps = watch('useAgeBasedCaps')
+  const withdrawalPercentage = watch('withdrawalPercentage')
 
   // Convert string values to numbers
   const monthlyContributionNum = parseFloat(monthlyContribution) || 0
@@ -177,6 +179,8 @@ const NPSCalculator = () => {
   }
 
   // Calculate results using custom hook
+  const withdrawalPercentageNum = parseFloat(withdrawalPercentage) || 80
+
   const results = useNPSCalculator(
     monthlyContributionNum,
     tenureNum,
@@ -189,7 +193,8 @@ const NPSCalculator = () => {
     corporateBondsReturnNum,
     governmentBondsReturnNum,
     alternativeReturnNum,
-    useAgeBasedCaps
+    useAgeBasedCaps,
+    withdrawalPercentageNum
   )
 
   return (
@@ -652,6 +657,41 @@ const NPSCalculator = () => {
                 description="Automatically reduce equity allocation cap as you age (100% up to age 35, decreases by 2.5% annually after, reaches 50% at age 60+)"
               />
 
+              {/* Withdrawal Percentage */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Withdrawal Percentage
+                </label>
+                <div className="flex items-center space-x-4">
+                  <label className="flex items-center">
+                    <input
+                      type="radio"
+                      {...register('withdrawalPercentage')}
+                      value={60}
+                      className="mr-2"
+                    />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">60% Lump Sum + 40% Annuity</span>
+                  </label>
+                  <label className="flex items-center">
+                    <input
+                      type="radio"
+                      {...register('withdrawalPercentage')}
+                      value={80}
+                      className="mr-2"
+                    />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">80% Lump Sum + 20% Annuity</span>
+                  </label>
+                </div>
+                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 mt-2">
+                  <p className="text-sm text-blue-800 dark:text-blue-200">
+                    {withdrawalPercentageNum === 80 
+                      ? "New rule: Up to 80% can be withdrawn as lump sum (taxable), remaining 20% must be used to purchase annuity (taxable)."
+                      : "Traditional rule: Up to 60% can be withdrawn as lump sum (taxable), remaining 40% must be used to purchase annuity (taxable)."
+                    }
+                  </p>
+                </div>
+              </div>
+
             </div>
           }
           resultsPanel={
@@ -661,7 +701,7 @@ const NPSCalculator = () => {
             <NPSCalculatorInfo />
           }
           evolutionTable={
-            <NPSCalculatorTable evolution={results?.evolution} tenure={tenureNum} />
+            <NPSCalculatorTable evolution={results?.evolution} tenure={tenureNum} results={results} />
           }
         />
     </div>

@@ -1,5 +1,8 @@
 import ResultCard from '@/components/common/ResultCard/ResultCard'
 import PieChart from '@/components/common/PieChart/PieChart'
+import MoneyInHandHero from '@/components/common/MoneyInHandHero'
+import TaxBreakdown from '@/components/common/TaxBreakdown'
+import useUserPreferencesStore from '@/store/userPreferencesStore'
 import { formatCurrency, formatPercentageValue } from '@/utils/formatters'
 
 /**
@@ -9,6 +12,8 @@ import { formatCurrency, formatPercentageValue } from '@/utils/formatters'
  * @param {Object} results - Calculation results from useIPOCalculator hook
  */
 const IPOCalculatorResults = ({ results }) => {
+  const { adjustInflation, incomeTaxSlab } = useUserPreferencesStore()
+
   if (!results) {
     return (
       <div className="space-y-6">
@@ -34,10 +39,9 @@ const IPOCalculatorResults = ({ results }) => {
     taxAmount,
     postTaxValue,
     postTaxReturns,
+    taxRule,
     isLongTerm,
-    realFinalValue,
-    realReturns,
-    realReturnRate
+    actualSpendingPower,
   } = results
 
   // Prepare pie chart data
@@ -59,6 +63,28 @@ const IPOCalculatorResults = ({ results }) => {
       <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
         Results
       </h2>
+
+      {/* Hero Section: Money in Hand / Actual Spending Power */}
+      <MoneyInHandHero
+        postTaxAmount={postTaxValue}
+        actualSpendingPower={actualSpendingPower}
+        inflationAdjusted={adjustInflation && actualSpendingPower !== null}
+        taxSlab={incomeTaxSlab}
+        taxAmount={taxAmount}
+        instrumentType="ipo"
+      />
+
+      {/* Tax Breakdown (Expandable) */}
+      <TaxBreakdown
+        maturityAmount={finalValue}
+        principal={initialInvestment}
+        returns={totalReturns}
+        taxAmount={taxAmount}
+        postTaxAmount={postTaxValue}
+        taxSlab={incomeTaxSlab}
+        taxRule={taxRule}
+        instrumentType="ipo"
+      />
 
       {/* Listing Gains Section */}
       <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
@@ -172,54 +198,6 @@ const IPOCalculatorResults = ({ results }) => {
         </div>
       </div>
 
-      {/* Inflation-adjusted results (if enabled) */}
-      {realFinalValue !== null && realFinalValue !== undefined && (
-        <div className={`mt-6 p-4 border rounded-lg ${
-          realReturns < 0 
-            ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800' 
-            : 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800'
-        }`}>
-          <h3 className={`text-lg font-semibold mb-3 ${
-            realReturns < 0 
-              ? 'text-red-900 dark:text-red-200' 
-              : 'text-yellow-900 dark:text-yellow-200'
-          }`}>
-            Inflation-Adjusted Results (Real Value)
-          </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div>
-              <p className="text-sm text-yellow-700 dark:text-yellow-300">Real Return Rate</p>
-              <p className={`text-xl font-bold ${
-                realReturns < 0 
-                  ? 'text-red-900 dark:text-red-100' 
-                  : 'text-yellow-900 dark:text-yellow-100'
-              }`}>
-                {formatPercentageValue(realReturnRate)}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-yellow-700 dark:text-yellow-300">Real Final Value</p>
-              <p className={`text-xl font-bold ${
-                realReturns < 0 
-                  ? 'text-red-900 dark:text-red-100' 
-                  : 'text-yellow-900 dark:text-yellow-100'
-              }`}>
-                {formatCurrency(realFinalValue)}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-yellow-700 dark:text-yellow-300">Real Returns</p>
-              <p className={`text-xl font-bold ${
-                realReturns < 0 
-                  ? 'text-red-900 dark:text-red-100' 
-                  : 'text-yellow-900 dark:text-yellow-100'
-              }`}>
-                {formatCurrency(realReturns)}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Pie Chart */}
       <div className="mt-6">

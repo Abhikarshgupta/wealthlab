@@ -281,7 +281,7 @@ const SGBCalculator = () => {
             <SGBCalculatorInfo />
           }
           evolutionTable={
-            <SGBCalculatorTable evolution={results?.evolution} />
+            <SGBCalculatorTable evolution={results?.evolution} tenure={results?.tenure || tenureNum} results={results} />
           }
         />
     </div>

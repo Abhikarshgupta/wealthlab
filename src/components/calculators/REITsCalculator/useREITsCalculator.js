@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import useUserPreferencesStore from '@/store/userPreferencesStore'
+import { calculateTaxOnWithdrawal } from '@/utils/taxCalculations'
 
 /**
  * Custom hook for REITs Calculator calculations
@@ -19,6 +21,8 @@ const useREITsCalculator = (
   tenure
 ) => {
   const [results, setResults] = useState(null)
+  const { defaultInflationRate, adjustInflation, incomeTaxSlab } = useUserPreferencesStore()
+  const inflationRate = defaultInflationRate / 100 // Convert to decimal
 
   useEffect(() => {
     // Validate inputs
@@ -80,6 +84,39 @@ const useREITsCalculator = (
       ? (Math.pow(finalValue / investmentAmount, 1 / tenure) - 1) * 100
       : 0
 
+    // Calculate tax on withdrawal (REITs: LTCG @ 10% above ₹1L exemption if held > 1 year, STCG @ 15% if < 1 year)
+    // Note: Dividend income is taxable annually, but for withdrawal calculation, we calculate tax on capital gains
+    // The dividend tax is already accounted for in annual tax payments
+    const taxCalculation = calculateTaxOnWithdrawal(
+      finalValue,
+      'reits',
+      tenure,
+      {
+        incomeTaxSlab,
+        principal: investmentAmount,
+        returns: totalReturns,
+      }
+    )
+
+    const postTaxAmount = taxCalculation.postTaxCorpus
+    const taxAmount = taxCalculation.taxAmount
+
+    // Adjust for inflation if enabled
+    let realFinalValue = finalValue
+    let realTotalReturns = totalReturns
+    let actualSpendingPower = null
+    
+    if (adjustInflation) {
+      // Adjust the nominal final value for inflation over the tenure
+      realFinalValue = finalValue / Math.pow(1 + inflationRate, tenure)
+      
+      // Real returns = real final value - principal
+      realTotalReturns = realFinalValue - investmentAmount
+
+      // Calculate actual spending power (post-tax, inflation-adjusted)
+      actualSpendingPower = postTaxAmount / Math.pow(1 + inflationRate, tenure)
+    }
+
     setResults({
       investmentAmount: Math.round(investmentAmount * 100) / 100,
       numberOfUnits: calculatedUnits,
@@ -89,6 +126,14 @@ const useREITsCalculator = (
       finalValue: Math.round(finalValue * 100) / 100,
       totalReturns: Math.round(totalReturns * 100) / 100,
       cagr: Math.round(cagr * 100) / 100,
+      // Tax calculation results
+      taxAmount: Math.round(taxAmount * 100) / 100,
+      postTaxAmount: Math.round(postTaxAmount * 100) / 100,
+      taxRate: taxCalculation.taxRate,
+      taxRule: taxCalculation.taxRule,
+      actualSpendingPower: actualSpendingPower !== null ? Math.round(actualSpendingPower * 100) / 100 : null,
+      realFinalValue: adjustInflation ? Math.round(realFinalValue * 100) / 100 : null,
+      realTotalReturns: adjustInflation ? Math.round(realTotalReturns * 100) / 100 : null,
       evolution,
     })
   }, [
@@ -96,7 +141,10 @@ const useREITsCalculator = (
     numberOfUnits,
     dividendYield,
     capitalAppreciation,
-    tenure
+    tenure,
+    adjustInflation,
+    inflationRate,
+    incomeTaxSlab
   ])
 
   return results

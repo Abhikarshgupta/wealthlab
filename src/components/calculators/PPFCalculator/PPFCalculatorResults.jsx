@@ -26,10 +26,7 @@ const PPFCalculatorResults = ({ results }) => {
     totalInvested,
     totalInterest,
     maturityValue,
-    returnPercentage,
-    realMaturityValue,
-    realTotalInterest,
-    realReturnRate
+    returnPercentage
   } = results
 
   // Prepare pie chart data
@@ -92,44 +89,6 @@ const PPFCalculatorResults = ({ results }) => {
         />
       </div>
 
-      {/* Inflation-adjusted results (if enabled) */}
-      {realMaturityValue !== null && (
-        <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-          <h3 className="text-lg font-semibold text-yellow-900 dark:text-yellow-200 mb-3">
-            Inflation-Adjusted Results (Real Value)
-          </h3>
-          <p className="text-xs text-yellow-700 dark:text-yellow-400 mb-3">
-            <strong>Understanding Real vs Nominal:</strong> Real value shows purchasing power in today's terms. 
-            Even with positive real returns, your real corpus will be less than nominal corpus because inflation erodes purchasing power over time.
-            {realTotalInterest < 0 && (
-              <span className="font-semibold"> Negative real returns indicate your investment is losing purchasing power despite nominal growth.</span>
-            )}
-            {realTotalInterest >= 0 && (
-              <span className="font-semibold"> Positive real returns mean your investment is beating inflation, but future money still has less purchasing power than today's money.</span>
-            )}
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <p className="text-sm text-yellow-700 dark:text-yellow-300">Real Return Rate</p>
-              <p className="text-xl font-bold text-yellow-900 dark:text-yellow-100">
-                {formatPercentageValue(realReturnRate)}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-yellow-700 dark:text-yellow-300">Real Maturity Value</p>
-              <p className="text-xl font-bold text-yellow-900 dark:text-yellow-100">
-                {formatCurrency(realMaturityValue)}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-yellow-700 dark:text-yellow-300">Real Total Interest</p>
-              <p className="text-xl font-bold text-yellow-900 dark:text-yellow-100">
-                {formatCurrency(realTotalInterest)}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Pie Chart */}
       <div className="mt-6">

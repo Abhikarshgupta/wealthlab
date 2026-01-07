@@ -7,6 +7,7 @@ import {
 } from '@/utils/calculations'
 import useUserPreferencesStore from '@/store/userPreferencesStore'
 import { getGoldPricePerGram, getCachedGoldPrice, FALLBACK_GOLD_PRICE_PER_GRAM } from '@/utils/goldPriceService'
+import { calculateTaxOnWithdrawal } from '@/utils/taxCalculations'
 
 /**
  * Custom hook for SGB Calculator calculations
@@ -28,7 +29,7 @@ const useSGBCalculator = (
   const [isLoadingPrice, setIsLoadingPrice] = useState(false)
   const [isRealTimePrice, setIsRealTimePrice] = useState(false)
   const [refreshTrigger, setRefreshTrigger] = useState(0)
-  const { defaultInflationRate, adjustInflation } = useUserPreferencesStore()
+  const { defaultInflationRate, adjustInflation, incomeTaxSlab } = useUserPreferencesStore()
   const inflationRate = defaultInflationRate / 100 // Convert to decimal
 
   // Initialize and fetch gold price on mount or when refresh is triggered
@@ -96,10 +97,29 @@ const useSGBCalculator = (
       ? calculateCAGR(principal, maturityAmount, tenure)
       : 0
 
+    // Calculate tax on withdrawal (SGB: Capital gains exempt if held till maturity, interest taxable)
+    // For SGB, if held till maturity (5/8 years), capital gains are exempt
+    // Only the 2.5% interest portion is taxable annually (already taxed)
+    // For withdrawal calculation, we calculate tax assuming held till maturity
+    const taxCalculation = calculateTaxOnWithdrawal(
+      maturityAmount,
+      'sgb',
+      tenure,
+      {
+        incomeTaxSlab,
+        principal: principal,
+        returns: totalReturns,
+      }
+    )
+
+    const postTaxAmount = taxCalculation.postTaxCorpus
+    const taxAmount = taxCalculation.taxAmount
+
     // Adjust for inflation if enabled
     let realMaturityAmount = maturityAmount
     let realTotalReturns = totalReturns
     let realReturnRate = 0
+    let actualSpendingPower = null
     
     if (adjustInflation) {
       // Calculate combined return rate (approximation)
@@ -114,6 +134,9 @@ const useSGBCalculator = (
       
       // Real returns = real maturity amount - principal
       realTotalReturns = realMaturityAmount - principal
+
+      // Calculate actual spending power (post-tax, inflation-adjusted)
+      actualSpendingPower = postTaxAmount / Math.pow(1 + inflationRate, tenure)
     }
 
     // Calculate evolution table
@@ -132,7 +155,14 @@ const useSGBCalculator = (
       realReturnRate: adjustInflation ? realReturnRate * 100 : null, // Convert to percentage
       realMaturityAmount: adjustInflation ? Math.round(realMaturityAmount * 100) / 100 : null,
       realTotalReturns: adjustInflation ? Math.round(realTotalReturns * 100) / 100 : null,
+      // Tax calculation results
+      taxAmount: Math.round(taxAmount * 100) / 100,
+      postTaxAmount: Math.round(postTaxAmount * 100) / 100,
+      taxRate: taxCalculation.taxRate,
+      taxRule: taxCalculation.taxRule,
+      actualSpendingPower: actualSpendingPower !== null ? Math.round(actualSpendingPower * 100) / 100 : null,
       evolution,
+      tenure, // Store tenure for table
       isLoadingPrice,
       isRealTimePrice,
       refreshGoldPrice: () => setRefreshTrigger(prev => prev + 1),
@@ -145,7 +175,8 @@ const useSGBCalculator = (
     inflationRate,
     goldPricePerGram,
     isLoadingPrice,
-    isRealTimePrice
+    isRealTimePrice,
+    incomeTaxSlab
   ])
 
   return results

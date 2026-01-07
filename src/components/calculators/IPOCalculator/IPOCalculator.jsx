@@ -405,7 +405,7 @@ const IPOCalculator = () => {
             <IPOCalculatorInfo />
           }
           evolutionTable={
-            <IPOCalculatorTable evolution={results?.evolution} tenure={holdingPeriodNum} />
+            <IPOCalculatorTable evolution={results?.evolution} tenure={holdingPeriodNum} results={results} />
           }
         />
     </div>

@@ -7,6 +7,7 @@ import {
   calculateCAGR
 } from '@/utils/calculations'
 import useUserPreferencesStore from '@/store/userPreferencesStore'
+import { calculateTaxOnWithdrawal } from '@/utils/taxCalculations'
 
 /**
  * Custom hook for NPS Calculator calculations
@@ -24,6 +25,7 @@ import useUserPreferencesStore from '@/store/userPreferencesStore'
  * @param {number} governmentBondsReturn - Expected government bonds return rate (as percentage)
  * @param {number} alternativeReturn - Expected alternative investments return rate (as percentage)
  * @param {boolean} useAgeBasedCaps - Whether to apply age-based equity caps
+ * @param {number} withdrawalPercentage - Withdrawal percentage (60, 80, or 100)
  * @returns {Object} Calculation results
  */
 const useNPSCalculator = (
@@ -38,10 +40,11 @@ const useNPSCalculator = (
   corporateBondsReturn,
   governmentBondsReturn,
   alternativeReturn,
-  useAgeBasedCaps
+  useAgeBasedCaps,
+  withdrawalPercentage = 80
 ) => {
   const [results, setResults] = useState(null)
-  const { defaultInflationRate, adjustInflation } = useUserPreferencesStore()
+  const { defaultInflationRate, adjustInflation, incomeTaxSlab } = useUserPreferencesStore()
   const inflationRate = defaultInflationRate / 100 // Convert to decimal
 
   useEffect(() => {
@@ -206,10 +209,26 @@ const useNPSCalculator = (
       ? calculateCAGR(totalInvested, futureValue, tenure)
       : 0
 
+    // Calculate tax on withdrawal (NPS: 60% tax-free, 40% taxable)
+    const taxCalculation = calculateTaxOnWithdrawal(
+      futureValue,
+      'nps',
+      tenure,
+      {
+        incomeTaxSlab,
+        principal: totalInvested,
+        returns: returnsEarned,
+      }
+    )
+
+    const postTaxAmount = taxCalculation.postTaxCorpus
+    const taxAmount = taxCalculation.taxAmount
+
     // Adjust for inflation if enabled
     let realFutureValue = futureValue
     let realReturns = returnsEarned
     let realReturnRate = weightedReturn
+    let actualSpendingPower = null
     
     if (adjustInflation) {
       // Calculate real return rate (annualized)
@@ -220,7 +239,27 @@ const useNPSCalculator = (
       
       // Real returns = real future value - total invested
       realReturns = realFutureValue - totalInvested
+
+      // Calculate actual spending power (post-tax, inflation-adjusted)
+      actualSpendingPower = postTaxAmount / Math.pow(1 + inflationRate, tenure)
     }
+
+    // Calculate withdrawal and annuity amounts based on withdrawal percentage
+    // Updated NPS Rules (December 2025):
+    // - Non-Government Subscribers: Can withdraw up to 80% of corpus as lump sum (increased from 60%)
+    // - Remaining 20%: Must be used to purchase annuity
+    // - Full Withdrawal: If total corpus ≤ ₹8 lakh, subscriber can withdraw 100% without annuity purchase
+    const WITHDRAWAL_THRESHOLD = 800000 // ₹8 lakh
+    const effectiveWithdrawalPercentage = futureValue <= WITHDRAWAL_THRESHOLD ? 100 : withdrawalPercentage
+    
+    const withdrawalAmount = futureValue * (effectiveWithdrawalPercentage / 100)
+    const annuityAmount = futureValue - withdrawalAmount
+    
+    // Calculate post-tax withdrawal amount (proportional to post-tax corpus)
+    // Tax is calculated on the full corpus (60% tax-free, 40% taxable)
+    // Withdrawal amount gets proportional post-tax value
+    const postTaxWithdrawalAmount = withdrawalAmount * (postTaxAmount / futureValue)
+    const postTaxAnnuityAmount = postTaxAmount - postTaxWithdrawalAmount
 
     // Calculate evolution table
     const evolution = calculateNPSEvolution(
@@ -252,6 +291,18 @@ const useNPSCalculator = (
       realReturnRate: realReturnRate * 100, // Convert to percentage
       realCorpusValue: adjustInflation ? Math.round(realFutureValue * 100) / 100 : null,
       realReturns: adjustInflation ? Math.round(realReturns * 100) / 100 : null,
+      // Tax calculation results
+      taxAmount: Math.round(taxAmount * 100) / 100,
+      postTaxAmount: Math.round(postTaxAmount * 100) / 100,
+      taxRate: taxCalculation.taxRate,
+      taxRule: taxCalculation.taxRule,
+      actualSpendingPower: actualSpendingPower !== null ? Math.round(actualSpendingPower * 100) / 100 : null,
+      // Withdrawal and annuity amounts
+      withdrawalPercentage: effectiveWithdrawalPercentage,
+      withdrawalAmount: Math.round(withdrawalAmount * 100) / 100,
+      annuityAmount: Math.round(annuityAmount * 100) / 100,
+      postTaxWithdrawalAmount: Math.round(postTaxWithdrawalAmount * 100) / 100,
+      postTaxAnnuityAmount: Math.round(postTaxAnnuityAmount * 100) / 100,
       evolution,
       allocation: {
         equity: Math.round(effectiveEquityAlloc * 100 * 10) / 10,
@@ -279,8 +330,10 @@ const useNPSCalculator = (
     governmentBondsReturn,
     alternativeReturn,
     useAgeBasedCaps,
+    withdrawalPercentage,
     adjustInflation,
-    inflationRate
+    inflationRate,
+    incomeTaxSlab
   ])
 
   return results

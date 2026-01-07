@@ -250,7 +250,7 @@ const SIPCalculator = () => {
             <SIPCalculatorInfo />
           }
           evolutionTable={
-            <SIPCalculatorTable evolution={results?.evolution} tenure={tenureUnit === 'years' ? tenureNum : tenureNum / 12} />
+            <SIPCalculatorTable evolution={results?.evolution} tenure={tenureUnit === 'years' ? tenureNum : tenureNum / 12} results={results} />
           }
         />
     </div>

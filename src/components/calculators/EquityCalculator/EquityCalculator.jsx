@@ -317,7 +317,7 @@ const EquityCalculator = () => {
             <EquityCalculatorInfo />
           }
           evolutionTable={
-            <EquityCalculatorTable evolution={results?.evolution} tenure={tenureNum} />
+            <EquityCalculatorTable evolution={results?.evolution} tenure={tenureNum} results={results} />
           }
         />
     </div>

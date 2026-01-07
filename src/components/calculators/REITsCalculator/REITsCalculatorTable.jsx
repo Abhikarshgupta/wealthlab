@@ -5,8 +5,10 @@ import InvestmentTable from '@/components/common/InvestmentTable/InvestmentTable
  * Displays year-wise breakdown of REITs investment including dividends and capital appreciation
  * 
  * @param {Array} evolution - Evolution data from useREITsCalculator hook
+ * @param {number} tenure - Investment tenure in years
+ * @param {Object} results - Full calculation results from useREITsCalculator hook (optional, for post-tax footer)
  */
-const REITsCalculatorTable = ({ evolution }) => {
+const REITsCalculatorTable = ({ evolution, tenure, results = null }) => {
   if (!evolution || evolution.length === 0) {
     return null
   }
@@ -30,10 +32,22 @@ const REITsCalculatorTable = ({ evolution }) => {
     }
   })
 
+  // Extract post-tax values from results if available
+  const preTaxMaturity = results?.finalValue || null
+  const taxAmount = results?.taxAmount || null
+  const postTaxAmount = results?.postTaxAmount || null
+  const postTaxSpendingPower = results?.actualSpendingPower || null
+
   return (
     <InvestmentTable
       data={tableData}
       title="Year-wise Investment Evolution (Dividend + Capital Appreciation)"
+      tenure={tenure}
+      preTaxMaturity={preTaxMaturity}
+      taxAmount={taxAmount}
+      postTaxAmount={postTaxAmount}
+      postTaxSpendingPower={postTaxSpendingPower}
+      instrumentType="reits"
     />
   )
 }

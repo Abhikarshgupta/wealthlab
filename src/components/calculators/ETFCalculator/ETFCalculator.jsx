@@ -424,7 +424,7 @@ const ETFCalculator = () => {
             <ETFCalculatorInfo />
           }
           evolutionTable={
-            <ETFCalculatorTable evolution={results?.evolution} tenure={tenureNum} />
+            <ETFCalculatorTable evolution={results?.evolution} tenure={tenureNum} results={results} />
           }
         />
     </div>

@@ -28,7 +28,7 @@ const POMISCalculator = () => {
   const { register, watch, setValue, formState: { errors } } = useForm({
     resolver: joiResolver(pomisSchema),
     defaultValues: {
-      principal: 1000000,
+      principal: 100000,
       isJointAccount: false,
       rate: investmentRates.pomis.rate
     },
@@ -112,7 +112,7 @@ const POMISCalculator = () => {
                   }}
                   error={errors.principal?.message}
                   showCurrency
-                  placeholder="1000000"
+                  placeholder="100000"
                   min={1000}
                   max={maxPrincipal}
                   step={1000}
@@ -122,7 +122,7 @@ const POMISCalculator = () => {
                   label=""
                   min={1000}
                   max={maxPrincipal}
-                  value={principalNum || 1000000}
+                  value={principalNum || 100000}
                   onChange={(value) => setValue('principal', value, { shouldValidate: true })}
                   step={1000}
                   showCurrency
