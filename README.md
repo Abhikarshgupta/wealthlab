@@ -17,13 +17,6 @@ WealthLab is a modern web application that empowers you to experiment with diffe
 
 ### ✅ Completed Features
 
-**Core Infrastructure**
-- ✅ Project setup with Vite + React
-- ✅ Theme system with dark mode support
-- ✅ Responsive layout components
-- ✅ Routing architecture
-- ✅ State management with Zustand
-
 **Investment Calculators (15/15 Complete)**
 - ✅ **PPF Calculator** - Annual compounding with step-up option
 - ✅ **FD Calculator** - Flexible compounding frequencies (Quarterly/Monthly/Annually)
@@ -50,14 +43,6 @@ WealthLab is a modern web application that empowers you to experiment with diffe
 - Visual pie charts using Highcharts
 - Year-wise evolution table
 - Information panel with current rates, features, tax benefits, and eligibility
-
-**Common Components**
-- ✅ Reusable InputField component
-- ✅ Slider component for range inputs
-- ✅ ToggleSwitch component
-- ✅ ResultCard component
-- ✅ PieChart component (Highcharts integration)
-- ✅ InvestmentTable component
 
 ### 🚧 Coming Soon
 
