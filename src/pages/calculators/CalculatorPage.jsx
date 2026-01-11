@@ -1,24 +1,47 @@
 import { useNavigate } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, Suspense, lazy } from 'react'
 import { routes } from '@/routes/routes'
 import { investmentInfo } from '@/constants/investmentInfo'
-import SIPCalculator from '@/components/calculators/SIPCalculator/SIPCalculator'
-import FDCalculator from '@/components/calculators/FDCalculator/FDCalculator'
-import NSCalculator from '@/components/calculators/NSCalculator/NSCalculator'
-import SGBCalculator from '@/components/calculators/SGBCalculator/SGBCalculator'
-import NPSCalculator from '@/components/calculators/NPSCalculator/NPSCalculator'
-import SCSSCalculator from '@/components/calculators/SCSSCalculator/SCSSCalculator'
-import POMISCalculator from '@/components/calculators/POMISCalculator/POMISCalculator'
-import PPFCalculator from '@/components/calculators/PPFCalculator/PPFCalculator'
-import ELSSCalculator from '@/components/calculators/ELSSCalculator/ELSSCalculator'
-import SSYCalculator from '@/components/calculators/SSYCalculator/SSYCalculator'
-import EquityCalculator from '@/components/calculators/EquityCalculator/EquityCalculator'
-import ETFCalculator from '@/components/calculators/ETFCalculator/ETFCalculator'
-import DebtMutualFundCalculator from '@/components/calculators/DebtMutualFundCalculator/DebtMutualFundCalculator'
-import RDCalculator from '@/components/calculators/RDCalculator/RDCalculator'
-import REITsCalculator from '@/components/calculators/REITsCalculator/REITsCalculator'
-import Bonds54ECCalculator from '@/components/calculators/54ECBondsCalculator/54ECBondsCalculator'
 import ScrollToTop from '@/components/common/ScrollToTop'
+import LoadingSpinner from '@/components/common/LoadingSpinner/LoadingSpinner'
+
+// Lazy load calculator components
+const SIPCalculator = lazy(() => import('@/components/calculators/SIPCalculator/SIPCalculator'))
+const FDCalculator = lazy(() => import('@/components/calculators/FDCalculator/FDCalculator'))
+const NSCalculator = lazy(() => import('@/components/calculators/NSCalculator/NSCalculator'))
+const SGBCalculator = lazy(() => import('@/components/calculators/SGBCalculator/SGBCalculator'))
+const NPSCalculator = lazy(() => import('@/components/calculators/NPSCalculator/NPSCalculator'))
+const SCSSCalculator = lazy(() => import('@/components/calculators/SCSSCalculator/SCSSCalculator'))
+const POMISCalculator = lazy(() => import('@/components/calculators/POMISCalculator/POMISCalculator'))
+const PPFCalculator = lazy(() => import('@/components/calculators/PPFCalculator/PPFCalculator'))
+const ELSSCalculator = lazy(() => import('@/components/calculators/ELSSCalculator/ELSSCalculator'))
+const SSYCalculator = lazy(() => import('@/components/calculators/SSYCalculator/SSYCalculator'))
+const EquityCalculator = lazy(() => import('@/components/calculators/EquityCalculator/EquityCalculator'))
+const ETFCalculator = lazy(() => import('@/components/calculators/ETFCalculator/ETFCalculator'))
+const DebtMutualFundCalculator = lazy(() => import('@/components/calculators/DebtMutualFundCalculator/DebtMutualFundCalculator'))
+const RDCalculator = lazy(() => import('@/components/calculators/RDCalculator/RDCalculator'))
+const REITsCalculator = lazy(() => import('@/components/calculators/REITsCalculator/REITsCalculator'))
+const Bonds54ECCalculator = lazy(() => import('@/components/calculators/54ECBondsCalculator/54ECBondsCalculator'))
+
+// Calculator component mapping
+const calculatorComponents = {
+  sip: SIPCalculator,
+  fd: FDCalculator,
+  nsc: NSCalculator,
+  sgb: SGBCalculator,
+  nps: NPSCalculator,
+  scss: SCSSCalculator,
+  pomis: POMISCalculator,
+  ppf: PPFCalculator,
+  elss: ELSSCalculator,
+  ssy: SSYCalculator,
+  equity: EquityCalculator,
+  rd: RDCalculator,
+  etf: ETFCalculator,
+  debtMutualFund: DebtMutualFundCalculator,
+  reits: REITsCalculator,
+  bonds54EC: Bonds54ECCalculator,
+}
 
 /**
  * CalculatorPage Component
@@ -282,122 +305,15 @@ const CalculatorPage = ({ calculatorType }) => {
 
   // If calculatorType is provided, render the specific calculator
   if (calculatorType) {
-    switch (calculatorType) {
-      case 'sip':
-        return (
-          <>
-            <SIPCalculator />
-            <ScrollToTop />
-          </>
-        )
-      case 'fd':
-        return (
-          <>
-            <FDCalculator />
-            <ScrollToTop />
-          </>
-        )
-      case 'nsc':
-        return (
-          <>
-            <NSCalculator />
-            <ScrollToTop />
-          </>
-        )
-      case 'sgb':
-        return (
-          <>
-            <SGBCalculator />
-            <ScrollToTop />
-          </>
-        )
-      case 'nps':
-        return (
-          <>
-            <NPSCalculator />
-            <ScrollToTop />
-          </>
-        )
-      case 'scss':
-        return (
-          <>
-            <SCSSCalculator />
-            <ScrollToTop />
-          </>
-        )
-      case 'ppf':
-        return (
-          <>
-            <PPFCalculator />
-            <ScrollToTop />
-          </>
-        )
-      case 'elss':
-        return (
-          <>
-            <ELSSCalculator />
-            <ScrollToTop />
-          </>
-        )
-      case 'ssy':
-        return (
-          <>
-            <SSYCalculator />
-            <ScrollToTop />
-          </>
-        )
-      case 'equity':
-        return (
-          <>
-            <EquityCalculator />
-            <ScrollToTop />
-          </>
-        )
-      case 'rd':
-        return (
-          <>
-            <RDCalculator />
-            <ScrollToTop />
-          </>
-        )
-      case 'pomis':
-        return (
-          <>
-            <POMISCalculator />
-            <ScrollToTop />
-          </>
-        )
-      case 'etf':
-        return (
-          <>
-            <ETFCalculator />
-            <ScrollToTop />
-          </>
-        )
-      case 'debtMutualFund':
-        return (
-          <>
-            <DebtMutualFundCalculator />
-            <ScrollToTop />
-          </>
-        )
-      case 'reits':
-        return (
-          <>
-            <REITsCalculator />
-            <ScrollToTop />
-          </>
-        )
-      case 'bonds54EC':
-        return (
-          <>
-            <Bonds54ECCalculator />
-            <ScrollToTop />
-          </>
-        )
-      default:
-        // Fall through to card grid
-        break
+    const CalculatorComponent = calculatorComponents[calculatorType]
+    
+    if (CalculatorComponent) {
+      return (
+        <Suspense fallback={<LoadingSpinner />}>
+          <CalculatorComponent />
+          <ScrollToTop />
+        </Suspense>
+      )
     }
   }
 
