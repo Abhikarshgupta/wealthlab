@@ -2,71 +2,62 @@
 
 **Your personal finance experimentation lab** - A comprehensive financial planning and investment calculator platform built specifically for Indian retail investors. Take control of your financial future with real-time calculations, goal-based planning, and portfolio projections.
 
-## 🎯 What is WealthLab?
+---
 
-WealthLab is a modern web application that empowers you to experiment with different investment strategies and gain complete control over your personal finance planning journey. Built with production-grade architecture, it provides:
+## 🎯 What WealthLab Offers
 
-- **15+ Investment Calculators** - Calculate returns for PPF, FD, SIP, NPS, NSC, SSY, SCSS, SGB, ELSS, Equity, ETFs, Debt Mutual Funds, REITs, 54EC Bonds, IPO/FPO, RD, POMIS, and more
+WealthLab empowers you to experiment with different investment strategies and gain complete control over your personal finance planning journey. Built with production-grade architecture, it provides:
+
+### 📊 **17 Investment Calculators**
+
+Calculate returns, tax implications, and real purchasing power for:
+
+- **Fixed Income Instruments:** PPF, FD, NSC, SSY, SCSS, RD, POMIS
+- **Equity Investments:** Equity (SIP/Lumpsum), SIP, ELSS, IPO/FPO, ETFs (Equity/Debt/Gold/International)
+- **Advanced Instruments:** NPS, Debt Mutual Funds, SGB, REITs, 54EC Bonds
+
+### 💰 **Post-Tax Calculations**
+
+See the **actual money you'll receive** after tax deductions:
+
+- **Tax-Aware Results:** All calculators show "Money in Hand" (post-tax amount)
+- **Tax Breakdown:** Detailed tax calculations based on your income tax slab
+- **Tax Rules:** Automatic application of LTCG/STCG rules, indexation benefits, exemptions
+- **TDS Information:** Warnings when TDS thresholds are exceeded
+- **Tax Slab Selection:** Choose your effective tax rate (5%, 20%, 30%)
+
+### 📈 **Inflation-Adjusted Insights**
+
+Understand **real purchasing power** of your investments:
+
+- **Spending Power:** See how much your money will actually be worth in today's terms
+- **Inflation Toggle:** Enable/disable inflation adjustments across all calculators
+- **Real Returns:** Compare nominal vs. real returns to make informed decisions
+
+### ✨ **Key Features**
+
 - **Real-Time Calculations** - Instant results as you type, no calculate buttons needed
-- **Goal-Based Planning** - Plan your financial goals with risk-based asset allocation recommendations
-- **Multi-Instrument Corpus Calculator** - Project your portfolio across multiple investment instruments
+- **Visual Analytics** - Pie charts and year-wise evolution tables
+- **Flexible Inputs** - Sliders, step-up options, multiple compounding frequencies
+- **Comprehensive Information** - Current rates, tax benefits, eligibility criteria for each instrument
 - **Beautiful UI** - Modern, responsive design with dark mode support
 - **Production-Ready** - Scalable architecture built for performance and maintainability
 
-## ✨ Current Status
+### 🎯 **What Each Calculator Provides**
 
-### ✅ Completed Features
+Every calculator includes:
 
-**Investment Calculators (15/15 Complete)**
-- ✅ **PPF Calculator** - Annual compounding with step-up option
-- ✅ **FD Calculator** - Flexible compounding frequencies (Quarterly/Monthly/Annually)
-- ✅ **SIP Calculator** - Monthly SIP with step-up support
-- ✅ **NSC Calculator** - 5-year maturity calculations
-- ✅ **SSY Calculator** - Sukanya Samriddhi Yojana for girl child
-- ✅ **SCSS Calculator** - Senior Citizen Savings Scheme
-- ✅ **SGB Calculator** - Sovereign Gold Bonds with real-time gold prices
-- ✅ **NPS Calculator** - National Pension System with asset allocation
-- ✅ **ELSS Calculator** - Equity Linked Savings Scheme with 3-year lock-in
-- ✅ **Equity Calculator** - SIP/Lumpsum with step-up support
-- ✅ **RD Calculator** - Recurring Deposit with flexible tenure
-- ✅ **POMIS Calculator** - Post Office Monthly Income Scheme
-- ✅ **ETF Calculator** - Exchange Traded Funds (Equity, Debt, Gold, International)
-- ✅ **Debt Mutual Funds Calculator** - Tax-efficient debt investments with indexation
-- ✅ **REITs Calculator** - Real Estate Investment Trusts
-- ✅ **IPO/FPO Calculator** - Initial/Follow-on Public Offer
-- ✅ **54EC Bonds Calculator** - Capital Gain Bonds with tax exemption
+- **Money in Hand** - Post-tax amount you'll actually receive
+- **Spending Power** - Inflation-adjusted purchasing power (when enabled)
+- **Tax Breakdown** - Detailed tax calculations with rules and exemptions
+- **Investment Evolution** - Year-wise breakdown showing growth over time
+- **Visual Charts** - Pie charts showing investment vs. returns breakdown
+- **Current Rates** - Latest interest rates and market expectations
+- **Tax Benefits** - Eligibility, exemptions, and tax-saving opportunities
 
-**Each Calculator Includes:**
-- Real-time calculation engine
-- Input validation with React Hook Form + Joi
-- Results panel with invested amount, returns, maturity value, and ROI
-- Visual pie charts using Highcharts
-- Year-wise evolution table
-- Information panel with current rates, features, tax benefits, and eligibility
+---
 
-### 🚧 Coming Soon
-
-**Phase 3: Goal-Based Financial Planning**
-- Risk-based asset allocation recommendations
-- Shortfall detection and SIP recommendations
-- Goal timeline visualization
-- Portfolio recommendations based on risk appetite
-
-**Phase 4: Multi-Instrument Corpus Calculator**
-- Three-step form for investment selection
-- Detailed input forms for each selected instrument
-- Overall corpus breakdown with pie charts
-- Sectional breakdown per instrument
-- Export/import JSON functionality
-
-**Phase 5: Polish & Enhancements**
-- Loading states and error handling
-- Accessibility improvements
-- Performance optimizations
-- Comprehensive testing
-- Documentation updates
-
-## 🚀 Quick Start
+## 🚀 Getting Started
 
 ### Prerequisites
 
@@ -107,65 +98,43 @@ The app will be available at `http://localhost:5173`
 npm run build
 ```
 
+### Testing
+
+```bash
+npm test              # Run tests
+npm test:ui          # Run tests with UI
+npm test:coverage    # Run tests with coverage
+```
+
+---
+
 ## 📊 Gold Price Integration
 
 WealthLab uses GoldAPI.io for fetching real-time gold prices in the SGB Calculator:
 
-- **Rate Limit**: Once per user per 24 hours (stored in localStorage)
-- **Fallback**: Uses fallback price (₹6,500/gram) if API fails or rate limit is reached
-- **Caching**: API responses are cached for 1 hour
+- **Rate Limit:** Once per user per 24 hours (stored in localStorage)
+- **Fallback:** Uses fallback price (₹6,500/gram) if API fails or rate limit is reached
+- **Caching:** API responses are cached for 1 hour
 
 Supported metals: Gold (XAU), Silver (XAG), Platinum (XPT), Palladium (XPD)
 
-## 🏗️ Project Structure
-
-```
-src/
-├── components/
-│   ├── calculators/      # Individual calculator components
-│   │   ├── PPFCalculator/
-│   │   ├── FDCalculator/
-│   │   ├── SIPCalculator/
-│   │   └── ... (15 calculators total)
-│   └── common/          # Reusable UI components
-│       ├── InputField/
-│       ├── Slider/
-│       ├── ToggleSwitch/
-│       ├── ResultCard/
-│       ├── PieChart/
-│       └── InvestmentTable/
-├── pages/               # Page components
-│   ├── Home/
-│   ├── calculators/
-│   ├── GoalPlanningPage/
-│   └── CorpusCalculatorPage/
-├── routes/              # Route configuration
-├── store/               # Zustand state management
-├── utils/               # Utility functions
-│   ├── calculations.js  # Financial calculation formulas
-│   ├── formatters.js   # Currency, percentage, date formatting
-│   ├── validators.js   # Joi validation helpers
-│   └── goldPriceService.js  # Gold price API integration
-├── constants/           # Constants and configuration
-│   ├── investmentRates.js  # Current interest rates
-│   └── investmentInfo.js   # Instrument details
-└── contexts/            # React contexts
-    └── ThemeContext.jsx    # Theme provider
-```
+---
 
 ## 🛠️ Technology Stack
 
 - **Framework:** React 19 with Vite
 - **Styling:** TailwindCSS with dark mode support
-- **State Management:** Zustand (for Goal Planning & Corpus Calculator)
+- **State Management:** Zustand
 - **Form Management:** React Hook Form + Joi validation
 - **Routing:** React Router v6
-- **Charts:** Highcharts (highcharts-react-official)
-- **Date Utilities:** date-fns
+- **Charts:** Highcharts
+- **Testing:** Vitest + React Testing Library
+
+---
 
 ## 📝 Current Interest Rates
 
-*As of November 2025*
+*As of January 2025*
 
 - **PPF:** 7.1% p.a. (compounded annually)
 - **NSC:** 7.7% p.a. (compounded annually, paid at maturity)
@@ -173,10 +142,14 @@ src/
 - **SCSS:** 8.2% p.a. (paid quarterly)
 - **SGB:** 2.5% p.a. + gold price appreciation
 - **FD:** 5.5-7.5% p.a. (varies by bank/tenure)
+- **RD:** 6.5-7.5% p.a. (varies by bank/tenure)
+- **POMIS:** 7.4% p.a. (paid monthly)
 - **NPS:** 8-12% expected (market-linked)
 - **SIP/Mutual Funds:** 10-15% expected (market-linked)
 - **ELSS:** 12-15% expected (market-linked)
 - **Equity:** Variable (market-dependent)
+
+---
 
 ## 🎨 Design System
 
@@ -184,6 +157,8 @@ src/
 - **Secondary Colors:** Indigo (#6366F1, #2563eb)
 - **Typography:** Inter, Roboto, Nunito
 - **Dark Mode:** Fully supported with localStorage persistence
+
+---
 
 ## 📄 License
 
