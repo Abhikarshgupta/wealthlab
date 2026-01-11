@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { 
-  calculatePPF, 
-  calculateRealReturn
+  calculatePPF,
+  adjustForInflation
 } from '@/utils/calculations'
 import useUserPreferencesStore from '@/store/userPreferencesStore'
 
@@ -28,8 +28,8 @@ const useSSYCalculator = (
   stepUpPercentage
 ) => {
   const [results, setResults] = useState(null)
-  const { defaultInflationRate, adjustInflation } = useUserPreferencesStore()
-  const inflationRate = defaultInflationRate / 100 // Convert to decimal
+  const { adjustInflation, defaultInflationRate } = useUserPreferencesStore()
+  const inflationRate = adjustInflation ? defaultInflationRate / 100 : 0
   const MAX_YEARLY_INVESTMENT = 150000 // ₹1.5L cap per year
 
   useEffect(() => {
@@ -97,21 +97,10 @@ const useSSYCalculator = (
     // Calculate maturity year
     const maturityYear = startYear + yearsTillMaturity
 
-    // Adjust for inflation if enabled
-    let realMaturityValue = maturityValue
-    let realTotalInterest = totalInterest
-    let realReturnRate = annualRate
-    
-    if (adjustInflation) {
-      // Calculate real return rate (annualized)
-      realReturnRate = calculateRealReturn(annualRate, inflationRate)
-      
-      // Adjust the nominal maturity value for inflation over the tenure
-      // Formula: Real Value = Nominal Value / (1 + inflation)^years
-      realMaturityValue = maturityValue / Math.pow(1 + inflationRate, yearsTillMaturity)
-      
-      // Real interest = real maturity value - total invested
-      realTotalInterest = realMaturityValue - totalInvested
+    // SSY is tax-free (EEE), but we still calculate inflation-adjusted spending power
+    let actualSpendingPower = null
+    if (adjustInflation && inflationRate > 0) {
+      actualSpendingPower = adjustForInflation(maturityValue, inflationRate, yearsTillMaturity)
     }
 
     // Calculate evolution table with step-up support
@@ -150,9 +139,7 @@ const useSSYCalculator = (
       maturityYear,
       yearsTillMaturity,
       returnPercentage: Math.round(returnPercentage * 100) / 100,
-      realReturnRate: realReturnRate * 100, // Convert to percentage
-      realMaturityValue: adjustInflation ? Math.round(realMaturityValue * 100) / 100 : null,
-      realTotalInterest: adjustInflation ? Math.round(realTotalInterest * 100) / 100 : null,
+      actualSpendingPower: actualSpendingPower !== null ? Math.round(actualSpendingPower * 100) / 100 : null,
       evolution,
     })
   }, [

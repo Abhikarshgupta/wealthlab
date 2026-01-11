@@ -88,11 +88,6 @@ export const investmentRates = {
     defaultExpectedReturn: 12,
     lastUpdated: '2025-11-01',
   },
-  ipo: {
-    // Market-linked, user-defined expected CAGR for post-listing period
-    defaultExpectedCAGR: 12,
-    lastUpdated: '2025-11-01',
-  },
   etf: {
     equity: 12,
     debt: 7,

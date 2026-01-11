@@ -3,7 +3,7 @@
 
 **Document Version:** 2.3  
 **Date:** January 2025  
-**Purpose:** Plan for integrating post-tax calculations ("Money in Hand") across all 17 calculators  
+**Purpose:** Plan for integrating post-tax calculations ("Money in Hand") across all 16 calculators  
 **Last Updated:** January 2025 - All phases completed (Phase 1-5), UI cleanup completed for all calculators, pending: mobile optimization, legal disclaimers
 
 ---
@@ -51,7 +51,7 @@ This document outlines a comprehensive plan to integrate tax calculations into a
 |----------|---------------|----------|-------------------|
 | **Exempt (EEE)** | No tax at all | PPF, SSY | None |
 | **Interest Income** | Taxed as per income slab | FD, NSC, SCSS, RD, POMIS | Tax Slab |
-| **LTCG (Equity)** | 10% above ₹1L exemption | Equity, SIP, ELSS, IPO, Equity ETFs | Tax Slab (for exemption sharing) |
+| **LTCG (Equity)** | 10% above ₹1L exemption | Equity, SIP, ELSS, Equity ETFs | Tax Slab (for exemption sharing) |
 | **STCG (Equity)** | 15% flat rate | Equity held < 1 year | None (fixed rate) |
 | **LTCG (Debt)** | 20% with indexation | Debt MFs, Debt ETFs (held > 3 years) | None (fixed rate) |
 | **STCG (Debt)** | As per income slab | Debt MFs held < 3 years | Tax Slab |
@@ -62,7 +62,7 @@ This document outlines a comprehensive plan to integrate tax calculations into a
 
 **Note:** Tax slab rates remain unchanged from FY 2024-25. The following rules apply:
 
-#### Equity Investments (Equity, SIP, ELSS, IPO, Equity ETFs)
+#### Equity Investments (Equity, SIP, ELSS, Equity ETFs)
 - **Holding Period:** 
   - < 1 year: STCG @ 15% (no exemption)
   - ≥ 1 year (≥ 3 years for ELSS): LTCG @ 10% above ₹1L exemption
@@ -295,7 +295,7 @@ Money in Hand: ₹9,40,000
 
 ### 4.3 Equity-Based Instruments
 
-**Calculators:** Equity, SIP, ELSS, IPO, Equity ETFs
+**Calculators:** Equity, SIP, ELSS, Equity ETFs
 
 **Tax Calculation:**
 - Determine holding period (tenure)
@@ -607,7 +607,6 @@ setIncomeTaxSlab: (slab) => set({ incomeTaxSlab: slab })
 - [ ] Equity Calculator - Post-tax display
 - [ ] SIP Calculator - Post-tax display
 - [ ] ELSS Calculator - Post-tax display
-- [ ] IPO Calculator - Post-tax display
 - [ ] Equity ETF Calculator - Post-tax display
 
 ### Phase 4: Advanced Calculators (Week 4)
@@ -1149,7 +1148,7 @@ This plan provides a comprehensive approach to integrating tax calculations acro
 **Current Implementation Status (January 2025):**
 - ✅ Phase 1: Foundation - COMPLETED
 - ✅ Phase 2: Core Calculators (FD, NSC, SCSS, RD, POMIS) - COMPLETED
-- ✅ Phase 3: Equity Calculators (Equity, SIP, ELSS, IPO, ETF) - COMPLETED
+- ✅ Phase 3: Equity Calculators (Equity, SIP, ELSS, ETF) - COMPLETED
 - ✅ Phase 4: Advanced Calculators (Debt MF, NPS, SGB, 54EC Bonds, REITs) - COMPLETED
 - ✅ Phase 5: Enhancement - COMPLETED
   - ✅ Inflation toggle integration
@@ -1200,12 +1199,12 @@ This plan provides a comprehensive approach to integrating tax calculations acro
 - ✅ All Phase 2 calculators (FD, NSC, SCSS, RD, POMIS) now show consistent post-tax calculations
 
 **Key Updates in v2.2 (January 2025):**
-- ✅ Phase 3: Equity Calculators implementation completed (Equity, SIP, ELSS, IPO, ETF)
+- ✅ Phase 3: Equity Calculators implementation completed (Equity, SIP, ELSS, ETF)
 - ✅ Phase 4: Advanced Calculators implementation completed (Debt MF, NPS, SGB, 54EC Bonds, REITs)
 - ✅ Phase 5: Enhancement implementation completed
 - ✅ Indexation formula display implemented for debt mutual funds with CII values
 - ✅ NPS calculator updated with user-selectable withdrawal percentage (60% or 80%)
-- ✅ All 17 calculators now integrated with tax calculations and post-tax display
+- ✅ All 16 calculators now integrated with tax calculations and post-tax display
 - ✅ Consistent implementation pattern across all calculators (MoneyInHandHero, TaxBreakdown, post-tax footer)
 
 **Key Updates in v2.3 (January 2025):**
@@ -1213,9 +1212,9 @@ This plan provides a comprehensive approach to integrating tax calculations acro
 - ✅ Removed redundant "Inflation-Adjusted Results" yellow sections (redundant with Spending Power)
 - ✅ Integrated "Effective Return %" into MoneyInHandHero component where applicable
 - ✅ Cleaned up all core calculators: FD, NSC, SCSS, POMIS, RD (removed Details sections, moved effective return to hero)
-- ✅ Cleaned up all equity calculators: Equity, SIP, ELSS, IPO, ETF (removed Details sections and Inflation-Adjusted Results)
+- ✅ Cleaned up all equity calculators: Equity, SIP, ELSS, ETF (removed Details sections and Inflation-Adjusted Results)
 - ✅ Cleaned up all advanced calculators: Debt MF, NPS, SGB, 54EC Bonds, REITs (removed Details sections and Inflation-Adjusted Results)
 - ✅ Cleaned up tax-free calculators: PPF, SSY (removed Inflation-Adjusted Results sections)
-- ✅ Reduced UI noise and improved information hierarchy across all 17 calculators
+- ✅ Reduced UI noise and improved information hierarchy across all 16 calculators
 - ✅ Preserved unique information sections (e.g., Tax Efficiency Note for Debt MF, Tax Savings for 54EC Bonds, Monthly/Quarterly Interest for POMIS/SCSS)
 

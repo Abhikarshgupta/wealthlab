@@ -103,12 +103,6 @@ export const getTaxRateForInstrument = (instrumentType) => {
       rate: null, // Depends on income slab
       notes: 'Interest taxed monthly as per income slab. TDS applicable if annual interest > ₹40,000',
     },
-    ipo: {
-      type: 'ltcg',
-      rate: 0.10, // 10% above ₹1L exemption
-      exemptionLimit: 100000, // ₹1L exemption
-      notes: 'LTCG: 10% above ₹1L exemption (held > 1 year). STCG: 15% (held < 1 year). Listing gains taxable',
-    },
     reits: {
       type: 'ltcg',
       rate: 0.10, // 10% above ₹1L exemption
@@ -523,7 +517,7 @@ export const calculateTaxForMultipleInstruments = (
   }
 
   // Equity instruments that share LTCG exemption (₹1L per FY)
-  const equityInstrumentTypes = ['equity', 'sip', 'elss', 'etf', 'ipo']
+  const equityInstrumentTypes = ['equity', 'sip', 'elss', 'etf']
   const equityInstruments = instruments.filter(instr => equityInstrumentTypes.includes(instr))
 
   // Step 1: Calculate LTCG exemption for equity instruments

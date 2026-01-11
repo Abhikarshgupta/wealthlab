@@ -17,7 +17,6 @@ import ETFCalculator from '@/components/calculators/ETFCalculator/ETFCalculator'
 import DebtMutualFundCalculator from '@/components/calculators/DebtMutualFundCalculator/DebtMutualFundCalculator'
 import RDCalculator from '@/components/calculators/RDCalculator/RDCalculator'
 import REITsCalculator from '@/components/calculators/REITsCalculator/REITsCalculator'
-import IPOCalculator from '@/components/calculators/IPOCalculator/IPOCalculator'
 import Bonds54ECCalculator from '@/components/calculators/54ECBondsCalculator/54ECBondsCalculator'
 import ScrollToTop from '@/components/common/ScrollToTop'
 
@@ -257,20 +256,6 @@ const CalculatorPage = ({ calculatorType }) => {
       )
     },
     {
-      id: 'ipo',
-      name: 'IPO/FPO',
-      fullName: 'IPO/FPO',
-      description: investmentInfo.ipo.description,
-      route: routes.calculators.ipo,
-      status: 'complete',
-      popularity: 15,
-      icon: (
-        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-        </svg>
-      )
-    },
-    {
       id: 'bonds54EC',
       name: '54EC Bonds',
       fullName: 'Capital Gain Bonds',
@@ -365,13 +350,6 @@ const CalculatorPage = ({ calculatorType }) => {
         return (
           <>
             <EquityCalculator />
-            <ScrollToTop />
-          </>
-        )
-      case 'ipo':
-        return (
-          <>
-            <IPOCalculator />
             <ScrollToTop />
           </>
         )

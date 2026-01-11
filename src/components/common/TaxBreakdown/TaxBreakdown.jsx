@@ -80,7 +80,7 @@ const TaxBreakdown = ({
             {returns > 0 && (
               <div>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  {instrumentType === 'equity' || instrumentType === 'sip' || instrumentType === 'elss' || instrumentType === 'ipo' || instrumentType === 'etf'
+                  {instrumentType === 'equity' || instrumentType === 'sip' || instrumentType === 'elss' || instrumentType === 'etf'
                     ? 'Capital Gains'
                     : 'Interest Earned'}
                 </p>

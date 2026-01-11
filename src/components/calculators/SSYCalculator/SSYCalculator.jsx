@@ -277,7 +277,7 @@ const SSYCalculator = () => {
             <SSYCalculatorInfo />
           }
           evolutionTable={
-            <SSYCalculatorTable evolution={results?.evolution} />
+            <SSYCalculatorTable evolution={results?.evolution} tenure={yearsTillMaturity} results={results} />
           }
         />
     </div>
