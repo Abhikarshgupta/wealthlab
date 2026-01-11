@@ -17,7 +17,6 @@ export const routes = {
     debtMutualFund: '/calculators/debt-mutual-fund',
     reits: '/calculators/reits',
     rd: '/calculators/rd',
-    ipo: '/calculators/ipo',
     bonds54EC: '/calculators/54ec-bonds'
   },
   goalPlanning: '/goal-planning',

@@ -8,12 +8,12 @@
 
 WealthLab empowers you to experiment with different investment strategies and gain complete control over your personal finance planning journey. Built with production-grade architecture, it provides:
 
-### 📊 **17 Investment Calculators**
+### 📊 **16 Investment Calculators**
 
 Calculate returns, tax implications, and real purchasing power for:
 
 - **Fixed Income Instruments:** PPF, FD, NSC, SSY, SCSS, RD, POMIS
-- **Equity Investments:** Equity (SIP/Lumpsum), SIP, ELSS, IPO/FPO, ETFs (Equity/Debt/Gold/International)
+- **Equity Investments:** Equity (SIP/Lumpsum), SIP, ELSS, ETFs (Equity/Debt/Gold/International)
 - **Advanced Instruments:** NPS, Debt Mutual Funds, SGB, REITs, 54EC Bonds
 
 ### 💰 **Post-Tax Calculations**

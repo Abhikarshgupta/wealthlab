@@ -12,7 +12,6 @@ export const availableInstruments = [
   { id: 'nps', name: 'NPS', fullName: 'National Pension System', icon: '🎯' },
   { id: 'equity', name: 'Equity', fullName: 'Equity/Mutual Funds', icon: '📊' },
   { id: 'elss', name: 'ELSS', fullName: 'Equity Linked Savings Scheme', icon: '💎' },
-  { id: 'ipo', name: 'IPO/FPO', fullName: 'Initial/Follow-on Public Offer', icon: '🚀' },
   { id: 'rd', name: 'RD', fullName: 'Recurring Deposit', icon: '💳' },
   { id: 'debtMutualFund', name: 'Debt MF', fullName: 'Debt Mutual Funds', icon: '📉' },
   { id: 'etf', name: 'ETF', fullName: 'Exchange Traded Funds', icon: '📉' },

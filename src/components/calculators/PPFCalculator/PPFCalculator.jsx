@@ -72,7 +72,7 @@ const PPFCalculator = () => {
           PPF Calculator
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          Calculate your Public Provident Fund returns with step-up and inflation adjustments
+          Calculate your Public Provident Fund returns with step-up investment option
         </p>
       </div>
 
@@ -231,7 +231,7 @@ const PPFCalculator = () => {
             <PPFCalculatorInfo />
           }
           evolutionTable={
-            <PPFCalculatorTable evolution={results?.evolution} tenure={tenureNum} />
+            <PPFCalculatorTable evolution={results?.evolution} tenure={tenureNum} results={results} />
           }
         />
     </div>

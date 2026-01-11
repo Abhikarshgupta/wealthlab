@@ -260,30 +260,6 @@ export const investmentInfo = {
     minInvestment: '1 share',
     maxInvestment: 'No limit',
   },
-  ipo: {
-    name: 'IPO/FPO (Initial/Follow-on Public Offer)',
-    description: 'Investment in shares of companies during their Initial Public Offering (IPO) or Follow-on Public Offering (FPO).',
-    features: [
-      'Opportunity to invest at issue price',
-      'Potential listing gains',
-      'Direct ownership in companies',
-      'No lock-in period (can sell immediately after listing)',
-      'Dividend income possible',
-    ],
-    taxBenefits: [
-      'Listing gains: Short-term capital gains tax (15%) if sold within 1 year',
-      'Long-term: Long-term capital gains tax (10% above ₹1 lakh exemption) after 1 year',
-      'Dividend income taxable as per income tax slab',
-    ],
-    eligibility: [
-      'Any individual with Demat account',
-      'Minors through guardian',
-      'Need ASBA or UPI facility',
-    ],
-    lockInPeriod: 'No lock-in (can sell immediately after listing)',
-    minInvestment: '₹1,000 (varies by IPO lot size)',
-    maxInvestment: 'No limit (subject to oversubscription)',
-  },
   rd: {
     name: 'Recurring Deposit (RD)',
     description: 'A monthly recurring deposit scheme offered by banks with fixed interest rate.',
