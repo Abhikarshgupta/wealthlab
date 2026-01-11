@@ -1,9 +1,24 @@
-import { useMemo } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import PieChart from '@/components/common/PieChart'
-import Highcharts from 'highcharts'
-import HighchartsReact from 'highcharts-react-official'
 import { useTheme } from '@/contexts/ThemeContext'
 import { formatCurrency } from '@/utils/formatters'
+import LoadingSpinner from '@/components/common/LoadingSpinner/LoadingSpinner'
+
+// Lazy load Highcharts components
+let Highcharts = null
+let HighchartsReact = null
+
+const loadHighcharts = async () => {
+  if (!Highcharts || !HighchartsReact) {
+    const [highchartsModule, reactModule] = await Promise.all([
+      import('highcharts'),
+      import('highcharts-react-official')
+    ])
+    Highcharts = highchartsModule.default
+    HighchartsReact = reactModule.default
+  }
+  return { Highcharts, HighchartsReact }
+}
 
 /**
  * Corpus Visualizations Component
@@ -12,6 +27,13 @@ import { formatCurrency } from '@/utils/formatters'
 const CorpusVisualizations = ({ results, settings }) => {
   const { theme } = useTheme()
   const isDark = theme === 'dark'
+  const [highchartsComponents, setHighchartsComponents] = useState(null)
+
+  useEffect(() => {
+    loadHighcharts().then((components) => {
+      setHighchartsComponents(components)
+    })
+  }, [])
 
   // Prepare pie chart data for instrument breakdown
   const pieChartData = useMemo(() => {
@@ -182,7 +204,12 @@ const CorpusVisualizations = ({ results, settings }) => {
       {/* Comparison Bar Chart */}
       {barChartData && barChartOptions && (
         <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          <HighchartsReact highcharts={Highcharts} options={barChartOptions} />
+          {highchartsComponents ? (() => {
+            const { Highcharts: HC, HighchartsReact: HCReact } = highchartsComponents
+            return <HCReact highcharts={HC} options={barChartOptions} />
+          })() : (
+            <LoadingSpinner />
+          )}
           <p className="mt-4 text-xs text-gray-500 dark:text-gray-400 text-center">
             Compares nominal corpus with inflation-adjusted corpus to show purchasing power
           </p>
