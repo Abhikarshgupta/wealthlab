@@ -165,12 +165,16 @@ export const calculateTaxOnWithdrawal = (corpus, instrumentType, tenure, options
 
   let taxAmount = 0
   let effectiveTaxRate = 0
+  let actualTaxRate = 0 // Actual tax rate applied (for display)
+  let taxRateLabel = '' // Label for tax rate (e.g., "10% LTCG", "30% slab")
 
   switch (taxRule.type) {
     case 'exempt':
       // PPF, SSY - No tax
       taxAmount = 0
       effectiveTaxRate = 0
+      actualTaxRate = 0
+      taxRateLabel = 'Tax-Free'
       break
 
     case 'ltcg': {
@@ -201,10 +205,14 @@ export const calculateTaxOnWithdrawal = (corpus, instrumentType, tenure, options
         const taxableReturns = Math.max(0, actualReturns - availableExemption)
         taxAmount = taxableReturns * taxRule.rate // Tax only on taxable returns
         effectiveTaxRate = corpus > 0 ? (taxAmount / corpus) * 100 : 0
+        actualTaxRate = taxRule.rate * 100 // 10% LTCG
+        taxRateLabel = `${actualTaxRate}% LTCG`
       } else {
         // Short-term capital gains (no exemption)
         taxAmount = actualReturns * 0.15 // 15% STCG on returns
         effectiveTaxRate = corpus > 0 ? (taxAmount / corpus) * 100 : 0
+        actualTaxRate = 15 // 15% STCG
+        taxRateLabel = `${actualTaxRate}% STCG`
       }
       break
     }
@@ -231,11 +239,15 @@ export const calculateTaxOnWithdrawal = (corpus, instrumentType, tenure, options
         const capitalGains = Math.max(0, corpus - indexedCost)
         taxAmount = capitalGains * taxRule.rate // 20% with indexation
         effectiveTaxRate = corpus > 0 ? (taxAmount / corpus) * 100 : 0
+        actualTaxRate = taxRule.rate * 100 // 20% LTCG with indexation
+        taxRateLabel = `${actualTaxRate}% LTCG (Indexed)`
       } else {
         // Short-term capital gains - taxed as per income slab
         const capitalGains = Math.max(0, corpus - principalAmount)
         taxAmount = capitalGains * incomeTaxSlab
         effectiveTaxRate = corpus > 0 ? (taxAmount / corpus) * 100 : 0
+        actualTaxRate = incomeTaxSlab * 100 // Income tax slab
+        taxRateLabel = `${actualTaxRate}% slab`
       }
       break
     }
@@ -245,6 +257,8 @@ export const calculateTaxOnWithdrawal = (corpus, instrumentType, tenure, options
       const taxablePortion = corpus * taxRule.taxablePortion
       taxAmount = taxablePortion * incomeTaxSlab
       effectiveTaxRate = taxRule.taxablePortion * incomeTaxSlab * 100
+      actualTaxRate = incomeTaxSlab * 100 // Income tax slab on taxable portion
+      taxRateLabel = `${actualTaxRate}% slab (on 40%)`
       break
     }
 
@@ -259,10 +273,14 @@ export const calculateTaxOnWithdrawal = (corpus, instrumentType, tenure, options
         // This is a simplified calculation - actual tax depends on when interest was received
         taxAmount = 0 // Capital gains exempt, interest already taxed
         effectiveTaxRate = 0
+        actualTaxRate = 0
+        taxRateLabel = 'Capital Gains Exempt'
       } else {
         // If withdrawn early, capital gains taxable
         taxAmount = corpus * 0.15 // 15% STCG approximation
         effectiveTaxRate = 15
+        actualTaxRate = 15
+        taxRateLabel = `${actualTaxRate}% STCG`
       }
       break
     }
@@ -305,6 +323,8 @@ export const calculateTaxOnWithdrawal = (corpus, instrumentType, tenure, options
         // Use actual interest for tax calculation
         taxAmount = actualInterest * incomeTaxSlab
         effectiveTaxRate = corpus > 0 ? (taxAmount / corpus) * 100 : 0
+        actualTaxRate = incomeTaxSlab * 100 // Income tax slab
+        taxRateLabel = `${actualTaxRate}% slab`
         // Note: TDS calculation is done in the return statement section below
       } else {
         // Fallback to estimate (for backward compatibility)
@@ -312,6 +332,8 @@ export const calculateTaxOnWithdrawal = (corpus, instrumentType, tenure, options
         const estimatedReturns = corpus * 0.3 // Rough estimate
         taxAmount = estimatedReturns * incomeTaxSlab
         effectiveTaxRate = (estimatedReturns / corpus) * incomeTaxSlab * 100
+        actualTaxRate = incomeTaxSlab * 100
+        taxRateLabel = `${actualTaxRate}% slab`
       }
       break
     }
@@ -344,11 +366,15 @@ export const calculateTaxOnWithdrawal = (corpus, instrumentType, tenure, options
         // Only interest is taxable (capital gains already exempt at investment)
         taxAmount = bonds54ECInterest * incomeTaxSlab
         effectiveTaxRate = corpus > 0 ? (taxAmount / corpus) * 100 : 0
+        actualTaxRate = incomeTaxSlab * 100 // Income tax slab on interest
+        taxRateLabel = `${actualTaxRate}% slab (on interest)`
       } else {
         // Fallback: estimate interest portion
         const estimatedInterest = corpus * 0.25 // Rough estimate for 5-year bond
         taxAmount = estimatedInterest * incomeTaxSlab
         effectiveTaxRate = corpus > 0 ? (taxAmount / corpus) * 100 : 0
+        actualTaxRate = incomeTaxSlab * 100
+        taxRateLabel = `${actualTaxRate}% slab (on interest)`
       }
       break
     }
@@ -356,6 +382,8 @@ export const calculateTaxOnWithdrawal = (corpus, instrumentType, tenure, options
     default:
       taxAmount = 0
       effectiveTaxRate = 0
+      actualTaxRate = 0
+      taxRateLabel = 'N/A'
   }
 
   const postTaxCorpus = corpus - taxAmount
@@ -397,7 +425,9 @@ export const calculateTaxOnWithdrawal = (corpus, instrumentType, tenure, options
   return {
     taxAmount: Math.round(taxAmount * 100) / 100,
     postTaxCorpus: Math.round(postTaxCorpus * 100) / 100,
-    taxRate: Math.round(effectiveTaxRate * 100) / 100,
+    taxRate: Math.round(effectiveTaxRate * 100) / 100, // Effective rate on corpus
+    actualTaxRate: actualTaxRate, // Actual tax rate applied (for display)
+    taxRateLabel: taxRateLabel || `${actualTaxRate}%`, // Human-readable label
     taxRule: taxRule.notes,
     tdsInfo, // TDS information for FD/SCSS
   }
