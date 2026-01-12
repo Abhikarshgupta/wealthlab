@@ -11,7 +11,8 @@ import { formatCurrency, formatCurrencyCompact } from '@/utils/formatters'
  * @param {number} props.returns - Returns/interest earned
  * @param {number} props.taxAmount - Tax amount deducted
  * @param {number} props.postTaxAmount - Post-tax amount
- * @param {number} props.taxSlab - Tax slab rate (as decimal)
+ * @param {number} props.taxSlab - Tax slab rate (as decimal) - DEPRECATED, use taxRateLabel instead
+ * @param {string} props.taxRateLabel - Actual tax rate label (e.g., "10% LTCG", "30% slab")
  * @param {string} props.taxRule - Tax rule description
  * @param {Object} props.tdsInfo - TDS information (optional)
  * @param {Object} props.indexationInfo - Indexation calculation details (optional)
@@ -25,6 +26,7 @@ const TaxBreakdown = ({
   taxAmount,
   postTaxAmount,
   taxSlab,
+  taxRateLabel = null,
   taxRule,
   tdsInfo = null,
   indexationInfo = null,
@@ -33,8 +35,13 @@ const TaxBreakdown = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState(false)
 
-  const formatTaxSlab = (slab) => {
-    return `${(slab * 100).toFixed(0)}%`
+  // Format tax rate for display
+  const getTaxRateDisplay = () => {
+    if (taxRateLabel) {
+      return taxRateLabel
+    }
+    // Fallback to taxSlab for backward compatibility
+    return `${(taxSlab * 100).toFixed(0)}%`
   }
 
   return (
@@ -92,7 +99,7 @@ const TaxBreakdown = ({
             <div>
               <p className="text-xs text-gray-500 dark:text-gray-400">Tax Deducted</p>
               <p className="text-base font-semibold text-red-600 dark:text-red-400">
-                {formatCurrency(taxAmount)} ({formatTaxSlab(taxSlab)})
+                {formatCurrency(taxAmount)} ({getTaxRateDisplay()})
               </p>
             </div>
             <div>
