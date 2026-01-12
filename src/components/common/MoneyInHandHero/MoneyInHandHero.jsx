@@ -11,7 +11,8 @@ import useUserPreferencesStore from '@/store/userPreferencesStore'
  * @param {number} props.postTaxAmount - Post-tax amount (Money in Hand)
  * @param {number} props.actualSpendingPower - Actual spending power (inflation-adjusted, optional)
  * @param {boolean} props.inflationAdjusted - Whether inflation adjustment is enabled
- * @param {number} props.taxSlab - Tax slab rate (as decimal, e.g., 0.30)
+ * @param {number} props.taxSlab - Tax slab rate (as decimal, e.g., 0.30) - DEPRECATED, use taxRateLabel instead
+ * @param {string} props.taxRateLabel - Actual tax rate label (e.g., "10% LTCG", "30% slab")
  * @param {number} props.taxAmount - Tax amount deducted
  * @param {string} props.instrumentType - Type of instrument (for tax-free badge)
  * @param {number} props.effectiveReturn - Effective return percentage (optional)
@@ -22,6 +23,7 @@ const MoneyInHandHero = ({
   actualSpendingPower = null,
   inflationAdjusted = false,
   taxSlab = 0.30,
+  taxRateLabel = null,
   taxAmount = 0,
   instrumentType = null,
   effectiveReturn = null,
@@ -53,9 +55,13 @@ const MoneyInHandHero = ({
     return formatCurrency(value)
   }
 
-  // Format tax slab percentage
-  const formatTaxSlab = (slab) => {
-    return `${(slab * 100).toFixed(0)}%`
+  // Format tax rate for display
+  const getTaxRateDisplay = () => {
+    if (taxRateLabel) {
+      return taxRateLabel
+    }
+    // Fallback to taxSlab for backward compatibility
+    return `${(taxSlab * 100).toFixed(0)}% slab`
   }
 
   // When inflation is ON and we have spending power, show Money in Hand first, then Spending Power
@@ -85,7 +91,7 @@ const MoneyInHandHero = ({
             </p>
           ) : (
             <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-              After tax @ {formatTaxSlab(taxSlab)} slab • Post-tax amount
+              After tax @ {getTaxRateDisplay()} • Post-tax amount
             </p>
           )}
           {effectiveReturn !== null && effectiveReturn !== undefined && (
@@ -149,7 +155,7 @@ const MoneyInHandHero = ({
             </p>
           ) : (
             <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-              After tax @ {formatTaxSlab(taxSlab)} slab • Post-tax amount
+              After tax @ {getTaxRateDisplay()} • Post-tax amount
             </p>
           )}
           {effectiveReturn !== null && effectiveReturn !== undefined && (
