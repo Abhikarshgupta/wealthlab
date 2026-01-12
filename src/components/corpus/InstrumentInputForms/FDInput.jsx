@@ -11,22 +11,23 @@ import { migrateFDData, normalizeYearsMonths } from '@/utils/fdTenureUtils'
  * @param {Function} props.updateInvestment - Function to update investment data
  */
 const FDInput = ({ instrumentId, instrumentData, updateInvestment }) => {
-  // Migrate legacy data format on mount
+  console.log('instrumentData', instrumentData); 
+  // Migrate legacy data format on mount (if needed)
   useEffect(() => {
     const migrated = migrateFDData(instrumentData)
-    if (migrated.tenureYears !== undefined || migrated.tenureMonths !== undefined) {
-      // Only update if migration changed something
-      if (migrated.tenureYears !== instrumentData.tenureYears || 
-          migrated.tenureMonths !== instrumentData.tenureMonths) {
-        updateInvestment(instrumentId, migrated)
-      }
+    console.log('migrated', migrated); 
+    // Only update if migration actually changed something
+    if (migrated.tenureYears !== instrumentData.tenureYears || 
+        migrated.tenureMonths !== instrumentData.tenureMonths) {
+      updateInvestment(instrumentId, migrated)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // Only run on mount
 
-  // Get current values (with defaults)
-  const tenureYears = instrumentData.tenureYears ?? (instrumentData.tenure && instrumentData.tenureUnit === 'years' ? Math.floor(instrumentData.tenure) : 0)
-  const tenureMonths = instrumentData.tenureMonths ?? (instrumentData.tenure && instrumentData.tenureUnit === 'months' ? instrumentData.tenure % 12 : 0)
+  // Get current values - migrateFDData handles legacy format conversion
+  const migrated = migrateFDData(instrumentData)
+  const tenureYears = migrated.tenureYears ?? 0
+  const tenureMonths = migrated.tenureMonths ?? 0
 
   return (
     <div className="space-y-4">

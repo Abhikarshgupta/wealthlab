@@ -79,7 +79,7 @@ export const convertLegacyToYearsMonths = (tenure, tenureUnit) => {
  */
 export const migrateFDData = (instrumentData) => {
   if (!instrumentData) {
-    return { tenureYears: 0, tenureMonths: 0 }
+    return {} // Return empty object - let defaults handle initial values
   }
 
   // If new format exists, normalize and use it
@@ -111,11 +111,11 @@ export const migrateFDData = (instrumentData) => {
     }
   }
 
-  // Default to 0 years, 0 months (will be set to defaults by form)
+  // Return data as-is if no tenure information exists
+  // Let defaults handle setting initial values (don't set to 0,0)
   return {
-    ...instrumentData,
-    tenureYears: 0,
-    tenureMonths: 0
+    ...instrumentData
+    // tenureYears and tenureMonths remain undefined - defaults will set them
   }
 }
 

@@ -102,21 +102,9 @@ const CorpusCalculatorPage = () => {
   // Initialize defaults when user navigates to Step 2
   useEffect(() => {
     if (currentStep === 2 && selectedInstruments.length > 0) {
-      // Initialize defaults for instruments that don't have data yet
-      selectedInstruments.forEach((instrumentId) => {
-        const instrumentData = investments[instrumentId] || {}
-        // Only initialize if instrument has no investment data at all
-        // (meaning user hasn't interacted with it yet)
-        if (Object.keys(instrumentData).length === 0 || 
-            (!instrumentData.hasExistingInvestment && 
-             !instrumentData.yearlyInvestment && 
-             !instrumentData.principal && 
-             !instrumentData.monthlySIP && 
-             !instrumentData.monthlyContribution && 
-             !instrumentData.amount)) {
-          initializeDefaultsForInstruments([instrumentId], investments, updateInvestment)
-        }
-      })
+      // Initialize defaults for instruments that need them
+      // Uses needsDefaultInitialization to check required fields per instrument type
+      initializeDefaultsForInstruments(selectedInstruments, investments, updateInvestment)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStep]) // Run when currentStep changes

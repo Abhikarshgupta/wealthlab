@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import InputField from '@/components/common/InputField/InputField'
 import { investmentRates } from '@/constants/investmentRates'
 
@@ -9,6 +10,19 @@ import { investmentRates } from '@/constants/investmentRates'
  * @param {Function} props.updateInvestment - Function to update investment data
  */
 const SIPInput = ({ instrumentId, instrumentData, updateInvestment }) => {
+  // Ensure tenureUnit is set to 'years' by default if not set
+  useEffect(() => {
+    if (!instrumentData.tenureUnit) {
+      updateInvestment(instrumentId, {
+        ...instrumentData,
+        tenureUnit: 'years',
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) // Only run on mount
+  
+  const tenureUnit = instrumentData.tenureUnit || 'years'
+  
   return (
     <div className="space-y-4">
       <InputField
@@ -42,7 +56,7 @@ const SIPInput = ({ instrumentId, instrumentData, updateInvestment }) => {
           <input
             type="radio"
             name={`${instrumentId}-tenureUnit`}
-            checked={instrumentData.tenureUnit === 'years'}
+            checked={tenureUnit === 'years'}
             onChange={() =>
               updateInvestment(instrumentId, {
                 ...instrumentData,
@@ -57,7 +71,7 @@ const SIPInput = ({ instrumentId, instrumentData, updateInvestment }) => {
           <input
             type="radio"
             name={`${instrumentId}-tenureUnit`}
-            checked={instrumentData.tenureUnit === 'months'}
+            checked={tenureUnit === 'months'}
             onChange={() =>
               updateInvestment(instrumentId, {
                 ...instrumentData,
