@@ -130,6 +130,8 @@ const useEquityCalculator = (
       taxAmount: Math.round(taxAmount * 100) / 100,
       postTaxAmount: Math.round(postTaxAmount * 100) / 100,
       taxRate: taxCalculation.taxRate,
+      actualTaxRate: taxCalculation.actualTaxRate,
+      taxRateLabel: taxCalculation.taxRateLabel,
       taxRule: taxCalculation.taxRule,
       actualSpendingPower: actualSpendingPower !== null ? Math.round(actualSpendingPower * 100) / 100 : null,
       evolution,
