@@ -329,15 +329,19 @@ const InstrumentBreakdownTable = ({ results, investments, instruments, settings 
                               <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
                                 {isPartialTax
                                   ? 'Tax Rate on Taxable Portion (40%)'
-                                  : 'Tax Rate on Interest'}
+                                  : isInterestTax
+                                    ? 'Tax Rate on Interest'
+                                    : 'Tax Rate'}
                               </div>
                               <div className="text-sm font-semibold text-gray-900 dark:text-white">
                                 {row.taxDetails.taxAmount > 0
-                                  ? formatPercentage(incomeTaxSlab, 0)
+                                  ? (row.taxDetails.taxRateLabel || formatPercentage(incomeTaxSlab, 0))
                                   : 'Tax-Free'}
                               </div>
                               <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                (Your tax bracket)
+                                {isInterestTax || isPartialTax
+                                  ? '(Your tax bracket)'
+                                  : '(Actual tax rate applied)'}
                               </div>
                             </div>
                             <div>
@@ -397,7 +401,9 @@ const InstrumentBreakdownTable = ({ results, investments, instruments, settings 
                                   <>
                                     <li>
                                       <strong>Tax Rate:</strong> {row.taxDetails.taxAmount > 0
-                                        ? `This instrument is taxed at ${formatPercentage(row.taxDetails.taxRate / 100, 2)} effective rate.`
+                                        ? (row.taxDetails.taxRateLabel 
+                                            ? `This instrument is taxed at ${row.taxDetails.taxRateLabel}.`
+                                            : `This instrument is taxed at ${formatPercentage(row.taxDetails.taxRate / 100, 2)} effective rate.`)
                                         : 'This instrument is tax-free.'}
                                     </li>
                                     <li>
