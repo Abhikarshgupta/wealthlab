@@ -76,6 +76,7 @@ const RDCalculatorResults = ({ results, compoundingFrequency }) => {
         actualSpendingPower={actualSpendingPower}
         inflationAdjusted={adjustInflation && actualSpendingPower !== null}
         taxSlab={incomeTaxSlab}
+        taxRateLabel={results.taxRateLabel}
         taxAmount={taxAmount}
         effectiveReturn={effectiveReturn}
         instrumentType="rd"
@@ -89,6 +90,7 @@ const RDCalculatorResults = ({ results, compoundingFrequency }) => {
         taxAmount={taxAmount}
         postTaxAmount={postTaxAmount}
         taxSlab={incomeTaxSlab}
+        taxRateLabel={results.taxRateLabel}
         taxRule={taxRule}
         monthlyDeposit={monthlyDeposit}
         instrumentType="rd"

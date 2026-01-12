@@ -62,6 +62,7 @@ const SIPCalculatorResults = ({ results }) => {
         actualSpendingPower={actualSpendingPower}
         inflationAdjusted={adjustInflation && actualSpendingPower !== null}
         taxSlab={incomeTaxSlab}
+        taxRateLabel={results.taxRateLabel}
         taxAmount={taxAmount}
         instrumentType="sip"
       />
@@ -74,6 +75,7 @@ const SIPCalculatorResults = ({ results }) => {
         taxAmount={taxAmount}
         postTaxAmount={postTaxAmount}
         taxSlab={incomeTaxSlab}
+        taxRateLabel={results.taxRateLabel}
         taxRule={taxRule}
         instrumentType="sip"
       />

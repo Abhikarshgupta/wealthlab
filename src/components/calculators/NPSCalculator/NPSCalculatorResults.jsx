@@ -98,6 +98,7 @@ const NPSCalculatorResults = ({ results }) => {
         actualSpendingPower={actualSpendingPower}
         inflationAdjusted={adjustInflation && actualSpendingPower !== null}
         taxSlab={incomeTaxSlab}
+        taxRateLabel={results.taxRateLabel}
         taxAmount={taxAmount}
         instrumentType="nps"
       />
@@ -110,6 +111,7 @@ const NPSCalculatorResults = ({ results }) => {
         taxAmount={taxAmount}
         postTaxAmount={postTaxAmount}
         taxSlab={incomeTaxSlab}
+        taxRateLabel={results.taxRateLabel}
         taxRule={taxRule}
         instrumentType="nps"
       />

@@ -64,6 +64,7 @@ const NSCalculatorResults = ({ results }) => {
         actualSpendingPower={actualSpendingPower}
         inflationAdjusted={adjustInflation && actualSpendingPower !== null}
         taxSlab={incomeTaxSlab}
+        taxRateLabel={results.taxRateLabel}
         taxAmount={taxAmount}
         effectiveReturn={effectiveReturn}
         instrumentType="nsc"
@@ -77,6 +78,7 @@ const NSCalculatorResults = ({ results }) => {
         taxAmount={taxAmount}
         postTaxAmount={postTaxAmount}
         taxSlab={incomeTaxSlab}
+        taxRateLabel={results.taxRateLabel}
         taxRule={taxRule}
         instrumentType="nsc"
       />

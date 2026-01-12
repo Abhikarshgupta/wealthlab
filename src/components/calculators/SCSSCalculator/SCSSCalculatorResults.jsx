@@ -65,6 +65,7 @@ const SCSSCalculatorResults = ({ results }) => {
         actualSpendingPower={actualSpendingPower}
         inflationAdjusted={adjustInflation && actualSpendingPower !== null}
         taxSlab={incomeTaxSlab}
+        taxRateLabel={results.taxRateLabel}
         taxAmount={taxAmount}
         effectiveReturn={effectiveReturn}
         instrumentType="scss"
@@ -78,6 +79,7 @@ const SCSSCalculatorResults = ({ results }) => {
         taxAmount={taxAmount}
         postTaxAmount={postTaxAmount}
         taxSlab={incomeTaxSlab}
+        taxRateLabel={results.taxRateLabel}
         taxRule={taxRule}
         tdsInfo={tdsInfo}
         instrumentType="scss"

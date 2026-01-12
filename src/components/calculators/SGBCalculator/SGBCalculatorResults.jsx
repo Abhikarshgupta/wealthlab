@@ -73,6 +73,7 @@ const SGBCalculatorResults = ({ results }) => {
         actualSpendingPower={actualSpendingPower}
         inflationAdjusted={adjustInflation && actualSpendingPower !== null}
         taxSlab={incomeTaxSlab}
+        taxRateLabel={results.taxRateLabel}
         taxAmount={taxAmount}
         instrumentType="sgb"
       />
@@ -85,6 +86,7 @@ const SGBCalculatorResults = ({ results }) => {
         taxAmount={taxAmount}
         postTaxAmount={postTaxAmount}
         taxSlab={incomeTaxSlab}
+        taxRateLabel={results.taxRateLabel}
         taxRule={taxRule}
         instrumentType="sgb"
       />

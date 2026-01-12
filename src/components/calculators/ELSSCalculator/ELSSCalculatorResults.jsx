@@ -64,6 +64,7 @@ const ELSSCalculatorResults = ({ results, investmentType }) => {
         actualSpendingPower={actualSpendingPower}
         inflationAdjusted={adjustInflation && actualSpendingPower !== null}
         taxSlab={incomeTaxSlab}
+        taxRateLabel={results.taxRateLabel}
         taxAmount={taxAmount}
         instrumentType="elss"
       />
@@ -76,6 +77,7 @@ const ELSSCalculatorResults = ({ results, investmentType }) => {
         taxAmount={taxAmount}
         postTaxAmount={postTaxAmount}
         taxSlab={incomeTaxSlab}
+        taxRateLabel={results.taxRateLabel}
         taxRule={taxRule}
         instrumentType="elss"
       />
