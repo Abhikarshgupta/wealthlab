@@ -1,22 +1,7 @@
-import { useMemo, useState, useEffect, Suspense } from 'react'
+import { useMemo } from 'react'
 import { useTheme } from '@/contexts/ThemeContext'
-import LoadingSpinner from '@/components/common/LoadingSpinner/LoadingSpinner'
-
-// Lazy load Highcharts components
-let Highcharts = null
-let HighchartsReact = null
-
-const loadHighcharts = async () => {
-  if (!Highcharts || !HighchartsReact) {
-    const [highchartsModule, reactModule] = await Promise.all([
-      import('highcharts'),
-      import('highcharts-react-official')
-    ])
-    Highcharts = highchartsModule.default
-    HighchartsReact = reactModule.default
-  }
-  return { Highcharts, HighchartsReact }
-}
+import Highcharts from 'highcharts'
+import HighchartsReact from 'highcharts-react-official'
 
 /**
  * PieChart - Highcharts donut chart wrapper
@@ -33,13 +18,6 @@ const PieChart = ({
 }) => {
   const { theme } = useTheme()
   const isDark = theme === 'dark'
-  const [highchartsComponents, setHighchartsComponents] = useState(null)
-
-  useEffect(() => {
-    loadHighcharts().then((components) => {
-      setHighchartsComponents(components)
-    })
-  }, [])
 
   const options = useMemo(() => ({
     chart: {
@@ -108,20 +86,10 @@ const PieChart = ({
     },
   }), [data, title, height, isDark])
 
-  if (!highchartsComponents) {
-    return (
-      <div className={`${className} flex items-center justify-center`} style={{ minHeight: `${height}px` }}>
-        <LoadingSpinner />
-      </div>
-    )
-  }
-
-  const { Highcharts: HC, HighchartsReact: HCReact } = highchartsComponents
-
   return (
     <div className={`${className}`}>
-      <HCReact
-        highcharts={HC}
+      <HighchartsReact
+        highcharts={Highcharts}
         options={options}
       />
     </div>

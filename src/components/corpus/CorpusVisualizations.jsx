@@ -1,24 +1,9 @@
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo } from 'react'
 import PieChart from '@/components/common/PieChart'
 import { useTheme } from '@/contexts/ThemeContext'
 import { formatCurrency } from '@/utils/formatters'
-import LoadingSpinner from '@/components/common/LoadingSpinner/LoadingSpinner'
-
-// Lazy load Highcharts components
-let Highcharts = null
-let HighchartsReact = null
-
-const loadHighcharts = async () => {
-  if (!Highcharts || !HighchartsReact) {
-    const [highchartsModule, reactModule] = await Promise.all([
-      import('highcharts'),
-      import('highcharts-react-official')
-    ])
-    Highcharts = highchartsModule.default
-    HighchartsReact = reactModule.default
-  }
-  return { Highcharts, HighchartsReact }
-}
+import Highcharts from 'highcharts'
+import HighchartsReact from 'highcharts-react-official'
 
 /**
  * Corpus Visualizations Component
@@ -27,13 +12,6 @@ const loadHighcharts = async () => {
 const CorpusVisualizations = ({ results, settings }) => {
   const { theme } = useTheme()
   const isDark = theme === 'dark'
-  const [highchartsComponents, setHighchartsComponents] = useState(null)
-
-  useEffect(() => {
-    loadHighcharts().then((components) => {
-      setHighchartsComponents(components)
-    })
-  }, [])
 
   // Prepare pie chart data for instrument breakdown
   const pieChartData = useMemo(() => {
@@ -68,7 +46,7 @@ const CorpusVisualizations = ({ results, settings }) => {
 
     // Nominal Corpus
     categories.push('Nominal Corpus')
-    data.push([results.nominalCorpus || 0])
+    data.push(results.nominalCorpus || 0)
 
     // Inflation-Adjusted Corpus
     if (settings?.generalInflationRate && settings?.timeHorizon) {
@@ -77,7 +55,7 @@ const CorpusVisualizations = ({ results, settings }) => {
         (results.nominalCorpus || 0) /
         Math.pow(1 + inflationRateDecimal, settings.timeHorizon)
       categories.push(`Inflation-Adjusted\n(${settings.timeHorizon} years)`)
-      data.push([inflationAdjusted])
+      data.push(inflationAdjusted)
     }
 
     return { categories, data }
@@ -204,12 +182,10 @@ const CorpusVisualizations = ({ results, settings }) => {
       {/* Comparison Bar Chart */}
       {barChartData && barChartOptions && (
         <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-          {highchartsComponents ? (() => {
-            const { Highcharts: HC, HighchartsReact: HCReact } = highchartsComponents
-            return <HCReact highcharts={HC} options={barChartOptions} />
-          })() : (
-            <LoadingSpinner />
-          )}
+          <HighchartsReact
+            highcharts={Highcharts}
+            options={barChartOptions}
+          />
           <p className="mt-4 text-xs text-gray-500 dark:text-gray-400 text-center">
             Compares nominal corpus with inflation-adjusted corpus to show purchasing power
           </p>
