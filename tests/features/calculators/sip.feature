@@ -118,20 +118,20 @@ Feature: SIP Calculator
     Then the corpus value should be approximately 487411 within tolerance 100
 
   @tax @regression @calculator-sip
-  Scenario: SIP-22 LTCG 10% above ₹1L exemption after 1 year
+  Scenario: SIP-22 LTCG 12.5% above ₹1.25L exemption after 1 year
   # Golden: tests/fixtures/golden/sip.json#SIP-22
     When I enter monthly SIP amount 10000
     And I set investment tenure to 10 years
-    Then the tax rate label should be "10% LTCG"
-    And the tax amount should be approximately 102339 within tolerance 500
+    Then the tax rate label should be "12.5% LTCG"
+    And the tax amount should be approximately 124799 within tolerance 500
 
   @tax @edge @regression @calculator-sip
   Scenario: SIP-23 STCG when tenure less than 1 year
   # Golden: tests/fixtures/golden/sip.json#SIP-23
     When I enter monthly SIP amount 10000
     And I set investment tenure to 6 months
-    Then the tax rate label should be "15% STCG"
-    And the tax amount should be approximately 320 within tolerance 50
+    Then the tax rate label should be "20% STCG"
+    And the tax amount should be approximately 427 within tolerance 50
 
   @wip @known-bug @calculator-sip
   Scenario: SIP-24 SWP systematic withdrawal plan

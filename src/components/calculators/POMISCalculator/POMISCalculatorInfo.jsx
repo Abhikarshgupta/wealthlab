@@ -155,7 +155,7 @@ const POMISCalculatorInfo = () => {
             </p>
             <ul className="list-disc list-inside text-sm text-amber-800 dark:text-amber-300 space-y-1 ml-2">
               <li><strong>No Partial Withdrawals:</strong> POMIS does not permit partial withdrawals. Premature withdrawal entails closure of the entire account.</li>
-              <li><strong>TDS on Interest:</strong> If total interest earned in a financial year exceeds ₹40,000, TDS is applicable. Submit Form 15G/15H to avoid TDS if total income is below taxable limit.</li>
+              <li><strong>TDS on Interest:</strong> If total interest earned in a financial year exceeds ₹50,000 (₹1,00,000 for senior citizens), TDS is applicable. Submit Form 15G/15H to avoid TDS if total income is below taxable limit.</li>
               <li><strong>No Tax Deduction:</strong> Unlike PPF/NSC, POMIS does not qualify for Section 80C deduction.</li>
             </ul>
           </div>

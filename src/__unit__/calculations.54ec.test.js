@@ -198,7 +198,7 @@ describe('use54ECBondsCalculator hook — golden integration', () => {
 describe('54EC Bonds adversarial inputs', () => {
   it('returns null when investment is below minimum threshold', async () => {
     resetUserPreferences()
-    const { result } = renderHook(() => use54ECBondsCalculator(1000000, 999, 5.75))
+    const { result } = renderHook(() => use54ECBondsCalculator(1000000, 999, 5.25))
 
     await waitFor(() => {
       expect(result.current).toBeNull()
@@ -207,7 +207,7 @@ describe('54EC Bonds adversarial inputs', () => {
 
   it('returns null when investment exceeds capital gain', async () => {
     resetUserPreferences()
-    const { result } = renderHook(() => use54ECBondsCalculator(500000, 600000, 5.75))
+    const { result } = renderHook(() => use54ECBondsCalculator(500000, 600000, 5.25))
 
     await waitFor(() => {
       expect(result.current).toBeNull()

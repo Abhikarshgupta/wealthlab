@@ -7,17 +7,18 @@ Application code may simplify rules; golden outputs must align with this data un
 
 | File | Purpose |
 |------|---------|
-| `tax-slabs-fy2024-25.json` | Income tax slabs (new/old regime), cess, app mapping |
-| `ltcg-exemptions.json` | LTCG/STCG rates, ₹1L equity exemption, debt indexation |
+| `tax-slabs-fy2024-25.json` | Income tax slabs FY 2024-25 (historical; AY 2025-26) |
+| `tax-slabs-fy2025-26.json` | Income tax slabs FY 2025-26 (current; AY 2026-27) |
+| `ltcg-exemptions.json` | LTCG/STCG rates, ₹1.25L equity exemption, debt indexation |
 | `tds-thresholds.json` | TDS limits for FD, SCSS, POMIS, NSC |
 
 ## Sources & review
 
 | Field | Value |
 |-------|-------|
-| Financial year | 2024-25 (AY 2025-26) |
-| Last reviewed | 2026-07-25 |
-| Primary sources | Income Tax Act, Union Budget 2024, Section 112A / 194A |
+| Current financial year | 2025-26 (AY 2026-27) |
+| Last reviewed | 2026-08-29 |
+| Primary sources | Union Budget 2024 (112A LTCG), Budget 2025 (194A TDS, slabs), MoF small savings notifications |
 
 ## CA sign-off process (P7)
 

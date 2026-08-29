@@ -181,24 +181,24 @@
   },
   {
     "id": "POMIS-TDS",
-    "description": "TDS warning when annual interest exceeds ₹40,000 threshold",
+    "description": "TDS warning when annual interest exceeds ₹50,000 threshold",
     "pathType": "XF",
     "tags": ["@tax", "@regression", "@calculator-pomis"],
     "inputs": {
-      "principal": 600000,
+      "principal": 650000,
       "rate": 8,
       "tenureYears": 5,
       "isJointAccount": false,
       "incomeTaxSlab": 0.30
     },
     "expected": {
-      "annualInterest": 48000,
-      "monthlyInterest": 4000,
+      "annualInterest": 52000,
+      "monthlyInterest": 4333.33,
       "tdsApplicable": true,
-      "tdsThreshold": 40000,
+      "tdsThreshold": 50000,
       "tolerance": 50
     },
-    "verifiedAgainst": ["tests/fixtures/regulatory/tds-thresholds.json", "Section 194A FY2024-25"],
+    "verifiedAgainst": ["tests/fixtures/regulatory/tds-thresholds.json", "Section 194A FY2025-26"],
     "verifiedBy": "QA",
     "caReviewed": false,
     "lastVerified": "2026-08-29"

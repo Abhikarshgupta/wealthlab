@@ -108,7 +108,7 @@ describe('SIP Calculator integration', () => {
 
     await waitForHook(() => {
       expect(result.current).not.toBeNull()
-      expect(result.current.taxRateLabel).toBe('10% LTCG')
+      expect(result.current.taxRateLabel).toBe('12.5% LTCG')
       expect(
         withinTolerance(result.current.taxAmount, row.expected.taxAmount, row.expected.tolerance)
       ).toBe(true)

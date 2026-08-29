@@ -164,11 +164,11 @@
   },
   {
     "id": "SCSS-23",
-    "description": "TDS on interest when annual interest exceeds ₹40,000 threshold",
+    "description": "TDS on interest when annual interest exceeds ₹1,00,000 senior threshold",
     "pathType": "XF",
     "tags": ["@tax", "@regression", "@calculator-scss"],
     "inputs": {
-      "principal": 1000000,
+      "principal": 1500000,
       "tenure": 5,
       "seniorsAge": 65,
       "rate": 8.2,
@@ -176,15 +176,15 @@
       "incomeTaxSlab": 0.30
     },
     "expected": {
-      "maturityAmount": 1410000,
-      "totalInterest": 410000,
-      "annualInterest": 82000,
+      "maturityAmount": 2115000,
+      "totalInterest": 615000,
+      "annualInterest": 123000,
       "tdsApplicable": true,
-      "tdsThreshold": 40000,
-      "totalTDS": 41000,
+      "tdsThreshold": 100000,
+      "totalTDS": 61500,
       "tolerance": 50
     },
-    "verifiedAgainst": ["tests/fixtures/regulatory/tds-thresholds.json", "calculateTaxOnWithdrawal tdsInfo"],
+    "verifiedAgainst": ["tests/fixtures/regulatory/tds-thresholds.json", "Section 194A senior ₹1L from FY2025-26"],
     "verifiedBy": "QA",
     "caReviewed": false,
     "lastVerified": "2026-07-25"

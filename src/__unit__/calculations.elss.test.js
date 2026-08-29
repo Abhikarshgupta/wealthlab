@@ -103,20 +103,20 @@ describe('ELSS calculations — instrument-specific', () => {
     expect(result.corpusValue).not.toBe(sipEquivalent.corpusValue)
   })
 
-  it('ELSS-22: LTCG tax applies 10% only above ₹1L exemption on returns', () => {
+  it('ELSS-22: LTCG tax applies 12.5% only above ₹1.25L exemption on returns', () => {
     const golden = findGolden('ELSS-22')
     const result = computeELSSOutputs(golden.inputs)
-    const taxableReturns = Math.max(0, result.returnsEarned - 100000)
-    const expectedTax = Math.round(taxableReturns * 0.1 * 100) / 100
-    expect(result.taxRateLabel).toBe('10% LTCG')
+    const taxableReturns = Math.max(0, result.returnsEarned - 125000)
+    const expectedTax = Math.round(taxableReturns * 0.125 * 100) / 100
+    expect(result.taxRateLabel).toBe('12.5% LTCG')
     expect(withinTolerance(result.taxAmount, expectedTax, golden.expected.tolerance)).toBe(true)
   })
 
-  it('ELSS-23: STCG applies 15% on returns when tenure < 3 years', () => {
+  it('ELSS-23: STCG applies 20% on returns when tenure < 3 years', () => {
     const golden = findGolden('ELSS-23')
     const result = computeELSSOutputs(golden.inputs)
-    const expectedTax = Math.round(result.returnsEarned * 0.15 * 100) / 100
-    expect(result.taxRateLabel).toBe('15% STCG')
+    const expectedTax = Math.round(result.returnsEarned * 0.2 * 100) / 100
+    expect(result.taxRateLabel).toBe('20% STCG')
     expect(withinTolerance(result.taxAmount, expectedTax, golden.expected.tolerance)).toBe(true)
   })
 })
@@ -208,8 +208,8 @@ describe('ELSS calculations — adversarial & boundaries', () => {
       tenure: 3,
       expectedReturn: 14,
     })
-    expect(stcg.taxRateLabel).toBe('15% STCG')
-    expect(ltcg.taxRateLabel).toBe('10% LTCG')
+    expect(stcg.taxRateLabel).toBe('20% STCG')
+    expect(ltcg.taxRateLabel).toBe('12.5% LTCG')
   })
 
   adversarialSchemaCases.forEach(({ id, payload }) => {

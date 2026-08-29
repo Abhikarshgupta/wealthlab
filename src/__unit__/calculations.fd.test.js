@@ -110,7 +110,7 @@ describe('calculateFD — golden fixtures', () => {
     ).toBe(true)
   })
 
-  it('FD-23: TDS applicable when annual interest exceeds ₹40,000', () => {
+  it('FD-23: TDS applicable when annual interest exceeds ₹50,000', () => {
     const row = findGolden('FD-23')
     const { principal, tenureYears, tenureMonths, rate, compoundingFrequency, incomeTaxSlab } =
       row.inputs

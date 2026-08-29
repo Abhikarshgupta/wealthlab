@@ -1,0 +1,49 @@
+{
+  "$schema": "wealthlab-regulatory-v1",
+  "financialYear": "2025-26",
+  "assessmentYear": "2026-27",
+  "lastReviewed": "2026-08-29",
+  "effectiveFrom": "2025-04-01",
+  "sources": [
+    "Union Budget 2025 — Section 115BAC slab revisions",
+    "https://www.incometax.gov.in/iec/foportal/help/individual/return-applicable-1 (AY 2026-27 slabs)",
+    "Budget 2026 — slabs unchanged for FY 2026-27"
+  ],
+  "regimes": {
+    "new": {
+      "description": "Default regime from FY 2023-24 onward unless opted out; slabs revised in Budget 2025",
+      "slabs": [
+        { "from": 0, "to": 400000, "rate": 0 },
+        { "from": 400001, "to": 800000, "rate": 0.05 },
+        { "from": 800001, "to": 1200000, "rate": 0.10 },
+        { "from": 1200001, "to": 1600000, "rate": 0.15 },
+        { "from": 1600001, "to": 2000000, "rate": 0.20 },
+        { "from": 2000001, "to": 2400000, "rate": 0.25 },
+        { "from": 2400001, "to": null, "rate": 0.30 }
+      ],
+      "rebate87A": {
+        "maxIncome": 1200000,
+        "maxRebate": 60000,
+        "notes": "Rebate u/s 87A — tax liability nil up to ₹12L income under new regime (salaried effective ~₹12.75L with standard deduction)"
+      },
+      "standardDeduction": 75000,
+      "cess": 0.04
+    },
+    "old": {
+      "description": "Legacy regime — retained for reference in cross-checks",
+      "slabs": [
+        { "from": 0, "to": 250000, "rate": 0 },
+        { "from": 250001, "to": 500000, "rate": 0.05 },
+        { "from": 500001, "to": 1000000, "rate": 0.20 },
+        { "from": 1000001, "to": null, "rate": 0.30 }
+      ],
+      "standardDeduction": 50000,
+      "cess": 0.04
+    }
+  },
+  "appMapping": {
+    "notes": "WealthLab header tax slab is a single effective rate (default 30%). Tests use this file for regulatory expected outputs, not the UI slider granularity.",
+    "defaultEffectiveRate": 0.30,
+    "selectableRates": [0.05, 0.20, 0.30]
+  }
+}

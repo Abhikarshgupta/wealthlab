@@ -135,7 +135,7 @@ Feature: SCSS Calculator
     Given I open the SCSS calculator
     When I enter SCSS inputs from golden "SCSS-23"
     Then I should see SCSS TDS information in tax breakdown
-    And the SCSS annual interest should exceed 40000
+    And the SCSS annual interest should exceed 100000
 
   @wip @calculator-scss
   Scenario: SCSS-25 Premature closure not yet implemented

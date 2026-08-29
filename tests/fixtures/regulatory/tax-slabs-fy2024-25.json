@@ -2,10 +2,13 @@
   "$schema": "wealthlab-regulatory-v1",
   "financialYear": "2024-25",
   "assessmentYear": "2025-26",
-  "lastReviewed": "2026-07-25",
+  "lastReviewed": "2026-08-29",
+  "effectiveFrom": "2024-04-01",
+  "effectiveUntil": "2025-03-31",
   "sources": [
     "Income Tax Act — Section 115BAC (new tax regime)",
-    "Union Budget 2024 — slab revisions effective AY 2025-26"
+    "Union Budget 2024 — slab revisions effective AY 2025-26",
+    "Superseded for FY 2025-26 onward by tax-slabs-fy2025-26.json"
   ],
   "regimes": {
     "new": {

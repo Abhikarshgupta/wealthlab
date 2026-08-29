@@ -80,21 +80,21 @@ describe('POMIS Calculator', () => {
       })
     })
 
-    it('should show TDS warning when annual interest exceeds ₹40,000', async () => {
+    it('should show TDS warning when annual interest exceeds ₹50,000', async () => {
       const user = userEvent.setup()
       renderWithProviders(<POMISCalculator />)
       
-      // Set high principal to generate > ₹40K annual interest
+      // Set high principal to generate > ₹50K annual interest
       const principalInput = screen.getByLabelText(/investment amount|principal/i)
       await user.clear(principalInput)
-      await user.type(principalInput, '600000')
+      await user.type(principalInput, '650000')
       
       const rateInput = screen.getByLabelText(/rate of interest/i)
       await user.clear(rateInput)
       await user.type(rateInput, '8')
       
       await waitFor(() => {
-        // Annual interest = ₹48,000 (exceeds ₹40K threshold)
+        // Annual interest = ₹52,000 (exceeds ₹50K threshold)
         expect(screen.getByText(/tds.*applicable/i)).toBeInTheDocument()
       })
     })

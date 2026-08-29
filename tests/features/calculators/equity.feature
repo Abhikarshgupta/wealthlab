@@ -242,7 +242,7 @@ Feature: Equity Calculator
 
   @tax @regression @calculator-equity
 
-  Scenario: EQ-22 LTCG 10% above ₹1L exemption after 1 year
+  Scenario: EQ-22 LTCG 12.5% above ₹1.25L exemption after 1 year
 
   # Golden: tests/fixtures/golden/equity.json#EQ-22
 
@@ -250,9 +250,9 @@ Feature: Equity Calculator
 
     And I set equity tenure to 10 years
 
-    Then the equity tax rate label should be "10% LTCG"
+    Then the equity tax rate label should be "12.5% LTCG"
 
-    And the equity tax amount should be approximately 102339 within tolerance 500
+    And the equity tax amount should be approximately 124799 within tolerance 500
 
 
 

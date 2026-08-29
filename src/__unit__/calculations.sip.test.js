@@ -103,20 +103,20 @@ describe('SIP calculations — instrument-specific', () => {
     expect(stepped.totalInvested).toBeGreaterThan(flat.totalInvested)
   })
 
-  it('SIP-22: LTCG tax applies 10% only above ₹1L exemption on returns', () => {
+  it('SIP-22: LTCG tax applies 12.5% only above ₹1.25L exemption on returns', () => {
     const golden = findGolden('SIP-22')
     const result = computeSIPOutputs(golden.inputs)
-    const taxableReturns = Math.max(0, result.returnsEarned - 100000)
-    const expectedTax = Math.round(taxableReturns * 0.1 * 100) / 100
-    expect(result.taxRateLabel).toBe('10% LTCG')
+    const taxableReturns = Math.max(0, result.returnsEarned - 125000)
+    const expectedTax = Math.round(taxableReturns * 0.125 * 100) / 100
+    expect(result.taxRateLabel).toBe('12.5% LTCG')
     expect(withinTolerance(result.taxAmount, expectedTax, golden.expected.tolerance)).toBe(true)
   })
 
-  it('SIP-23: STCG applies 15% on returns when tenure < 1 year', () => {
+  it('SIP-23: STCG applies 20% on returns when tenure < 1 year', () => {
     const golden = findGolden('SIP-23')
     const result = computeSIPOutputs(golden.inputs)
-    const expectedTax = Math.round(result.returnsEarned * 0.15 * 100) / 100
-    expect(result.taxRateLabel).toBe('15% STCG')
+    const expectedTax = Math.round(result.returnsEarned * 0.2 * 100) / 100
+    expect(result.taxRateLabel).toBe('20% STCG')
     expect(withinTolerance(result.taxAmount, expectedTax, golden.expected.tolerance)).toBe(true)
   })
 })
@@ -206,8 +206,8 @@ describe('SIP calculations — adversarial & boundaries', () => {
       stepUpEnabled: false,
       stepUpPercentage: 0,
     })
-    expect(stcg.taxRateLabel).toBe('15% STCG')
-    expect(ltcg.taxRateLabel).toBe('10% LTCG')
+    expect(stcg.taxRateLabel).toBe('20% STCG')
+    expect(ltcg.taxRateLabel).toBe('12.5% LTCG')
   })
 
   adversarialSchemaCases.forEach(({ id, payload }) => {

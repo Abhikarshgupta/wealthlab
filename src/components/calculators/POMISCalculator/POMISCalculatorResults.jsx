@@ -118,13 +118,13 @@ const POMISCalculatorResults = ({ results }) => {
       </div>
 
       {/* TDS Warning */}
-      {annualInterest > 40000 && (
+      {annualInterest > 50000 && (
         <div className="mt-4 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
           <h3 className="text-lg font-semibold text-amber-900 dark:text-amber-200 mb-2">
             TDS Applicable
           </h3>
           <p className="text-sm text-amber-800 dark:text-amber-300">
-            Your annual interest ({formatCurrency(annualInterest)}) exceeds ₹40,000. 
+            Your annual interest ({formatCurrency(annualInterest)}) exceeds ₹50,000. 
             TDS at 10% will be deducted unless you submit Form 15G/15H for exemption.
           </p>
         </div>

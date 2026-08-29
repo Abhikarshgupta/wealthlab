@@ -1,11 +1,11 @@
 // Investment Rates Constants
-// Last Updated: November 2025
+// Last Updated: August 2026
 
 export const investmentRates = {
   ppf: {
     rate: 7.1,
     compounding: 'annual',
-    lastUpdated: '2025-11-01',
+    lastUpdated: '2026-08-29',
     minInvestment: 500,
     maxInvestment: 150000,
     lockInPeriod: 15,
@@ -13,7 +13,7 @@ export const investmentRates = {
   nsc: {
     rate: 7.7,
     compounding: 'annual',
-    lastUpdated: '2025-11-01',
+    lastUpdated: '2026-08-29',
     minInvestment: 1000,
     maxInvestment: null,
     lockInPeriod: 5,
@@ -21,7 +21,7 @@ export const investmentRates = {
   ssy: {
     rate: 8.2,
     compounding: 'annual',
-    lastUpdated: '2025-11-01',
+    lastUpdated: '2026-08-29',
     minInvestment: 250,
     maxInvestment: 150000,
     lockInPeriod: 21, // Till girl child turns 21
@@ -29,7 +29,7 @@ export const investmentRates = {
   scss: {
     rate: 8.2,
     compounding: 'quarterly',
-    lastUpdated: '2025-11-01',
+    lastUpdated: '2026-08-29',
     minInvestment: 1000,
     maxInvestment: 3000000,
     lockInPeriod: 5,
@@ -37,7 +37,7 @@ export const investmentRates = {
   pomis: {
     rate: 7.4,
     compounding: 'monthly',
-    lastUpdated: '2025-11-01',
+    lastUpdated: '2026-08-29',
     minInvestment: 1000,
     maxInvestmentSingle: 900000,
     maxInvestmentJoint: 1500000,
@@ -46,7 +46,7 @@ export const investmentRates = {
   sgb: {
     fixedRate: 2.5, // Per annum, paid semi-annually
     goldAppreciation: 8, // Expected, user adjustable
-    lastUpdated: '2025-11-01',
+    lastUpdated: '2026-08-29',
     minInvestment: 1, // In grams
     lockInPeriod: 5, // Exit option after 5 years
   },
@@ -54,7 +54,7 @@ export const investmentRates = {
     // Varies by bank and tenure - using average
     rate: 6.5,
     compounding: 'quarterly',
-    lastUpdated: '2025-11-01',
+    lastUpdated: '2026-08-29',
     minInvestment: 1000,
     maxInvestment: null,
   },
@@ -62,7 +62,7 @@ export const investmentRates = {
     // Recurring Deposit - typically similar to FD rates
     rate: 6.5,
     compounding: 'quarterly',
-    lastUpdated: '2025-11-01',
+    lastUpdated: '2026-08-29',
     minInvestment: 500,
     maxInvestment: null,
   },
@@ -71,22 +71,22 @@ export const investmentRates = {
     equity: 12,
     debt: 8,
     corporateBonds: 9,
-    lastUpdated: '2025-11-01',
+    lastUpdated: '2026-08-29',
   },
   sip: {
     // Market-linked mutual funds
     expectedReturn: 12,
-    lastUpdated: '2025-11-01',
+    lastUpdated: '2026-08-29',
   },
   elss: {
     expectedReturn: 14,
     lockInPeriod: 3,
-    lastUpdated: '2025-11-01',
+    lastUpdated: '2026-08-29',
   },
   equity: {
     // User input expected
     defaultExpectedReturn: 12,
-    lastUpdated: '2025-11-01',
+    lastUpdated: '2026-08-29',
   },
   etf: {
     equity: 12,
@@ -109,9 +109,9 @@ export const investmentRates = {
     lastUpdated: '2025-01-01',
   },
   bonds54EC: {
-    rate: 5.75, // Default interest rate (% p.a.)
+    rate: 5.25, // PFC/REC 54EC series FY 2025-26 (% p.a.)
     compounding: 'annual',
-    lastUpdated: '2025-01-01',
+    lastUpdated: '2026-08-29',
     minInvestment: 1000,
     maxInvestment: 5000000, // ₹50L per financial year
     lockInPeriod: 5,

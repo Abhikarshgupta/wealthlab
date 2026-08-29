@@ -1,24 +1,36 @@
 {
   "$schema": "wealthlab-regulatory-v1",
   "financialYear": "2024-25",
-  "lastReviewed": "2026-07-25",
+  "assessmentYear": "2025-26",
+  "lastReviewed": "2026-08-29",
+  "effectiveFrom": "2024-07-23",
   "sources": [
-    "Finance Act 2018 — Section 112A (equity LTCG)",
-    "Budget 2023 — debt mutual fund taxation changes"
+    "Union Budget 2024 — Section 112A (equity LTCG rate & exemption revision)",
+    "https://economictimes.indiatimes.com/wealth/tax/will-ltcg-exemption-on-equity-equity-mutual-funds-be-rs-1-lakh-or-rs-1-25-lakh-while-filing-itr-for-fy-2024-25-ay-2025-26/printarticle/122221713.cms",
+    "Budget 2026 — rates unchanged for FY 2026-27"
   ],
   "rules": {
     "equityAndEquityOriented": {
       "instruments": ["equity", "sip", "elss", "etf_equity", "reits"],
       "ltcg": {
-        "rate": 0.10,
-        "exemptionLimit": 100000,
+        "rate": 0.125,
+        "exemptionLimit": 125000,
         "minHoldingYears": 1,
-        "notes": "10% on gains above ₹1 lakh per financial year"
+        "priorRule": {
+          "effectiveUntil": "2024-07-22",
+          "rate": 0.10,
+          "exemptionLimit": 100000
+        },
+        "notes": "12.5% on gains above ₹1.25 lakh per financial year (FY 2024-25 onward, aggregate for full FY)"
       },
       "stcg": {
-        "rate": 0.15,
+        "rate": 0.20,
         "maxHoldingYears": 1,
-        "notes": "15% if sold within 1 year (equity-oriented)"
+        "priorRule": {
+          "effectiveUntil": "2024-07-22",
+          "rate": 0.15
+        },
+        "notes": "20% if sold within 1 year (Section 111A, equity-oriented with STT)"
       },
       "elssLockInYears": 3
     },

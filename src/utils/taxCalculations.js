@@ -4,6 +4,17 @@
  * Based on Indian tax rules (FY 2025-26 & 2026-27)
  */
 
+/** Section 194A TDS thresholds for bank/PO interest (effective 1 April 2025) */
+const TDS_INTEREST_THRESHOLDS = {
+  general: 50000,
+  seniorCitizen: 100000,
+}
+
+/** Section 112A equity LTCG (effective FY 2024-25 / July 2024 rules) */
+const EQUITY_LTCG_RATE = 0.125
+const EQUITY_LTCG_EXEMPTION = 125000
+const EQUITY_STCG_RATE = 0.20
+
 /**
  * Get tax rate for an instrument type
  * @param {string} instrumentType - Type of instrument
@@ -24,33 +35,33 @@ export const getTaxRateForInstrument = (instrumentType) => {
     fd: {
       type: 'interest',
       rate: null, // Depends on income slab
-      notes: 'Interest taxed annually as per income slab. TDS applicable if interest > ₹40,000 (₹50,000 for senior citizens)',
+      notes: 'Interest taxed annually as per income slab. TDS applicable if interest > ₹50,000 (₹1,00,000 for senior citizens)',
     },
     equity: {
       type: 'ltcg',
-      rate: 0.10, // 10% above ₹1L exemption
-      exemptionLimit: 100000, // ₹1L exemption
-      notes: 'LTCG: 10% above ₹1L exemption (held > 1 year). STCG: 15% (held < 1 year)',
+      rate: EQUITY_LTCG_RATE,
+      exemptionLimit: EQUITY_LTCG_EXEMPTION,
+      notes: 'LTCG: 12.5% above ₹1.25L exemption (held > 1 year). STCG: 20% (held < 1 year)',
     },
     sip: {
       type: 'ltcg',
-      rate: 0.10, // 10% above ₹1L exemption
-      exemptionLimit: 100000, // ₹1L exemption
-      notes: 'LTCG: 10% above ₹1L exemption (held > 1 year). STCG: 15% (held < 1 year)',
+      rate: EQUITY_LTCG_RATE,
+      exemptionLimit: EQUITY_LTCG_EXEMPTION,
+      notes: 'LTCG: 12.5% above ₹1.25L exemption (held > 1 year). STCG: 20% (held < 1 year)',
     },
     elss: {
       type: 'ltcg',
-      rate: 0.10, // 10% above ₹1L exemption (after 3-year lock-in)
-      exemptionLimit: 100000, // ₹1L exemption
-      notes: 'LTCG: 10% above ₹1L exemption (held > 3 years). STCG: 15% (held < 3 years)',
+      rate: EQUITY_LTCG_RATE,
+      exemptionLimit: EQUITY_LTCG_EXEMPTION,
+      notes: 'LTCG: 12.5% above ₹1.25L exemption (held > 3 years). STCG: 20% (held < 3 years)',
     },
     etf: {
       type: 'conditional',
-      notes: 'Equity ETFs: LTCG (10% above ₹1L exemption) after 1 year, STCG (15%) before 1 year. Debt ETFs: LTCG (20% with indexation) after 3 years. Gold ETFs: LTCG (20% with indexation) after 3 years',
+      notes: 'Equity ETFs: LTCG (12.5% above ₹1.25L exemption) after 1 year, STCG (20%) before 1 year. Debt ETFs: LTCG (20% with indexation) after 3 years. Gold ETFs: LTCG (20% with indexation) after 3 years',
       equityEtf: {
         type: 'ltcg',
-        rate: 0.10,
-        exemptionLimit: 100000,
+        rate: EQUITY_LTCG_RATE,
+        exemptionLimit: EQUITY_LTCG_EXEMPTION,
         minHoldingPeriod: 1,
       },
       debtEtf: {
@@ -65,8 +76,8 @@ export const getTaxRateForInstrument = (instrumentType) => {
       },
       internationalEtf: {
         type: 'ltcg',
-        rate: 0.10,
-        exemptionLimit: 100000,
+        rate: EQUITY_LTCG_RATE,
+        exemptionLimit: EQUITY_LTCG_EXEMPTION,
         minHoldingPeriod: 1,
       },
     },
@@ -101,16 +112,16 @@ export const getTaxRateForInstrument = (instrumentType) => {
     pomis: {
       type: 'interest',
       rate: null, // Depends on income slab
-      notes: 'Interest taxed monthly as per income slab. TDS applicable if annual interest > ₹40,000',
+      notes: 'Interest taxed monthly as per income slab. TDS applicable if annual interest > ₹50,000 (₹1,00,000 for senior citizens)',
     },
     reits: {
       type: 'ltcg',
-      rate: 0.10, // 10% above ₹1L exemption
-      exemptionLimit: 100000, // ₹1L exemption
-      stcgRate: 0.15, // 15% for STCG
-      minHoldingPeriod: 1, // LTCG after 1 year
-      dividendTaxable: true, // Dividend taxable as per income slab
-      notes: 'Dividend income: Taxable as per income tax slab. LTCG: 10% above ₹1L exemption (held > 1 year). STCG: 15% (held < 1 year). No indexation benefit on capital gains',
+      rate: EQUITY_LTCG_RATE,
+      exemptionLimit: EQUITY_LTCG_EXEMPTION,
+      stcgRate: EQUITY_STCG_RATE,
+      minHoldingPeriod: 1,
+      dividendTaxable: true,
+      notes: 'Dividend income: Taxable as per income tax slab. LTCG: 12.5% above ₹1.25L exemption (held > 1 year). STCG: 20% (held < 1 year). No indexation benefit on capital gains',
     },
     debtMutualFund: {
       type: 'ltcg_indexed',
@@ -205,13 +216,13 @@ export const calculateTaxOnWithdrawal = (corpus, instrumentType, tenure, options
         const taxableReturns = Math.max(0, actualReturns - availableExemption)
         taxAmount = taxableReturns * taxRule.rate // Tax only on taxable returns
         effectiveTaxRate = corpus > 0 ? (taxAmount / corpus) * 100 : 0
-        actualTaxRate = taxRule.rate * 100 // 10% LTCG
+        actualTaxRate = taxRule.rate * 100 // 12.5% LTCG
         taxRateLabel = `${actualTaxRate}% LTCG`
       } else {
         // Short-term capital gains (no exemption)
-        taxAmount = actualReturns * 0.15 // 15% STCG on returns
+        taxAmount = actualReturns * EQUITY_STCG_RATE
         effectiveTaxRate = corpus > 0 ? (taxAmount / corpus) * 100 : 0
-        actualTaxRate = 15 // 15% STCG
+        actualTaxRate = EQUITY_STCG_RATE * 100 // 20% STCG
         taxRateLabel = `${actualTaxRate}% STCG`
       }
       break
@@ -405,7 +416,11 @@ export const calculateTaxOnWithdrawal = (corpus, instrumentType, tenure, options
 
     if (actualInterest > 0 && tenure > 0) {
       const annualInterest = actualInterest / tenure
-      const tdsThreshold = 40000 // ₹40,000 (₹50,000 for senior citizens)
+      const isSeniorCitizen =
+        options.isSeniorCitizen === true || instrumentType === 'scss'
+      const tdsThreshold = isSeniorCitizen
+        ? TDS_INTEREST_THRESHOLDS.seniorCitizen
+        : TDS_INTEREST_THRESHOLDS.general
       const tdsRate = 0.10 // 10% TDS
 
       if (annualInterest > tdsThreshold) {
@@ -546,7 +561,7 @@ export const calculateTaxForMultipleInstruments = (
     return results
   }
 
-  // Equity instruments that share LTCG exemption (₹1L per FY)
+  // Equity instruments that share LTCG exemption (₹1.25L per FY)
   const equityInstrumentTypes = ['equity', 'sip', 'elss', 'etf']
   const equityInstruments = instruments.filter(instr => equityInstrumentTypes.includes(instr))
 
@@ -589,7 +604,7 @@ export const calculateTaxForMultipleInstruments = (
 
   // Apply shared exemption (₹1L) once per financial year
   // Exemption applies to capital gains (returns), not corpus
-  const ltcgExemptionLimit = 100000 // ₹1L
+  const ltcgExemptionLimit = EQUITY_LTCG_EXEMPTION
   const sharedExemptionUsed = Math.min(ltcgExemptionLimit, totalEquityReturns)
 
   // Calculate exemption per instrument proportionally based on returns

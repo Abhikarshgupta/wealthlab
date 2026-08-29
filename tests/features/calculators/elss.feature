@@ -115,12 +115,12 @@ Feature: ELSS Calculator
     And the ELSS info panel should mention Section 80C deduction
 
   @tax @regression @calculator-elss
-  Scenario: ELSS-22 LTCG 10% above ₹1L exemption after 3+ years
+  Scenario: ELSS-22 LTCG 12.5% above ₹1.25L exemption after 3+ years
   # Golden: tests/fixtures/golden/elss.json#ELSS-22
     When I enter ELSS investment amount 10000
     And I set ELSS investment tenure to 10 years
-    Then the ELSS tax rate label should be "10% LTCG"
-    And the ELSS tax amount should be approximately 132091 within tolerance 500
+    Then the ELSS tax rate label should be "12.5% LTCG"
+    And the ELSS tax amount should be approximately 161989 within tolerance 500
 
   @tax @edge @regression @known-bug @calculator-elss
   Scenario: ELSS-23 STCG when tenure less than 3 years
@@ -129,8 +129,8 @@ Feature: ELSS Calculator
     Given ELSS lock-in prevents browser STCG scenario
     When I enter ELSS investment amount 10000
     And I set ELSS investment tenure to 2 years
-    Then the ELSS tax rate label should be "15% STCG"
-    And the ELSS tax amount should be approximately 5751 within tolerance 50
+    Then the ELSS tax rate label should be "20% STCG"
+    And the ELSS tax amount should be approximately 7668 within tolerance 50
 
   @regression @calculator-elss
   Scenario: ELSS-24 Lumpsum investment mode reflected in results

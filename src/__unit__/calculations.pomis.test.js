@@ -128,7 +128,7 @@ describe('calculatePOMIS — golden fixtures', () => {
     )
   })
 
-  it('POMIS-TDS: annual interest exceeds ₹40,000 threshold', () => {
+  it('POMIS-TDS: annual interest exceeds ₹50,000 threshold', () => {
     const row = findGolden('POMIS-TDS')
     const { principal, rate } = row.inputs
     const result = calculatePOMIS(principal, rate / 100, TENURE)

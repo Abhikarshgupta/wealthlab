@@ -1,30 +1,48 @@
 {
   "$schema": "wealthlab-regulatory-v1",
-  "financialYear": "2024-25",
-  "lastReviewed": "2026-07-25",
+  "financialYear": "2025-26",
+  "assessmentYear": "2026-27",
+  "lastReviewed": "2026-08-29",
+  "effectiveFrom": "2025-04-01",
   "sources": [
-    "Section 194A — TDS on interest other than securities",
-    "Section 194 — TDS on dividend (reference)"
+    "Finance Bill 2025 — Section 194A threshold revisions (effective 1 April 2025)",
+    "https://taxguru.in/income-tax/budget-2025-section-194a-tds-thresholds-revised-effective-april-2025.html",
+    "Income Tax Act 2025 — Section 393(1) Sl.5(ii) (codes 1020/1021) from 1 April 2026"
   ],
   "thresholds": {
     "fd_interest": {
       "instrumentTypes": ["fd", "rd"],
-      "annualInterestLimit": 40000,
-      "seniorCitizenLimit": 50000,
+      "payerTypes": ["banking_company", "cooperative_bank", "post_office"],
+      "annualInterestLimit": 50000,
+      "seniorCitizenLimit": 100000,
+      "otherPayerLimit": 10000,
       "tdsRate": 0.10,
-      "notes": "TDS @ 10% if interest exceeds threshold; PAN not provided → higher rate may apply"
+      "priorLimits": {
+        "effectiveUntil": "2025-03-31",
+        "annualInterestLimit": 40000,
+        "seniorCitizenLimit": 50000
+      },
+      "notes": "TDS @ 10% if aggregate interest from bank/PO/co-op bank exceeds threshold; PAN not provided → higher rate may apply"
     },
     "scss_interest": {
       "instrumentTypes": ["scss"],
-      "annualInterestLimit": 40000,
-      "seniorCitizenLimit": 50000,
-      "tdsRate": 0.10
+      "payerTypes": ["post_office"],
+      "annualInterestLimit": 50000,
+      "seniorCitizenLimit": 100000,
+      "tdsRate": 0.10,
+      "notes": "SCSS depositors are senior citizens — use seniorCitizenLimit (₹1L from FY 2025-26)"
     },
     "pomis_interest": {
       "instrumentTypes": ["pomis"],
-      "annualInterestLimit": 40000,
+      "payerTypes": ["post_office"],
+      "annualInterestLimit": 50000,
+      "seniorCitizenLimit": 100000,
       "tdsRate": 0.10,
-      "notes": "Monthly interest aggregated annually for TDS"
+      "priorLimits": {
+        "effectiveUntil": "2025-03-31",
+        "annualInterestLimit": 40000
+      },
+      "notes": "Post office deposit — general ₹50K / senior ₹1L threshold from FY 2025-26; monthly interest aggregated annually for TDS"
     },
     "nsc_interest": {
       "instrumentTypes": ["nsc"],

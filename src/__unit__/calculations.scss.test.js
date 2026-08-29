@@ -121,7 +121,7 @@ describe('calculateSCSS — golden fixtures', () => {
     ).toBe(true)
   })
 
-  it('SCSS-23: TDS applicable when annual interest exceeds ₹40,000', () => {
+  it('SCSS-23: TDS applicable when annual interest exceeds ₹1,00,000 senior threshold', () => {
     const row = findGolden('SCSS-23')
     const { principal, rate, tenure, incomeTaxSlab } = row.inputs
     const { maturityAmount, totalInterest } = calculateSCSS(principal, rate / 100, tenure)

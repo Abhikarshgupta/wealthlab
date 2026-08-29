@@ -28,7 +28,7 @@ export const bonds54ECSchema = Joi.object({
   rate: Joi.number()
     .min(0.1)
     .max(100)
-    .default(5.75)
+    .default(5.25)
     .messages({
       'number.min': 'Interest rate must be at least 0.1%',
       'number.max': 'Interest rate cannot exceed 100%',

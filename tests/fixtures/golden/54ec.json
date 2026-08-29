@@ -1,23 +1,23 @@
 [
   {
     "id": "54EC-14",
-    "description": "Golden calculation — ₹10L reinvestment @ 5.75% for fixed 5 years",
+    "description": "Golden calculation — ₹10L reinvestment @ 5.25% for fixed 5 years",
     "pathType": "HP",
     "tags": ["@regression", "@tax", "@calculator-54ec"],
     "inputs": {
       "capitalGainAmount": 1000000,
       "investmentAmount": 1000000,
-      "rate": 5.75,
+      "rate": 5.25,
       "tenureYears": 5
     },
     "expected": {
-      "maturityAmount": 1322518.88,
-      "interestEarned": 322518.88,
+      "maturityAmount": 1291547.91,
+      "interestEarned": 291547.91,
       "taxSaved": 200000,
       "exemptedCapitalGain": 1000000,
       "tolerance": 50
     },
-    "verifiedAgainst": ["calculateCompoundInterest P(1+r)^5", "use54ECBondsCalculator hook", "manual spreadsheet 2026-08-29"],
+    "verifiedAgainst": ["calculateCompoundInterest P(1+r)^5", "PFC 54EC Series IX 5.25% p.a.", "manual spreadsheet 2026-08-29"],
     "verifiedBy": "QA",
     "caReviewed": false,
     "lastVerified": "2026-08-29"
@@ -30,15 +30,15 @@
     "inputs": {
       "capitalGainAmount": 1000000,
       "investmentAmount": 1000000,
-      "rate": 5.75,
+      "rate": 5.25,
       "tenureYears": 5,
       "incomeTaxSlab": 0.30
     },
     "expected": {
-      "maturityAmount": 1322518.88,
-      "interestEarned": 322518.88,
-      "taxAmount": 96755.66,
-      "postTaxAmount": 1225763.22,
+      "maturityAmount": 1291547.91,
+      "interestEarned": 291547.91,
+      "taxAmount": 87464.37,
+      "postTaxAmount": 1204083.54,
       "tolerance": 50
     },
     "verifiedAgainst": ["calculateTaxOnWithdrawal bonds54EC interest branch", "manual spreadsheet 2026-08-29"],
@@ -54,7 +54,7 @@
     "inputs": {
       "capitalGainAmount": 1000000,
       "investmentAmount": 999,
-      "rate": 5.75
+      "rate": 5.25
     },
     "expected": {
       "validationError": "Minimum investment amount is ₹1,000"
@@ -72,13 +72,13 @@
     "inputs": {
       "capitalGainAmount": 5000000,
       "investmentAmount": 1000,
-      "rate": 5.75,
+      "rate": 5.25,
       "tenureYears": 5
     },
     "expected": {
       "validation": "accept",
-      "maturityAmount": 1322.52,
-      "interestEarned": 322.52,
+      "maturityAmount": 1291.55,
+      "interestEarned": 291.55,
       "tolerance": 10
     },
     "verifiedAgainst": ["investmentRates.bonds54EC.minInvestment", "bonds54ECSchema min 1000"],
@@ -94,12 +94,12 @@
     "inputs": {
       "capitalGainAmount": 8000000,
       "investmentAmount": 5000000,
-      "rate": 5.75,
+      "rate": 5.25,
       "tenureYears": 5
     },
     "expected": {
-      "maturityAmount": 6612594.39,
-      "interestEarned": 1612594.39,
+      "maturityAmount": 6457739.57,
+      "interestEarned": 1457739.57,
       "exemptedCapitalGain": 5000000,
       "taxSaved": 1000000,
       "tolerance": 100
@@ -117,15 +117,15 @@
     "inputs": {
       "capitalGainAmount": 2000000,
       "investmentAmount": 2000000,
-      "rate": 5.75,
+      "rate": 5.25,
       "tenureYears": 5,
       "incomeTaxSlab": 0.30
     },
     "expected": {
-      "maturityAmount": 2645037.76,
-      "interestEarned": 645037.76,
-      "taxAmount": 193511.33,
-      "postTaxAmount": 2451526.43,
+      "maturityAmount": 2583095.83,
+      "interestEarned": 583095.83,
+      "taxAmount": 174928.75,
+      "postTaxAmount": 2408167.08,
       "taxSaved": 400000,
       "evolutionYears": 5,
       "tolerance": 50
@@ -143,7 +143,7 @@
     "inputs": {
       "capitalGainAmount": 500000,
       "investmentAmount": 600000,
-      "rate": 5.75
+      "rate": 5.25
     },
     "expected": {
       "validationError": "Investment amount cannot exceed capital gain amount"

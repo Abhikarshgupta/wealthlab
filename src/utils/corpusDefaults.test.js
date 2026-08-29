@@ -270,7 +270,7 @@ describe('corpusDefaults', () => {
         expect(defaults).toHaveProperty('investmentAmount', 100000)
         expect(defaults).toHaveProperty('capitalGainAmount', 100000)
         expect(defaults).toHaveProperty('tenure', 5) // Fixed 5-year lock-in
-        expect(defaults).toHaveProperty('rate', investmentRates.bonds54EC?.rate || 5.75)
+        expect(defaults).toHaveProperty('rate', investmentRates.bonds54EC?.rate || 5.25)
       })
 
       it('should set tenure to 5 years (fixed lock-in)', () => {
