@@ -16,7 +16,8 @@ jobs:
           node-version: '20'
           cache: npm
       - run: npm ci
-      - run: npm test -- --run
+      - run: npm run test:unit
+      - run: npm run test:integration
 
   gherkin-smoke:
     runs-on: ubuntu-latest
