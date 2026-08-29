@@ -1,0 +1,147 @@
+[
+  {
+    "id": "SSY-14",
+    "description": "Standard SSY: ₹10K/year @ 8.2% for 16 years (girl age 5, matures at 21)",
+    "pathType": "HP",
+    "tags": ["@regression", "@tax", "@calculator-ssy"],
+    "inputs": {
+      "yearlyInvestment": 10000,
+      "girlsAge": 5,
+      "startYear": 2026,
+      "rate": 8.2,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "yearsTillMaturity": 16,
+      "maturityValue": 333688,
+      "totalInvested": 160000,
+      "totalInterest": 173688,
+      "postTaxAmount": 333688,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["SSY annuity-due FV (calculatePPF)", "manual spreadsheet 2026-08-29"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "SSY-14-max",
+    "description": "Maximum annual contribution ₹1.5L from newborn (21 years till maturity)",
+    "pathType": "HP",
+    "tags": ["@regression", "@tax", "@calculator-ssy"],
+    "inputs": {
+      "yearlyInvestment": 150000,
+      "girlsAge": 0,
+      "startYear": 2026,
+      "rate": 8.2,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "yearsTillMaturity": 21,
+      "maturityValue": 8378761,
+      "totalInvested": 3150000,
+      "totalInterest": 5228761,
+      "postTaxAmount": 8378761,
+      "tolerance": 100
+    },
+    "verifiedAgainst": ["SSY annuity-due FV (calculatePPF)", "manual spreadsheet 2026-08-29"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "SSY-20",
+    "description": "Girl child age 9 (below 10) is accepted; age 10 is rejected",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-ssy"],
+    "inputs": {
+      "yearlyInvestment": 10000,
+      "girlsAge": 9,
+      "startYear": 2026,
+      "rate": 8.2,
+      "stepUpEnabled": false
+    },
+    "expected": {
+      "validation": "accept",
+      "yearsTillMaturity": 12,
+      "maturityValue": 207784,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["ssySchema max age 9", "investmentInfo.ssy eligibility"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "SSY-21",
+    "description": "Yearly investment at regulatory maximum ₹1,50,000 is accepted",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-ssy"],
+    "inputs": {
+      "yearlyInvestment": 150000,
+      "girlsAge": 5,
+      "startYear": 2026,
+      "rate": 8.2,
+      "stepUpEnabled": false
+    },
+    "expected": {
+      "validation": "accept",
+      "maturityValue": 5005320,
+      "tolerance": 100
+    },
+    "verifiedAgainst": ["investmentRates.ssy.maxInvestment", "ssySchema max 150000"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "SSY-22",
+    "description": "21-year investment period when account opened for newborn (age 0)",
+    "pathType": "HP",
+    "tags": ["@regression", "@calculator-ssy"],
+    "inputs": {
+      "yearlyInvestment": 10000,
+      "girlsAge": 0,
+      "startYear": 2026,
+      "rate": 8.2,
+      "stepUpEnabled": false
+    },
+    "expected": {
+      "yearsTillMaturity": 21,
+      "maturityYear": 2047,
+      "maturityValue": 558584,
+      "totalInvested": 210000,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["useSSYCalculator 21 - girlsAge tenure", "investmentInfo.ssy lock-in"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "SSY-23",
+    "description": "EEE tax status — post-tax maturity equals nominal maturity",
+    "pathType": "HP",
+    "tags": ["@tax", "@regression", "@calculator-ssy"],
+    "inputs": {
+      "yearlyInvestment": 10000,
+      "girlsAge": 5,
+      "startYear": 2026,
+      "rate": 8.2,
+      "stepUpEnabled": false,
+      "taxSlab": 0.30
+    },
+    "expected": {
+      "maturityValue": 333688,
+      "postTaxAmount": 333688,
+      "taxAmount": 0,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["investmentInfo.ssy EEE", "SSY tax-free regulatory treatment"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  }
+]

@@ -1,0 +1,156 @@
+[
+  {
+    "id": "54EC-14",
+    "description": "Golden calculation — ₹10L reinvestment @ 5.75% for fixed 5 years",
+    "pathType": "HP",
+    "tags": ["@regression", "@tax", "@calculator-54ec"],
+    "inputs": {
+      "capitalGainAmount": 1000000,
+      "investmentAmount": 1000000,
+      "rate": 5.75,
+      "tenureYears": 5
+    },
+    "expected": {
+      "maturityAmount": 1322518.88,
+      "interestEarned": 322518.88,
+      "taxSaved": 200000,
+      "exemptedCapitalGain": 1000000,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["calculateCompoundInterest P(1+r)^5", "use54ECBondsCalculator hook", "manual spreadsheet 2026-08-29"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "54EC-03",
+    "description": "Post-tax Money in Hand at 30% slab — interest taxed per income slab",
+    "pathType": "XF",
+    "tags": ["@tax", "@smoke", "@calculator-54ec"],
+    "inputs": {
+      "capitalGainAmount": 1000000,
+      "investmentAmount": 1000000,
+      "rate": 5.75,
+      "tenureYears": 5,
+      "incomeTaxSlab": 0.30
+    },
+    "expected": {
+      "maturityAmount": 1322518.88,
+      "interestEarned": 322518.88,
+      "taxAmount": 96755.66,
+      "postTaxAmount": 1225763.22,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["calculateTaxOnWithdrawal bonds54EC interest branch", "manual spreadsheet 2026-08-29"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "54EC-08",
+    "description": "Invalid min amount — investment ₹999 below ₹1,000 minimum",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-54ec"],
+    "inputs": {
+      "capitalGainAmount": 1000000,
+      "investmentAmount": 999,
+      "rate": 5.75
+    },
+    "expected": {
+      "validationError": "Minimum investment amount is ₹1,000"
+    },
+    "verifiedAgainst": ["bonds54ECSchema investmentAmount.min(1000)"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "54EC-20",
+    "description": "Minimum investment ₹1,000 at fixed 5-year lock-in",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-54ec"],
+    "inputs": {
+      "capitalGainAmount": 5000000,
+      "investmentAmount": 1000,
+      "rate": 5.75,
+      "tenureYears": 5
+    },
+    "expected": {
+      "validation": "accept",
+      "maturityAmount": 1322.52,
+      "interestEarned": 322.52,
+      "tolerance": 10
+    },
+    "verifiedAgainst": ["investmentRates.bonds54EC.minInvestment", "bonds54ECSchema min 1000"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "54EC-21",
+    "description": "Capital gains exemption capped at ₹50L per financial year",
+    "pathType": "HP",
+    "tags": ["@tax", "@regression", "@calculator-54ec"],
+    "inputs": {
+      "capitalGainAmount": 8000000,
+      "investmentAmount": 5000000,
+      "rate": 5.75,
+      "tenureYears": 5
+    },
+    "expected": {
+      "maturityAmount": 6612594.39,
+      "interestEarned": 1612594.39,
+      "exemptedCapitalGain": 5000000,
+      "taxSaved": 1000000,
+      "tolerance": 100
+    },
+    "verifiedAgainst": ["investmentRates.bonds54EC.maxInvestment", "taxCalculations bonds54EC maxExemptionLimit"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "54EC-22",
+    "description": "Interest taxable at income slab — only interest taxed, not principal",
+    "pathType": "HP",
+    "tags": ["@tax", "@regression", "@calculator-54ec"],
+    "inputs": {
+      "capitalGainAmount": 2000000,
+      "investmentAmount": 2000000,
+      "rate": 5.75,
+      "tenureYears": 5,
+      "incomeTaxSlab": 0.30
+    },
+    "expected": {
+      "maturityAmount": 2645037.76,
+      "interestEarned": 645037.76,
+      "taxAmount": 193511.33,
+      "postTaxAmount": 2451526.43,
+      "taxSaved": 400000,
+      "evolutionYears": 5,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["calculateTaxOnWithdrawal bonds54EC", "investmentInfo.bonds54EC taxBenefits"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "54EC-09",
+    "description": "Investment exceeding capital gain amount rejected",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-54ec"],
+    "inputs": {
+      "capitalGainAmount": 500000,
+      "investmentAmount": 600000,
+      "rate": 5.75
+    },
+    "expected": {
+      "validationError": "Investment amount cannot exceed capital gain amount"
+    },
+    "verifiedAgainst": ["bonds54ECSchema custom investmentExceedsCapitalGain"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  }
+]

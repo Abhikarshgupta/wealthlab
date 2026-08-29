@@ -244,3 +244,115 @@ Maps scenario IDs across Gherkin, golden JSON, unit, and integration layers.
 
 **I3 notes (EQ):** `@smoke` + `@regression` Gherkin green (EQ-24/EQ-25 `@wip` skipped). Step defs in `equity.steps.js`; lazy-load wait on page Given. Mutation spot-check on `calculateSIPFutureValue` / `calculateStepUpSIP` / `calculateCompoundInterest` recommended (nightly).
 
+## 54EC — Capital Gain Bonds
+
+| ID | Feature | Golden | Unit | Integration | Status | caReviewed |
+|----|---------|--------|------|-------------|--------|------------|
+| 54EC-01 | `tests/features/calculators/54ec.feature` | — | — | `54ec.integration.test.jsx` | done | n/a |
+| 54EC-02 | `54ec.feature` | — | `calculations.54ec.test.js` | `54ec.integration.test.jsx` | done | n/a |
+| 54EC-03 | `54ec.feature` | `54ec.json#54EC-03` | `calculations.54ec.test.js` | `54ec.integration.test.jsx` | done | false |
+| 54EC-04 | `54ec.feature` | — | — | — | done | n/a |
+| 54EC-05 | `54ec.feature` | — | — | — | done | n/a |
+| 54EC-06 | `54ec.feature` | — | — | `54ec.integration.test.jsx` | done | n/a |
+| 54EC-07 | `54ec.feature` | — | — | — | done | n/a |
+| 54EC-08 | `54ec.feature` | `54ec.json#54EC-08` | `calculations.54ec.test.js` | — | done | n/a |
+| 54EC-09 | `54ec.feature` | `54ec.json#54EC-09` | `calculations.54ec.test.js` | — | done | n/a |
+| 54EC-10 | `54ec.feature` | — | `calculations.54ec.test.js` | — | done | n/a |
+| 54EC-11 | `54ec.feature` | — | — | — | done | n/a |
+| 54EC-12 | `54ec.feature` | — | — | — | done | n/a |
+| 54EC-13 | `54ec.feature` | — | — | — | done | n/a |
+| 54EC-14 | `54ec.feature` | `54ec.json#54EC-14` | `calculations.54ec.test.js` | `54ec.integration.test.jsx` | done | false |
+| 54EC-15 | `54ec.feature` | — | — | — | done | n/a |
+| 54EC-20 | `54ec.feature` | `54ec.json#54EC-20` | `calculations.54ec.test.js` | `54ec.integration.test.jsx` | done | n/a |
+| 54EC-21 | `54ec.feature` | `54ec.json#54EC-21` | `calculations.54ec.test.js` | — | done | false |
+| 54EC-22 | `54ec.feature` | `54ec.json#54EC-22` | `calculations.54ec.test.js` | — | done | false |
+
+**I1 notes (54EC):** §8.4 checklist passed — scenario IDs match golden JSON; tolerances documented (`54EC-14` ±50, `54EC-21` ±100). Fixed 5-year lock-in verified in UI + hook evolution length. Capital gains exemption (`54EC-21`) and interest-only taxation (`54EC-03`, `54EC-22`) aligned with `taxCalculations.js` bonds54EC branch. `@tax` rows: `caReviewed: false` pending CA sign-off. Schema max ₹50L per FY enforced via custom validation + UI slider cap.
+
+**I3 notes (54EC):** `@smoke` + `@regression` Gherkin targeted green. Step defs in `54ec.steps.js`. Mutation spot-check on `calculateCompoundInterest` / `calculateTaxOnWithdrawal` bonds54EC branch recommended (nightly).
+
+## SCSS — Senior Citizens Savings Scheme
+
+| ID | Feature | Golden | Unit | Integration | Status | caReviewed |
+|----|---------|--------|------|-------------|--------|------------|
+| SCSS-01 | `tests/features/calculators/scss.feature` | — | — | `scss.integration.test.jsx` | done | n/a |
+| SCSS-02 | `scss.feature` | — | — | `scss.integration.test.jsx` | done | n/a |
+| SCSS-03 | `scss.feature` | `scss.json#SCSS-03` | `calculations.scss.test.js` | `scss.integration.test.jsx` | done | false |
+| SCSS-04 | `scss.feature` | `scss.json#SCSS-03` | — | — | done | false |
+| SCSS-05 | `scss.feature` | `scss.json#SCSS-14` | — | — | done | n/a |
+| SCSS-06 | `scss.feature` | — | — | `scss.integration.test.jsx` | done | n/a |
+| SCSS-07 | `scss.feature` | — | — | `SCSSCalculator.test.jsx` | done | n/a |
+| SCSS-08 | `scss.feature` | `scss.json#SCSS-08` | `calculations.scss.test.js` | — | done | n/a |
+| SCSS-09 | `scss.feature` | — | — | — | done | n/a |
+| SCSS-10 | `scss.feature` | — | — | — | done | n/a |
+| SCSS-11 | `scss.feature` | — | — | — | done | n/a |
+| SCSS-12 | `scss.feature` | — | — | — | done | n/a |
+| SCSS-13 | `scss.feature` | `scss.json#SCSS-14-max` | — | — | done | n/a |
+| SCSS-14 | `scss.feature` | `scss.json#SCSS-14`, `SCSS-14-max` | `calculations.scss.test.js` | `scss.integration.test.jsx` | done | false |
+| SCSS-15 | `scss.feature` | — | — | `SCSSCalculator.test.jsx` | done | n/a |
+| SCSS-20 | `scss.feature` | `scss.json#SCSS-20` | `calculations.scss.test.js` | `scss.integration.test.jsx` | done | n/a |
+| SCSS-21 | `scss.feature` | `scss.json#SCSS-21` | `calculations.scss.test.js` | `scss.integration.test.jsx` | done | n/a |
+| SCSS-22 | `scss.feature` | `scss.json#SCSS-22` | `calculations.scss.test.js` | `scss.integration.test.jsx` | done | n/a |
+| SCSS-23 | `scss.feature` | `scss.json#SCSS-23` | `calculations.scss.test.js` | — | done | false |
+| SCSS-25 | `scss.feature` | — | — | — | specified | n/a |
+
+**I1 notes (SCSS):** §8.4 checklist passed — scenario IDs match golden JSON; tolerances documented in `scss.json`; adversarial cases in `calculations.scss.test.js` (null principal, zero tenure, age 59 gate). `@tax` rows (`SCSS-03`, `SCSS-14`, `SCSS-23`): interest taxed per income slab + TDS display — `caReviewed: false` pending CA sign-off. **Gap:** TDS threshold in `taxCalculations.js` uses ₹40K flat (regulatory fixture notes ₹50K for SCSS seniors); SCSS-23 verifies current code behavior. **Gap:** SCSS-25 `@wip` skipped in runner.
+
+**I3 notes (SCSS):** `@smoke` + `@regression` Gherkin green (excl. `@wip` SCSS-25). Step defs in `scss.steps.js`. Mutation spot-check on `useSCSSCalculator` formula recommended (nightly).
+
+## SSY — Sukanya Samriddhi Yojana
+
+| ID | Feature | Golden | Unit | Integration | Status | caReviewed |
+|----|---------|--------|------|-------------|--------|------------|
+| SSY-01 | `tests/features/calculators/ssy.feature` | — | — | `ssy.integration.test.jsx` | done | n/a |
+| SSY-02 | `ssy.feature` | — | — | `ssy.integration.test.jsx` | done | n/a |
+| SSY-03 | `ssy.feature` | — | — | `SSYCalculator.test.jsx` | done | n/a |
+| SSY-04 | `ssy.feature` | — | — | — | done | n/a |
+| SSY-05 | `ssy.feature` | — | — | — | done | n/a |
+| SSY-06 | `ssy.feature` | — | — | `SSYCalculator.test.jsx` | done | n/a |
+| SSY-07 | `ssy.feature` | — | — | `SSYCalculator.test.jsx` | done | n/a |
+| SSY-08 | `ssy.feature` | — | `calculations.ssy.test.js` | `SSYCalculator.test.jsx` | done | n/a |
+| SSY-09 | `ssy.feature` | — | `calculations.ssy.test.js` | `SSYCalculator.test.jsx` | done | n/a |
+| SSY-10 | `ssy.feature` | — | `calculations.ssy.test.js` | — | done | n/a |
+| SSY-11 | `ssy.feature` | — | `calculations.ssy.test.js` | — | done | n/a |
+| SSY-12 | `ssy.feature` | — | — | — | done | n/a |
+| SSY-13 | `ssy.feature` | — | — | — | done | n/a |
+| SSY-14 | `ssy.feature` | `ssy.json#SSY-14`, `SSY-14-max` | `calculations.ssy.test.js` | `ssy.integration.test.jsx` | done | false |
+| SSY-15 | `ssy.feature` | — | — | — | done | n/a |
+| SSY-20 | `ssy.feature` | `ssy.json#SSY-20` | `calculations.ssy.test.js` | `SSYCalculator.test.jsx` | done | n/a |
+| SSY-21 | `ssy.feature` | `ssy.json#SSY-21` | `calculations.ssy.test.js` | `SSYCalculator.test.jsx` | done | n/a |
+| SSY-22 | `ssy.feature` | `ssy.json#SSY-22` | `calculations.ssy.test.js` | `ssy.integration.test.jsx` | done | n/a |
+| SSY-23 | `ssy.feature` | `ssy.json#SSY-23` | `calculations.ssy.test.js` | `ssy.integration.test.jsx` | done | false |
+
+**I1 notes (SSY):** §8.4 checklist passed — scenario IDs match golden JSON; tolerances documented (`SSY-14` ±50, `SSY-14-max` ±100). Age < 10 gate and 21-year maturity (`21 - girlsAge`) verified in unit + integration. EEE post-tax equals nominal verified in unit + integration. `caReviewed: false` on SSY-14/SSY-23 (pending CA sign-off).
+
+**I3 notes (SSY):** `@smoke` + `@regression` Gherkin green. Step defs in `ssy.steps.js`. Mutation spot-check on `calculatePPF` / `useSSYCalculator` tenure loop recommended (nightly).
+
+## POMIS — Post Office Monthly Income Scheme
+
+| ID | Feature | Golden | Unit | Integration | Status | caReviewed |
+|----|---------|--------|------|-------------|--------|------------|
+| POMIS-01 | `tests/features/calculators/pomis.feature` | — | — | — | done | n/a |
+| POMIS-02 | `pomis.feature` | — | — | `pomis.integration.test.jsx` | done | n/a |
+| POMIS-03 | `pomis.feature` | `pomis.json#POMIS-03` | `calculations.pomis.test.js` | `pomis.integration.test.jsx` | done | false |
+| POMIS-04 | `pomis.feature` | `pomis.json#POMIS-03` | — | — | done | false |
+| POMIS-05 | `pomis.feature` | `pomis.json#POMIS-14` | — | — | done | n/a |
+| POMIS-06 | `pomis.feature` | — | `calculations.pomis.test.js` | `pomis.integration.test.jsx` | done | n/a |
+| POMIS-07 | `pomis.feature` | — | — | — | done | n/a |
+| POMIS-08 | `pomis.feature` | `pomis.json#POMIS-08` | `calculations.pomis.test.js` | — | done | n/a |
+| POMIS-09 | `pomis.feature` | — | — | — | done | n/a |
+| POMIS-10 | `pomis.feature` | — | — | — | done | n/a |
+| POMIS-11 | `pomis.feature` | — | — | — | done | n/a |
+| POMIS-12 | `pomis.feature` | — | — | — | done | n/a |
+| POMIS-13 | `pomis.feature` | `pomis.json#POMIS-13` | `calculations.pomis.test.js` | — | done | n/a |
+| POMIS-14 | `pomis.feature` | `pomis.json#POMIS-14` | `calculations.pomis.test.js` | `pomis.integration.test.jsx` | done | false |
+| POMIS-15 | `pomis.feature` | — | — | — | done | n/a |
+| POMIS-20 | `pomis.feature` | `pomis.json#POMIS-20` | `calculations.pomis.test.js` | — | done | n/a |
+| POMIS-21 | `pomis.feature` | `pomis.json#POMIS-21` | `calculations.pomis.test.js` | `pomis.integration.test.jsx` | done | n/a |
+| POMIS-22 | `pomis.feature` | `pomis.json#POMIS-22-SINGLE`, `POMIS-22-JOINT` | `calculations.pomis.test.js` | — | done | n/a |
+| POMIS-TDS | `pomis.feature` | `pomis.json#POMIS-TDS` | `calculations.pomis.test.js` | `pomis.integration.test.jsx` | done | false |
+
+**I1 notes (POMIS):** §8.4 checklist passed — scenario IDs match golden JSON; tolerances documented in `pomis.json`; adversarial cases in `calculations.pomis.test.js` (null principal, sub-min rate, zero principal). `@tax` rows (`POMIS-03`, `POMIS-14`, `POMIS-TDS`): interest taxed per income slab — `caReviewed: false` pending CA sign-off. **Gap:** `pomisSchema` max is ₹15L globally; single-account ₹9L cap enforced in hook/UI only (POMIS-09 documents empty-state behavior). **Gap:** TDS display uses ₹40K threshold (not senior ₹50K variant).
+
+**I3 notes (POMIS):** `@smoke` + `@regression` Gherkin targeted green. Step defs in `pomis.steps.js`. Mutation spot-check on `calculatePOMIS` recommended (nightly).
+

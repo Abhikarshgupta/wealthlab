@@ -30,8 +30,7 @@ describe('54EC Bonds Calculator', () => {
       renderWithProviders(<Bonds54ECCalculator />)
       
       await waitFor(() => {
-        // Capital gains should be exempt
-        expect(screen.getByText(/tax savings.*benefits/i)).toBeInTheDocument()
+        expect(screen.getAllByText(/tax savings.*benefits/i).length).toBeGreaterThan(0)
       })
     })
 
@@ -41,8 +40,7 @@ describe('54EC Bonds Calculator', () => {
       renderWithProviders(<Bonds54ECCalculator />)
       
       await waitFor(() => {
-        // Interest should be taxable
-        expect(screen.getByText(/tax.*interest/i)).toBeInTheDocument()
+        expect(screen.getAllByText(/tax.*interest/i).length).toBeGreaterThan(0)
       })
     })
   })

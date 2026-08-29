@@ -197,5 +197,6 @@ const usePOMISCalculator = (
   return results
 }
 
+export { calculatePOMIS, calculatePOMISEvolution }
 export default usePOMISCalculator
 

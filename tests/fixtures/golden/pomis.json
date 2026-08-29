@@ -1,0 +1,206 @@
+[
+  {
+    "id": "POMIS-14",
+    "description": "Golden calculation — ₹1L @ 7.4% for fixed 5 years, monthly interest payout",
+    "pathType": "HP",
+    "tags": ["@regression", "@tax", "@calculator-pomis"],
+    "inputs": {
+      "principal": 100000,
+      "rate": 7.4,
+      "tenureYears": 5,
+      "isJointAccount": false,
+      "incomeTaxSlab": 0.30
+    },
+    "expected": {
+      "maturityAmount": 137000,
+      "totalInterest": 37000,
+      "monthlyInterest": 616.67,
+      "annualInterest": 7400,
+      "postTaxAmount": 125900,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["usePOMISCalculator monthly payout formula", "manual spreadsheet 2026-08-29"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "POMIS-03",
+    "description": "Post-tax Money in Hand at 30% slab — interest taxed per income slab",
+    "pathType": "XF",
+    "tags": ["@tax", "@smoke", "@calculator-pomis"],
+    "inputs": {
+      "principal": 100000,
+      "rate": 7.4,
+      "tenureYears": 5,
+      "isJointAccount": false,
+      "incomeTaxSlab": 0.30
+    },
+    "expected": {
+      "maturityAmount": 137000,
+      "totalInterest": 37000,
+      "taxAmount": 11100,
+      "postTaxAmount": 125900,
+      "taxRule": "Interest taxed monthly as per income slab",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["calculateTaxOnWithdrawal interest branch", "manual spreadsheet 2026-08-29"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "POMIS-08",
+    "description": "Invalid min amount — principal ₹999 below ₹1,000 minimum",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-pomis"],
+    "inputs": {
+      "principal": 999,
+      "rate": 7.4,
+      "isJointAccount": false
+    },
+    "expected": {
+      "validationError": "Minimum investment amount is ₹1,000"
+    },
+    "verifiedAgainst": ["pomisSchema.js principal.min(1000)"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "POMIS-21",
+    "description": "Monthly interest payout display — ₹5L @ 7.4%",
+    "pathType": "HP",
+    "tags": ["@regression", "@calculator-pomis"],
+    "inputs": {
+      "principal": 500000,
+      "rate": 7.4,
+      "tenureYears": 5,
+      "isJointAccount": false
+    },
+    "expected": {
+      "monthlyInterest": 3083.33,
+      "annualInterest": 37000,
+      "totalInterest": 185000,
+      "maturityAmount": 685000,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["POMIS monthly payout formula (P×r/12)", "manual spreadsheet 2026-08-29"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "POMIS-22-SINGLE",
+    "description": "Max investment limit — single account ₹9 lakh",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-pomis"],
+    "inputs": {
+      "principal": 900000,
+      "rate": 7.4,
+      "tenureYears": 5,
+      "isJointAccount": false
+    },
+    "expected": {
+      "maxPrincipal": 900000,
+      "maturityAmount": 1233000,
+      "monthlyInterest": 5550,
+      "annualInterest": 66600,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["investmentRates.pomis.maxInvestmentSingle", "pomisSchema + hook single cap"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "POMIS-22-JOINT",
+    "description": "Max investment limit — joint account ₹15 lakh",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-pomis"],
+    "inputs": {
+      "principal": 1500000,
+      "rate": 7.4,
+      "tenureYears": 5,
+      "isJointAccount": true
+    },
+    "expected": {
+      "maxPrincipal": 1500000,
+      "maturityAmount": 2055000,
+      "monthlyInterest": 9250,
+      "annualInterest": 111000,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["investmentRates.pomis.maxInvestmentJoint", "hook joint cap"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "POMIS-13",
+    "description": "Extremely large joint investment — ₹15L at max limit",
+    "pathType": "EG",
+    "tags": ["@edge", "@calculator-pomis"],
+    "inputs": {
+      "principal": 1500000,
+      "rate": 7.4,
+      "tenureYears": 5,
+      "isJointAccount": true
+    },
+    "expected": {
+      "maturityAmount": 2055000,
+      "totalInterest": 555000,
+      "tolerance": 100
+    },
+    "verifiedAgainst": ["manual spreadsheet 2026-08-29"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "POMIS-20",
+    "description": "Fixed 5-year tenure — minimum ₹1,000 investment",
+    "pathType": "HP",
+    "tags": ["@regression", "@calculator-pomis"],
+    "inputs": {
+      "principal": 1000,
+      "rate": 7.4,
+      "tenureYears": 5,
+      "isJointAccount": false
+    },
+    "expected": {
+      "tenureYears": 5,
+      "maturityAmount": 1370,
+      "monthlyInterest": 6.17,
+      "tolerance": 5
+    },
+    "verifiedAgainst": ["investmentRates.pomis.lockInPeriod", "pomisSchema min 1000"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "POMIS-TDS",
+    "description": "TDS warning when annual interest exceeds ₹40,000 threshold",
+    "pathType": "XF",
+    "tags": ["@tax", "@regression", "@calculator-pomis"],
+    "inputs": {
+      "principal": 600000,
+      "rate": 8,
+      "tenureYears": 5,
+      "isJointAccount": false,
+      "incomeTaxSlab": 0.30
+    },
+    "expected": {
+      "annualInterest": 48000,
+      "monthlyInterest": 4000,
+      "tdsApplicable": true,
+      "tdsThreshold": 40000,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["tests/fixtures/regulatory/tds-thresholds.json", "Section 194A FY2024-25"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  }
+]

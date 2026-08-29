@@ -1,0 +1,192 @@
+[
+  {
+    "id": "SCSS-14",
+    "description": "Golden calculation — ₹10L @ 8.2% for 5 years (quarterly interest payout)",
+    "pathType": "HP",
+    "tags": ["@regression", "@tax", "@calculator-scss"],
+    "inputs": {
+      "principal": 1000000,
+      "tenure": 5,
+      "seniorsAge": 65,
+      "rate": 8.2,
+      "isDefensePersonnel": false
+    },
+    "expected": {
+      "maturityAmount": 1410000,
+      "totalInterest": 410000,
+      "quarterlyInterest": 20500,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["useSCSSCalculator quarterly formula", "manual spreadsheet 2026-07-25"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "SCSS-14-max",
+    "description": "Maximum principal ₹30L @ 8.2% for 5 years",
+    "pathType": "HP",
+    "tags": ["@regression", "@tax", "@calculator-scss"],
+    "inputs": {
+      "principal": 3000000,
+      "tenure": 5,
+      "seniorsAge": 65,
+      "rate": 8.2,
+      "isDefensePersonnel": false
+    },
+    "expected": {
+      "maturityAmount": 4230000,
+      "totalInterest": 1230000,
+      "quarterlyInterest": 61500,
+      "tolerance": 100
+    },
+    "verifiedAgainst": ["investmentRates.scss.maxInvestment", "scssSchema max 3000000"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "SCSS-03",
+    "description": "Post-tax Money in Hand at 30% slab — interest taxed per income slab",
+    "pathType": "XF",
+    "tags": ["@tax", "@smoke", "@calculator-scss"],
+    "inputs": {
+      "principal": 1000000,
+      "tenure": 5,
+      "seniorsAge": 65,
+      "rate": 8.2,
+      "isDefensePersonnel": false,
+      "incomeTaxSlab": 0.30
+    },
+    "expected": {
+      "maturityAmount": 1410000,
+      "totalInterest": 410000,
+      "taxAmount": 123000,
+      "postTaxAmount": 1287000,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["calculateTaxOnWithdrawal interest branch", "manual spreadsheet 2026-07-25"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "SCSS-08",
+    "description": "Invalid min amount — principal ₹999 below ₹1,000 minimum",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-scss"],
+    "inputs": {
+      "principal": 999,
+      "tenure": 5,
+      "seniorsAge": 65,
+      "rate": 8.2,
+      "isDefensePersonnel": false
+    },
+    "expected": {
+      "validationError": "Minimum investment amount is ₹1,000"
+    },
+    "verifiedAgainst": ["scssSchema.js principal.min(1000)"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "SCSS-20",
+    "description": "Age 60+ validation — age 59 rejected, age 60 accepted",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-scss"],
+    "inputs": {
+      "principal": 1000000,
+      "tenure": 5,
+      "seniorsAge": 60,
+      "rate": 8.2,
+      "isDefensePersonnel": false,
+      "invalidAge": 59
+    },
+    "expected": {
+      "validation": "accept",
+      "invalidAgeError": "Minimum age is 60 years",
+      "maturityAmount": 1410000,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["scssSchema seniorsAge min 60", "useSCSSCalculator minAge gate"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "SCSS-21",
+    "description": "Maximum principal ₹30,00,000 accepted; ₹30,00,001 rejected",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-scss"],
+    "inputs": {
+      "principal": 3000000,
+      "tenure": 5,
+      "seniorsAge": 65,
+      "rate": 8.2,
+      "isDefensePersonnel": false,
+      "invalidPrincipal": 3000001
+    },
+    "expected": {
+      "validation": "accept",
+      "invalidMaxError": "Maximum investment amount is ₹30 lakh",
+      "maturityAmount": 4230000,
+      "tolerance": 100
+    },
+    "verifiedAgainst": ["investmentRates.scss.maxInvestment", "scssSchema max 3000000"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "SCSS-22",
+    "description": "Quarterly interest payout — ₹20,500 per quarter on ₹10L @ 8.2%",
+    "pathType": "HP",
+    "tags": ["@regression", "@calculator-scss"],
+    "inputs": {
+      "principal": 1000000,
+      "tenure": 5,
+      "seniorsAge": 65,
+      "rate": 8.2,
+      "isDefensePersonnel": false
+    },
+    "expected": {
+      "quarterlyInterest": 20500,
+      "yearlyInterest": 82000,
+      "evolutionYearCount": 5,
+      "evolutionInterestSum": 410000,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["useSCSSCalculator quarterlyInterest", "calculateSCSSEvolution yearInterest"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "SCSS-23",
+    "description": "TDS on interest when annual interest exceeds ₹40,000 threshold",
+    "pathType": "XF",
+    "tags": ["@tax", "@regression", "@calculator-scss"],
+    "inputs": {
+      "principal": 1000000,
+      "tenure": 5,
+      "seniorsAge": 65,
+      "rate": 8.2,
+      "isDefensePersonnel": false,
+      "incomeTaxSlab": 0.30
+    },
+    "expected": {
+      "maturityAmount": 1410000,
+      "totalInterest": 410000,
+      "annualInterest": 82000,
+      "tdsApplicable": true,
+      "tdsThreshold": 40000,
+      "totalTDS": 41000,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["tests/fixtures/regulatory/tds-thresholds.json", "calculateTaxOnWithdrawal tdsInfo"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  }
+]
