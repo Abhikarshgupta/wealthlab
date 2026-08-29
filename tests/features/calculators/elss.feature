@@ -126,6 +126,7 @@ Feature: ELSS Calculator
   Scenario: ELSS-23 STCG when tenure less than 3 years
   # Golden: tests/fixtures/golden/elss.json#ELSS-23 — STCG math verified in unit layer
   # UI enforces 3-year lock-in (schema min tenure) so browser cannot reach STCG state
+    Given ELSS lock-in prevents browser STCG scenario
     When I enter ELSS investment amount 10000
     And I set ELSS investment tenure to 2 years
     Then the ELSS tax rate label should be "15% STCG"

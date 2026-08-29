@@ -17,6 +17,10 @@ import {
 
 const { Given, When, Then } = createBdd()
 
+Given('ELSS lock-in prevents browser STCG scenario', async () => {
+  test.skip(true, 'ELSS-23 @known-bug — UI lock-in blocks tenure < 3 years; STCG covered in unit tests')
+})
+
 Given('I am on the ELSS calculator page', async ({ page }) => {
   await gotoWithPreferences(page, '/calculators/elss', { taxSlab: 0.3, adjustInflation: false })
   await expect(page.getByRole('heading', { name: 'ELSS Calculator' })).toBeVisible({
@@ -43,9 +47,6 @@ When('I enter ELSS investment amount {string}', async ({ page }, amount) => {
 })
 
 When('I set ELSS investment tenure to {int} years', async ({ page }, years) => {
-  if (years < 3) {
-    test.skip(true, 'ELSS-23 @known-bug — UI lock-in blocks tenure < 3 years; STCG covered in unit tests')
-  }
   await fillNamedInput(page, 'tenure', years)
 })
 
