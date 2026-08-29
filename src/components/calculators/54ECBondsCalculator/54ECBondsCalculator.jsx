@@ -139,7 +139,12 @@ const Bonds54ECCalculator = () => {
                     const value = parseFloat(e.target.value) || 0
                     handleInvestmentAmountChange(value)
                   }}
-                  error={errors.investmentAmount?.message || errors.investmentAmount?.type === 'custom.investmentExceedsCapitalGain' ? 'Investment amount cannot exceed capital gain amount' : undefined}
+                  error={
+                    errors.investmentAmount?.message ||
+                    (errors.investmentAmount?.type === 'custom.investmentExceedsCapitalGain'
+                      ? 'Investment amount cannot exceed capital gain amount'
+                      : undefined)
+                  }
                   showCurrency
                   placeholder="1000000"
                   min={1000}

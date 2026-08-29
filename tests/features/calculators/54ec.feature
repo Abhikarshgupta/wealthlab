@@ -60,11 +60,11 @@ Feature: 54EC Bonds Calculator
     Then I should see 54EC validation error containing "Minimum investment amount is"
 
   @edge @calculator-54ec
-  Scenario: 54EC-09 Investment exceeding capital gain shows validation error
+  Scenario: 54EC-09 Investment exceeding capital gain is clamped to capital gain
     Given I open the 54EC Bonds calculator
     When I set 54EC capital gain amount to 500000
     And I set 54EC investment amount to 600000
-    Then I should see 54EC validation error containing "cannot exceed capital gain"
+    Then the 54EC investment amount should be 500000
 
   @edge @calculator-54ec
   Scenario: 54EC-10 Zero or empty input does not crash

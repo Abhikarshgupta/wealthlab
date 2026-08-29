@@ -35,7 +35,10 @@ When('I set 54EC capital gain amount to {int}', async ({ page }, amount) => {
 })
 
 When('I set 54EC investment amount to {int}', async ({ page }, amount) => {
-  await fillNamedInput(page, 'investmentAmount', amount)
+  const input = page.locator('input[name="investmentAmount"]').first()
+  await input.fill('')
+  await input.pressSequentially(String(amount))
+  await input.blur()
 })
 
 When('I clear 54EC investment amount', async ({ page }) => {
@@ -123,11 +126,8 @@ Then(
     const row = findGolden('54ec', goldenId)
     const label = page.getByText('Tax Saved (on Capital Gains)').first()
     await expect(label).toBeVisible()
-    const block = label.locator('xpath=ancestor::div[contains(@class,"grid")][1]')
-    const text = await block.innerText()
-    const amounts = (text.match(/₹[\d,]+/g) ?? []).map(parseIndianCurrency)
-    const taxSaved = amounts.find((value) => Math.abs(value - row.expected.taxSaved) < 1000000)
-    expect(taxSaved).toBeDefined()
+    const valueText = await label.locator('xpath=following-sibling::p[1]').innerText()
+    const taxSaved = parseIndianCurrency(valueText)
     expect(Math.abs(taxSaved - row.expected.taxSaved)).toBeLessThanOrEqual(row.expected.tolerance)
   }
 )
@@ -177,13 +177,14 @@ Then('the 54EC tax rule should mention interest taxable per income slab', async 
 
 Then('the 54EC spending power should be less than money in hand', async ({ page }) => {
   const moneyInHand = await getMoneyInHandAmount(page)
-  const spendingHeading = page.getByRole('heading', { name: 'Spending Power' }).first()
-  await expect(spendingHeading).toBeVisible()
-  const block = spendingHeading.locator('xpath=ancestor::div[contains(@class,"rounded")][1]')
-  const text = await block.innerText()
-  const amounts = (text.match(/₹[\d,]+/g) ?? []).map(parseIndianCurrency)
-  expect(amounts.length).toBeGreaterThan(0)
-  expect(Math.max(...amounts)).toBeLessThan(moneyInHand)
+  const spendingPowerText = await page
+    .getByRole('heading', { name: 'Spending Power' })
+    .first()
+    .locator('xpath=following::*[contains(@class,"text-")]')
+    .first()
+    .innerText()
+  const spendingPower = parseIndianCurrency(spendingPowerText)
+  expect(spendingPower).toBeLessThan(moneyInHand)
 })
 
 Then('the 54EC evolution table should show 5 year rows', async ({ page }) => {

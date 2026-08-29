@@ -15,6 +15,15 @@ import {
 
 const { Given, When, Then } = createBdd()
 
+async function ensureTaxBreakdownExpanded(page) {
+  const toggle = page
+    .getByRole('button', { name: /tax breakdown|expand tax details|collapse tax details/i })
+    .first()
+  if ((await toggle.getAttribute('aria-expanded')) !== 'true') {
+    await toggle.click()
+  }
+}
+
 Given('I open the SCSS calculator', async ({ page }) => {
   await gotoWithPreferences(page, '/calculators/scss', { taxSlab: 0.3, adjustInflation: false })
   await expect(page.getByRole('heading', { name: 'SCSS Calculator' })).toBeVisible({
@@ -134,7 +143,7 @@ Then('I should see the SCSS tax breakdown section', async ({ page }) => {
 })
 
 Then('the SCSS tax rule should mention interest taxed per income slab', async ({ page }) => {
-  await expandTaxBreakdown(page)
+  await ensureTaxBreakdownExpanded(page)
   await expectTextVisible(page, /interest|income slab|taxed/i)
 })
 
@@ -213,12 +222,12 @@ Then('the SCSS info panel should mention quarterly interest', async ({ page }) =
 })
 
 Then('I should see SCSS TDS information in tax breakdown', async ({ page }) => {
-  await expandTaxBreakdown(page)
+  await ensureTaxBreakdownExpanded(page)
   await expect(page.getByText(/Annual Interest:/i).first()).toBeVisible()
 })
 
 Then('the SCSS annual interest should exceed {int}', async ({ page }, threshold) => {
-  await expandTaxBreakdown(page)
+  await ensureTaxBreakdownExpanded(page)
   const annualLine = page.getByText(/Annual Interest:/i).first()
   await expect(annualLine).toBeVisible()
   const text = await annualLine.innerText()
