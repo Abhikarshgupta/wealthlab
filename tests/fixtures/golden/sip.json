@@ -1,0 +1,191 @@
+[
+  {
+    "id": "SIP-14",
+    "description": "Golden calculation — ₹5K/month @ 12% for 5 years (default-like)",
+    "pathType": "HP",
+    "tags": ["@regression", "@tax", "@calculator-sip"],
+    "inputs": {
+      "monthlySIP": 5000,
+      "tenure": 5,
+      "tenureUnit": "years",
+      "expectedReturn": 12,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "corpusValue": 412431.83,
+      "totalInvested": 300000,
+      "returnsEarned": 112431.83,
+      "taxAmount": 1243.18,
+      "postTaxAmount": 411188.65,
+      "taxRateLabel": "10% LTCG",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["manual spreadsheet 2026-07-25", "calculateSIPFutureValue formula"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "SIP-20",
+    "description": "Minimum ₹500/month SIP for 1 year",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-sip"],
+    "inputs": {
+      "monthlySIP": 500,
+      "tenure": 1,
+      "tenureUnit": "years",
+      "expectedReturn": 12,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "corpusValue": 6404.66,
+      "totalInvested": 6000,
+      "returnsEarned": 404.66,
+      "taxAmount": 0,
+      "postTaxAmount": 6404.66,
+      "taxRateLabel": "10% LTCG",
+      "tolerance": 10
+    },
+    "verifiedAgainst": ["sipSchema min boundary ₹500", "manual spreadsheet 2026-07-25"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "SIP-21",
+    "description": "Step-up SIP — 10% annual increase, ₹5K/month @ 12% for 5 years",
+    "pathType": "HP",
+    "tags": ["@regression", "@calculator-sip"],
+    "inputs": {
+      "monthlySIP": 5000,
+      "tenure": 5,
+      "tenureUnit": "years",
+      "expectedReturn": 12,
+      "stepUpEnabled": true,
+      "stepUpPercentage": 10
+    },
+    "expected": {
+      "corpusValue": 487411.09,
+      "totalInvested": 366306,
+      "returnsEarned": 121105.09,
+      "taxAmount": 2110.51,
+      "postTaxAmount": 485300.58,
+      "taxRateLabel": "10% LTCG",
+      "tolerance": 100
+    },
+    "verifiedAgainst": ["calculateStepUpSIP month-by-month model", "manual spreadsheet 2026-07-25"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "SIP-22",
+    "description": "LTCG — 10% tax above ₹1L exemption after 1+ year holding",
+    "pathType": "HP",
+    "tags": ["@tax", "@regression", "@calculator-sip"],
+    "inputs": {
+      "monthlySIP": 10000,
+      "tenure": 10,
+      "tenureUnit": "years",
+      "expectedReturn": 12,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "corpusValue": 2323390.76,
+      "totalInvested": 1200000,
+      "returnsEarned": 1123390.76,
+      "taxAmount": 102339.08,
+      "postTaxAmount": 2221051.69,
+      "taxRateLabel": "10% LTCG",
+      "tolerance": 500
+    },
+    "verifiedAgainst": ["tests/fixtures/regulatory/ltcg-exemptions.json", "manual spreadsheet 2026-07-25"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "SIP-23",
+    "description": "STCG — 15% on gains when tenure < 1 year (6 months)",
+    "pathType": "BD",
+    "tags": ["@tax", "@edge", "@calculator-sip"],
+    "inputs": {
+      "monthlySIP": 10000,
+      "tenure": 6,
+      "tenureUnit": "months",
+      "expectedReturn": 12,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "corpusValue": 62135.35,
+      "totalInvested": 60000,
+      "returnsEarned": 2135.35,
+      "taxAmount": 320.3,
+      "postTaxAmount": 61815.05,
+      "taxRateLabel": "15% STCG",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["tests/fixtures/regulatory/ltcg-exemptions.json", "manual spreadsheet 2026-07-25"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "SIP-13",
+    "description": "Extremely large SIP — ₹1L/month for 10 years",
+    "pathType": "EG",
+    "tags": ["@edge", "@calculator-sip"],
+    "inputs": {
+      "monthlySIP": 100000,
+      "tenure": 10,
+      "tenureUnit": "years",
+      "expectedReturn": 12,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "corpusValue": 23233907.64,
+      "totalInvested": 12000000,
+      "returnsEarned": 11233907.64,
+      "taxAmount": 1113390.76,
+      "postTaxAmount": 22120516.87,
+      "taxRateLabel": "10% LTCG",
+      "tolerance": 5000
+    },
+    "verifiedAgainst": ["manual spreadsheet 2026-07-25"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "SIP-BD-TENURE-50",
+    "description": "Maximum tenure boundary — 50 years",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-sip"],
+    "inputs": {
+      "monthlySIP": 5000,
+      "tenure": 50,
+      "tenureUnit": "years",
+      "expectedReturn": 12,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "corpusValue": 197244615.48,
+      "totalInvested": 3000000,
+      "returnsEarned": 194244615.48,
+      "taxAmount": 19414461.55,
+      "postTaxAmount": 177830153.94,
+      "taxRateLabel": "10% LTCG",
+      "tolerance": 50000
+    },
+    "verifiedAgainst": ["sipSchema max tenure 50 years", "manual spreadsheet 2026-07-25"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  }
+]

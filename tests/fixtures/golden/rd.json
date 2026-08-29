@@ -1,0 +1,210 @@
+[
+  {
+    "id": "RD-14",
+    "description": "Golden calculation — ₹5K/month @ 7% for 5 years, quarterly compounding",
+    "pathType": "HP",
+    "tags": ["@regression", "@tax", "@calculator-rd"],
+    "inputs": {
+      "monthlyDeposit": 5000,
+      "tenureYears": 5,
+      "tenureMonths": 0,
+      "rate": 7,
+      "compoundingFrequency": "quarterly",
+      "incomeTaxSlab": 0.30
+    },
+    "expected": {
+      "maturityAmount": 359663.95,
+      "totalInvestment": 300000,
+      "interestEarned": 59663.95,
+      "postTaxAmount": 341764.77,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["manual spreadsheet 2026-07-25", "calculateRD FV formula"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "RD-03",
+    "description": "Post-tax Money in Hand at 30% slab — interest taxed per income slab",
+    "pathType": "XF",
+    "tags": ["@tax", "@smoke", "@calculator-rd"],
+    "inputs": {
+      "monthlyDeposit": 5000,
+      "tenureYears": 5,
+      "tenureMonths": 0,
+      "rate": 7,
+      "compoundingFrequency": "quarterly",
+      "incomeTaxSlab": 0.30
+    },
+    "expected": {
+      "maturityAmount": 359663.95,
+      "taxAmount": 17899.19,
+      "postTaxAmount": 341764.77,
+      "taxRule": "Interest taxed as per income slab",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["calculateTaxOnWithdrawal interest branch", "manual spreadsheet 2026-07-25"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "RD-20",
+    "description": "Minimum ₹500/month deposit for 1 year",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-rd"],
+    "inputs": {
+      "monthlyDeposit": 500,
+      "tenureYears": 1,
+      "tenureMonths": 0,
+      "rate": 6.5,
+      "compoundingFrequency": "quarterly"
+    },
+    "expected": {
+      "maturityAmount": 6214.32,
+      "totalInvestment": 6000,
+      "interestEarned": 214.32,
+      "tolerance": 10
+    },
+    "verifiedAgainst": ["rdSchema min boundary ₹500", "manual spreadsheet 2026-07-25"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "RD-21",
+    "description": "Years + months tenure — 1 year 3 months @ 6.5% quarterly",
+    "pathType": "HP",
+    "tags": ["@regression", "@calculator-rd"],
+    "inputs": {
+      "monthlyDeposit": 5000,
+      "tenureYears": 1,
+      "tenureMonths": 3,
+      "rate": 6.5,
+      "compoundingFrequency": "quarterly"
+    },
+    "expected": {
+      "maturityAmount": 78315.27,
+      "totalInvestment": 75000,
+      "interestEarned": 3315.27,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["manual spreadsheet 2026-07-25", "15 months tenure"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "RD-22",
+    "description": "Interest taxable per income slab at 30%",
+    "pathType": "XF",
+    "tags": ["@tax", "@regression", "@calculator-rd"],
+    "inputs": {
+      "monthlyDeposit": 5000,
+      "tenureYears": 5,
+      "tenureMonths": 0,
+      "rate": 7,
+      "compoundingFrequency": "quarterly",
+      "incomeTaxSlab": 0.30
+    },
+    "expected": {
+      "maturityAmount": 359663.95,
+      "taxAmount": 17899.19,
+      "postTaxAmount": 341764.77,
+      "taxRule": "Interest taxed as per income slab",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["tests/fixtures/regulatory/tax-slabs-fy2024-25.json", "manual spreadsheet 2026-07-25"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "RD-CMP",
+    "description": "Compounding frequency comparison — monthly vs quarterly vs annual vs cumulative",
+    "pathType": "HP",
+    "tags": ["@regression", "@calculator-rd"],
+    "inputs": {
+      "monthlyDeposit": 5000,
+      "tenureYears": 5,
+      "tenureMonths": 0,
+      "rate": 7,
+      "compoundingFrequency": "monthly"
+    },
+    "expected": {
+      "maturityAmount": 360052.63,
+      "maturityQuarterly": 359663.95,
+      "maturityAnnually": 357992.05,
+      "maturityCumulative": 360052.63,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["manual spreadsheet 2026-07-25", "calculateRD compounding branches"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "RD-08",
+    "description": "Invalid min amount — monthly deposit ₹499 below ₹500 minimum",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-rd"],
+    "inputs": {
+      "monthlyDeposit": 499,
+      "tenureYears": 1,
+      "tenureMonths": 0,
+      "rate": 6.5,
+      "compoundingFrequency": "quarterly"
+    },
+    "expected": {
+      "validationError": "Minimum monthly deposit is ₹500"
+    },
+    "verifiedAgainst": ["rdSchema.js monthlyDeposit.min(500)"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "RD-10",
+    "description": "Zero tenure — 0 years 0 months shows validation error",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-rd"],
+    "inputs": {
+      "monthlyDeposit": 5000,
+      "tenureYears": 0,
+      "tenureMonths": 0,
+      "rate": 6.5,
+      "compoundingFrequency": "quarterly"
+    },
+    "expected": {
+      "validationError": "Please enter at least 1 month"
+    },
+    "verifiedAgainst": ["fdTenureUtils.validateYearsMonths"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "RD-13",
+    "description": "Extremely large monthly deposit — ₹1L/month for 5 years",
+    "pathType": "EG",
+    "tags": ["@edge", "@calculator-rd"],
+    "inputs": {
+      "monthlyDeposit": 100000,
+      "tenureYears": 5,
+      "tenureMonths": 0,
+      "rate": 7,
+      "compoundingFrequency": "quarterly"
+    },
+    "expected": {
+      "maturityAmount": 7193279.09,
+      "totalInvestment": 6000000,
+      "interestEarned": 1193279.09,
+      "tolerance": 500
+    },
+    "verifiedAgainst": ["manual spreadsheet 2026-07-25"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  }
+]

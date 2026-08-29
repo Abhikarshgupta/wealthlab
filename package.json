@@ -10,7 +10,12 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest --coverage"
+    "test:coverage": "vitest --coverage",
+    "test:unit": "vitest run --passWithNoTests src/__unit__",
+    "test:integration": "vitest run --passWithNoTests src/__integration__",
+    "bddgen": "bddgen",
+    "test:gherkin": "bddgen && playwright test",
+    "test:gherkin:smoke": "bddgen && playwright test --grep @smoke"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -26,6 +31,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
+    "@playwright/test": "^1.62.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.1",
     "@testing-library/user-event": "^14.6.1",
@@ -42,6 +48,7 @@
     "eslint-plugin-react-refresh": "^0.4.22",
     "globals": "^16.4.0",
     "jsdom": "^27.0.1",
+    "playwright-bdd": "^9.2.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.18",
     "vite": "^7.1.7",

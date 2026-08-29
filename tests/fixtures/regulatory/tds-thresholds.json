@@ -1,0 +1,38 @@
+{
+  "$schema": "wealthlab-regulatory-v1",
+  "financialYear": "2024-25",
+  "lastReviewed": "2026-07-25",
+  "sources": [
+    "Section 194A — TDS on interest other than securities",
+    "Section 194 — TDS on dividend (reference)"
+  ],
+  "thresholds": {
+    "fd_interest": {
+      "instrumentTypes": ["fd", "rd"],
+      "annualInterestLimit": 40000,
+      "seniorCitizenLimit": 50000,
+      "tdsRate": 0.10,
+      "notes": "TDS @ 10% if interest exceeds threshold; PAN not provided → higher rate may apply"
+    },
+    "scss_interest": {
+      "instrumentTypes": ["scss"],
+      "annualInterestLimit": 40000,
+      "seniorCitizenLimit": 50000,
+      "tdsRate": 0.10
+    },
+    "pomis_interest": {
+      "instrumentTypes": ["pomis"],
+      "annualInterestLimit": 40000,
+      "tdsRate": 0.10,
+      "notes": "Monthly interest aggregated annually for TDS"
+    },
+    "nsc_interest": {
+      "instrumentTypes": ["nsc"],
+      "tdsRate": 0.10,
+      "notes": "TDS on accrued interest at maturity/premature encashment per rules"
+    }
+  },
+  "form15G15H": {
+    "notes": "No TDS if Form 15G/15H submitted and conditions met — out of scope for v1 automated tests"
+  }
+}

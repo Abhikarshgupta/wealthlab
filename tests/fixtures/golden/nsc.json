@@ -1,0 +1,130 @@
+[
+  {
+    "id": "NSC-14",
+    "description": "Golden calculation — ₹1L @ 7.7% for fixed 5 years (annual compounding)",
+    "pathType": "HP",
+    "tags": ["@regression", "@tax", "@calculator-nsc"],
+    "inputs": {
+      "principal": 100000,
+      "rate": 7.7,
+      "tenureYears": 5
+    },
+    "expected": {
+      "maturityAmount": 144903.38,
+      "interestEarned": 44903.38,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["calculateNSC P(1+r)^5 formula", "manual spreadsheet 2026-07-25"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "NSC-03",
+    "description": "Post-tax Money in Hand at 30% slab — interest taxed per income slab",
+    "pathType": "XF",
+    "tags": ["@tax", "@smoke", "@calculator-nsc"],
+    "inputs": {
+      "principal": 100000,
+      "rate": 7.7,
+      "tenureYears": 5,
+      "incomeTaxSlab": 0.30
+    },
+    "expected": {
+      "maturityAmount": 144903.38,
+      "interestEarned": 44903.38,
+      "taxAmount": 13471.01,
+      "postTaxAmount": 131432.37,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["calculateTaxOnWithdrawal interest branch", "manual spreadsheet 2026-07-25"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "NSC-08",
+    "description": "Invalid min amount — principal ₹999 below ₹1,000 minimum",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-nsc"],
+    "inputs": {
+      "principal": 999,
+      "rate": 7.7,
+      "tenureYears": 5
+    },
+    "expected": {
+      "validationError": "Minimum investment amount is ₹1,000"
+    },
+    "verifiedAgainst": ["nscSchema.js principal.min(1000)"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "NSC-20",
+    "description": "Minimum investment ₹1,000 at fixed 5-year tenure",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-nsc"],
+    "inputs": {
+      "principal": 1000,
+      "rate": 7.7,
+      "tenureYears": 5
+    },
+    "expected": {
+      "validation": "accept",
+      "maturityAmount": 1449.03,
+      "interestEarned": 449.03,
+      "tolerance": 10
+    },
+    "verifiedAgainst": ["investmentRates.nsc.minInvestment", "nscSchema min 1000"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "NSC-22",
+    "description": "Interest taxable and paid at maturity — full interest in year 5",
+    "pathType": "HP",
+    "tags": ["@tax", "@regression", "@calculator-nsc"],
+    "inputs": {
+      "principal": 100000,
+      "rate": 7.7,
+      "tenureYears": 5,
+      "incomeTaxSlab": 0.30
+    },
+    "expected": {
+      "maturityAmount": 144903.38,
+      "interestEarned": 44903.38,
+      "interestPaidAtMaturity": true,
+      "evolutionInterestSum": 44903.38,
+      "year5ClosingBalance": 144903.38,
+      "taxAmount": 13471.01,
+      "postTaxAmount": 131432.37,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["calculateNSCEvolution year-5 interest", "investmentInfo.nsc taxBenefits"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "NSC-13",
+    "description": "Extremely large principal — ₹1 crore @ 7.7% for 5 years",
+    "pathType": "EG",
+    "tags": ["@edge", "@calculator-nsc"],
+    "inputs": {
+      "principal": 10000000,
+      "rate": 7.7,
+      "tenureYears": 5
+    },
+    "expected": {
+      "maturityAmount": 14490338.02,
+      "interestEarned": 4490338.02,
+      "tolerance": 5000
+    },
+    "verifiedAgainst": ["manual spreadsheet 2026-07-25", "NSC slider max ₹1 crore"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  }
+]

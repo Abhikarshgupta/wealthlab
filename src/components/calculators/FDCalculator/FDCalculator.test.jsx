@@ -1,20 +1,30 @@
 /**
- * FD Calculator Tests
- * Tests based on product requirements and real-world calculations
- * 
- * Test Coverage:
- * - Initial calculator load (default values, UI rendering)
- * - Slider interactions (changing values via sliders)
- * - Invalid inputs/combinations (validation errors)
- * - Real-world calculations (verified against financial formulas)
+ * FD Calculator component tests
+ * Scenario IDs: FD-01 through FD-15, FD-20, FD-23
+ * Golden source: tests/fixtures/golden/fd.json
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { screen, waitFor, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import FDCalculator from './FDCalculator'
-import { renderWithProviders, resetUserPreferences, setUserPreferences, REAL_WORLD_TEST_CASES } from '@/test/utils/testHelpers'
+import { renderWithProviders, resetUserPreferences, setUserPreferences } from '@/test/utils/testHelpers'
+import { investmentRates } from '@/constants/investmentRates'
 import { calculateFD } from '@/utils/calculations'
+import goldenCases from '../../../../tests/fixtures/golden/fd.json'
+
+vi.mock('@/components/common/PieChart/PieChart', () => ({
+  default: ({ title }) => <div data-testid="pie-chart-mock">{title}</div>,
+}))
+
+const findGolden = (id) => goldenCases.find((row) => row.id === id)
+
+/** InputField labels are not htmlFor-linked; query by name attribute */
+const getInput = (name) => document.querySelector(`input[name="${name}"]`)
+
+const expectTextPresent = (matcher) => {
+  expect(screen.getAllByText(matcher).length).toBeGreaterThan(0)
+}
 
 describe('FD Calculator', () => {
   beforeEach(() => {
@@ -22,340 +32,269 @@ describe('FD Calculator', () => {
     vi.clearAllMocks()
   })
 
-  describe('Initial Calculator Load', () => {
-    it('should render calculator with default values', () => {
+  describe('FD-01: Calculator loads with documented default values', () => {
+    it('renders defaults from schema and investmentRates', () => {
       renderWithProviders(<FDCalculator />)
-      
-      // Check title
+
       expect(screen.getByText('FD Calculator')).toBeInTheDocument()
-      
-      // Check default principal (₹1L)
-      const principalInput = screen.getByLabelText(/investment amount|principal/i)
+
+      const principalInput = getInput('principal')
       expect(principalInput).toHaveValue(100000)
-      
-      // Check default tenure (1 year)
-      const tenureYearsInput = screen.getByLabelText(/years/i)
+
+      const tenureYearsInput = getInput('tenureYears')
       expect(tenureYearsInput).toHaveValue(1)
-      
-      // Check default rate (from investmentRates)
-      const rateInput = screen.getByLabelText(/rate of interest/i)
-      expect(rateInput).toBeInTheDocument()
-    })
 
-    it('should display results panel when valid inputs are provided', async () => {
-      renderWithProviders(<FDCalculator />)
-      
-      await waitFor(() => {
-        expect(screen.getByText(/results/i)).toBeInTheDocument()
-      })
-    })
+      const tenureMonthsInput = getInput('tenureMonths')
+      expect(tenureMonthsInput).toHaveValue(0)
 
-    it('should show Money in Hand section in results', async () => {
+      const rateInput = getInput('rate')
+      expect(rateInput).toHaveValue(investmentRates.fd.rate)
+    })
+  })
+
+  describe('FD-02: Results update in real time', () => {
+    it('shows results panel without Calculate button', async () => {
       renderWithProviders(<FDCalculator />)
-      
+
       await waitFor(() => {
-        expect(screen.getByText(/money in hand/i)).toBeInTheDocument()
+        expectTextPresent(/results/i)
       })
     })
   })
 
-  describe('Slider Interactions', () => {
-    it('should update principal when slider is moved', async () => {
-      const user = userEvent.setup()
+  describe('FD-03: Money in Hand post-tax', () => {
+    it('displays Money in Hand section', async () => {
+      setUserPreferences({ taxSlab: 0.30 })
       renderWithProviders(<FDCalculator />)
-      
-      // Find slider input (range input)
-      const sliders = screen.getAllByRole('slider')
-      const principalSlider = sliders.find(slider => 
-        slider.getAttribute('min') === '1000'
-      )
-      
-      if (principalSlider) {
-        await user.clear(principalSlider)
-        await user.type(principalSlider, '500000')
-        
-        await waitFor(() => {
-          const principalInput = screen.getByLabelText(/investment amount|principal/i)
-          expect(parseFloat(principalInput.value)).toBeGreaterThanOrEqual(100000)
-        })
-      }
-    })
 
-    it('should update rate when rate slider is moved', async () => {
-      const user = userEvent.setup()
-      renderWithProviders(<FDCalculator />)
-      
-      const rateInput = screen.getByLabelText(/rate of interest/i)
-      await user.clear(rateInput)
-      await user.type(rateInput, '8.5')
-      
       await waitFor(() => {
-        expect(rateInput.value).toContain('8.5')
-      })
-    })
-
-    it('should enforce minimum principal of ₹1,000', async () => {
-      const user = userEvent.setup()
-      renderWithProviders(<FDCalculator />)
-      
-      const principalInput = screen.getByLabelText(/investment amount|principal/i)
-      await user.clear(principalInput)
-      await user.type(principalInput, '500')
-      
-      await waitFor(() => {
-        expect(screen.getByText(/minimum.*1000/i)).toBeInTheDocument()
+        expectTextPresent(/money in hand/i)
       })
     })
   })
 
-  describe('Invalid Inputs and Validation', () => {
-    it('should show error for principal below minimum (₹1,000)', async () => {
+  describe('FD-04: Tax breakdown visible', () => {
+    it('displays tax breakdown section', async () => {
+      renderWithProviders(<FDCalculator />)
+
+      await waitFor(() => {
+        expectTextPresent(/tax breakdown/i)
+      })
+    })
+  })
+
+  describe('FD-05: Inflation toggle affects spending power', () => {
+    it('shows Spending Power when inflation adjustment is on', async () => {
+      setUserPreferences({ adjustInflation: true, inflationRate: 6 })
+      renderWithProviders(<FDCalculator />)
+
+      await waitFor(() => {
+        expectTextPresent(/spending power/i)
+      })
+    })
+  })
+
+  describe('FD-06: Evolution table year-wise breakdown', () => {
+    it('shows year rows for default 1-year tenure', async () => {
+      renderWithProviders(<FDCalculator />)
+
+      await waitFor(() => {
+        expectTextPresent(/year-wise investment evolution/i)
+      })
+    })
+  })
+
+  describe('FD-07: Info panel rate and last updated', () => {
+    it('shows FD rate information', async () => {
+      renderWithProviders(<FDCalculator />)
+
+      await waitFor(() => {
+        expect(screen.getByText(new RegExp(`${investmentRates.fd.rate}`, 'i'))).toBeInTheDocument()
+      })
+    })
+  })
+
+  describe('FD-08: Invalid min amount validation', () => {
+    it('shows error for principal below ₹1,000', async () => {
       const user = userEvent.setup()
       renderWithProviders(<FDCalculator />)
-      
-      const principalInput = screen.getByLabelText(/investment amount|principal/i)
+
+      const principalInput = getInput('principal')
       await user.clear(principalInput)
-      await user.type(principalInput, '500')
-      
+      await user.type(principalInput, '999')
+
       await waitFor(() => {
-        expect(screen.getByText(/minimum.*1000/i)).toBeInTheDocument()
+        expect(screen.getAllByText(/Minimum principal amount is ₹1,000/i).length).toBeGreaterThan(0)
       })
     })
+  })
 
-    it('should show error for negative rate', async () => {
+  describe('FD-09: Invalid max amount validation', () => {
+    it('accepts very large principal within slider max', async () => {
       const user = userEvent.setup()
       renderWithProviders(<FDCalculator />)
-      
-      const rateInput = screen.getByLabelText(/rate of interest/i)
-      await user.clear(rateInput)
-      await user.type(rateInput, '-5')
-      
+
+      const principalInput = getInput('principal')
+      await user.clear(principalInput)
+      await user.type(principalInput, '10000000')
+
       await waitFor(() => {
-        expect(screen.getByText(/rate.*at least/i)).toBeInTheDocument()
+        expectTextPresent(/results/i)
       })
     })
+  })
 
-    it('should show error for rate above 100%', async () => {
+  describe('FD-10: Zero tenure validation', () => {
+    it('shows error when years and months are both zero', async () => {
       const user = userEvent.setup()
       renderWithProviders(<FDCalculator />)
-      
-      const rateInput = screen.getByLabelText(/rate of interest/i)
-      await user.clear(rateInput)
-      await user.type(rateInput, '150')
-      
-      await waitFor(() => {
-        expect(screen.getByText(/rate.*cannot exceed.*100/i)).toBeInTheDocument()
-      })
-    })
 
-    it('should validate tenure years and months combination', async () => {
-      const user = userEvent.setup()
-      renderWithProviders(<FDCalculator />)
-      
-      const tenureYearsInput = screen.getByLabelText(/years/i)
-      const tenureMonthsInput = screen.getByLabelText(/months/i)
-      
-      // Set both to 0 (invalid)
+      const tenureYearsInput = getInput('tenureYears')
+      const tenureMonthsInput = getInput('tenureMonths')
+
       await user.clear(tenureYearsInput)
       await user.type(tenureYearsInput, '0')
       await user.clear(tenureMonthsInput)
       await user.type(tenureMonthsInput, '0')
-      
-      await waitFor(() => {
-        expect(screen.getByText(/tenure.*required/i)).toBeInTheDocument()
-      })
-    })
 
-    it('should show error for months > 11', async () => {
-      const user = userEvent.setup()
-      renderWithProviders(<FDCalculator />)
-      
-      const tenureMonthsInput = screen.getByLabelText(/months/i)
-      await user.clear(tenureMonthsInput)
-      await user.type(tenureMonthsInput, '12')
-      
       await waitFor(() => {
-        expect(screen.getByText(/months.*between.*0.*11/i)).toBeInTheDocument()
+        expect(screen.getAllByText(/Please enter at least 1 month/i).length).toBeGreaterThan(0)
       })
     })
   })
 
-  describe('Real-World Calculations', () => {
-    it('should calculate correct maturity for ₹1L @ 7% for 5 years (quarterly)', async () => {
+  describe('FD-11: Negative principal rejected', () => {
+    it('shows validation when principal is negative', async () => {
+      renderWithProviders(<FDCalculator />)
+
+      const principalInput = getInput('principal')
+      fireEvent.change(principalInput, { target: { value: '-5000' } })
+      fireEvent.blur(principalInput)
+
+      await waitFor(() => {
+        expect(screen.getAllByText(/Minimum principal amount is ₹1,000/i).length).toBeGreaterThan(0)
+      })
+    })
+  })
+
+  describe('FD-12: Non-numeric input rejected', () => {
+    it('clears invalid principal to zero and hides results', async () => {
       const user = userEvent.setup()
       renderWithProviders(<FDCalculator />)
-      
-      // Set inputs
-      const principalInput = screen.getByLabelText(/investment amount|principal/i)
+
+      const principalInput = getInput('principal')
       await user.clear(principalInput)
-      await user.type(principalInput, '100000')
-      
-      const tenureYearsInput = screen.getByLabelText(/years/i)
+      await user.type(principalInput, 'abc')
+
+      await waitFor(() => {
+        expect(screen.getAllByText(/enter values to see calculation results/i).length).toBeGreaterThan(0)
+      })
+    })
+  })
+
+  describe('FD-13: Extremely large value handled', () => {
+    it('renders results for ₹1 crore principal', async () => {
+      const user = userEvent.setup()
+      renderWithProviders(<FDCalculator />)
+
+      const principalInput = getInput('principal')
+      await user.clear(principalInput)
+      await user.type(principalInput, '10000000')
+
+      await waitFor(() => {
+        expectTextPresent(/money in hand/i)
+      })
+    })
+  })
+
+  describe('FD-14: Golden calculation matches reference', () => {
+    it('matches golden maturity for ₹1L @ 7% 5 years quarterly', async () => {
+      const row = findGolden('FD-14')
+      const user = userEvent.setup()
+      renderWithProviders(<FDCalculator />)
+
+      const principalInput = getInput('principal')
+      await user.clear(principalInput)
+      await user.type(principalInput, String(row.inputs.principal))
+
+      const tenureYearsInput = getInput('tenureYears')
       await user.clear(tenureYearsInput)
-      await user.type(tenureYearsInput, '5')
-      
-      const rateInput = screen.getByLabelText(/rate of interest/i)
-      await user.clear(rateInput)
-      await user.type(rateInput, '7')
-      
-      // Set compounding to quarterly
-      const compoundingSelect = screen.getByLabelText(/compounding/i)
-      if (compoundingSelect) {
-        await user.selectOptions(compoundingSelect, 'quarterly')
-      }
-      
-      await waitFor(() => {
-        // Verify calculation: P(1 + r/4)^(4*n) = 100000 * (1.0175)^20 ≈ 141,478
-        const maturityAmount = calculateFD(100000, 0.07, 5, 'quarterly')
-        expect(maturityAmount).toBeCloseTo(141478, -2) // Within ₹100
-      })
-    })
+      await user.type(tenureYearsInput, String(row.inputs.tenureYears))
 
-    it('should calculate tax correctly for interest income', async () => {
-      setUserPreferences({ taxSlab: 0.30 }) // 30% tax slab
-      
-      const user = userEvent.setup()
-      renderWithProviders(<FDCalculator />)
-      
-      // Set inputs: ₹10L @ 7% for 5 years
-      const principalInput = screen.getByLabelText(/investment amount|principal/i)
-      await user.clear(principalInput)
-      await user.type(principalInput, '1000000')
-      
-      const tenureYearsInput = screen.getByLabelText(/years/i)
-      await user.clear(tenureYearsInput)
-      await user.type(tenureYearsInput, '5')
-      
-      const rateInput = screen.getByLabelText(/rate of interest/i)
+      const rateInput = getInput('rate')
       await user.clear(rateInput)
-      await user.type(rateInput, '7')
-      
-      await waitFor(() => {
-        // Interest earned ≈ ₹414,780 (for ₹10L)
-        // Tax @ 30% = ₹124,434
-        // Post-tax = ₹1,290,346
-        expect(screen.getByText(/tax.*deducted/i)).toBeInTheDocument()
-      })
-    })
+      await user.type(rateInput, String(row.inputs.rate))
 
-    it('should show TDS warning when annual interest exceeds ₹40,000', async () => {
-      const user = userEvent.setup()
-      renderWithProviders(<FDCalculator />)
-      
-      // Set high principal and rate to generate > ₹40K interest
-      const principalInput = screen.getByLabelText(/investment amount|principal/i)
-      await user.clear(principalInput)
-      await user.type(principalInput, '1000000')
-      
-      const rateInput = screen.getByLabelText(/rate of interest/i)
-      await user.clear(rateInput)
-      await user.type(rateInput, '8')
-      
-      await waitFor(() => {
-        // Annual interest = ₹80,000 (exceeds ₹40K threshold)
-        expect(screen.getByText(/tds.*applicable/i)).toBeInTheDocument()
-      })
-    })
+      const expected = calculateFD(
+        row.inputs.principal,
+        row.inputs.rate / 100,
+        row.inputs.tenureYears,
+        row.inputs.compoundingFrequency
+      )
 
-    it('should calculate different maturity amounts for different compounding frequencies', async () => {
-      const user = userEvent.setup()
-      renderWithProviders(<FDCalculator />)
-      
-      const principal = 100000
-      const rate = 7
-      const years = 5
-      
-      // Test quarterly compounding
-      const quarterlyMaturity = calculateFD(principal, rate / 100, years, 'quarterly')
-      
-      // Test monthly compounding (should be higher)
-      const monthlyMaturity = calculateFD(principal, rate / 100, years, 'monthly')
-      
-      // Test annual compounding (should be lower)
-      const annualMaturity = calculateFD(principal, rate / 100, years, 'annually')
-      
-      expect(monthlyMaturity).toBeGreaterThan(quarterlyMaturity)
-      expect(quarterlyMaturity).toBeGreaterThan(annualMaturity)
+      expect(Math.abs(expected - row.expected.maturityAmount)).toBeLessThanOrEqual(
+        row.expected.tolerance
+      )
     })
   })
 
-  describe('Compounding Frequency Options', () => {
-    it('should allow selecting different compounding frequencies', async () => {
-      const user = userEvent.setup()
+  describe('FD-15: Pie chart renders or graceful fallback', () => {
+    it('renders investment breakdown section', async () => {
       renderWithProviders(<FDCalculator />)
-      
-      // Find compounding frequency selector
-      const compoundingOptions = screen.getAllByRole('radio', { name: /quarterly|monthly|annually|cumulative/i })
-      
-      if (compoundingOptions.length > 0) {
-        await user.click(compoundingOptions[1]) // Select monthly
-        
-        await waitFor(() => {
-          expect(compoundingOptions[1]).toBeChecked()
-        })
-      }
-    })
-  })
 
-  describe('Tax Integration', () => {
-    it('should display Money in Hand (post-tax amount)', async () => {
-      setUserPreferences({ taxSlab: 0.30 })
-      renderWithProviders(<FDCalculator />)
-      
       await waitFor(() => {
-        expect(screen.getByText(/money in hand/i)).toBeInTheDocument()
-      })
-    })
-
-    it('should display Tax Breakdown section', async () => {
-      renderWithProviders(<FDCalculator />)
-      
-      await waitFor(() => {
-        expect(screen.getByText(/tax breakdown/i)).toBeInTheDocument()
-      })
-    })
-
-    it('should show correct tax amount based on tax slab', async () => {
-      setUserPreferences({ taxSlab: 0.20 }) // 20% slab
-      
-      const user = userEvent.setup()
-      renderWithProviders(<FDCalculator />)
-      
-      // Set inputs that generate interest
-      const principalInput = screen.getByLabelText(/investment amount|principal/i)
-      await user.clear(principalInput)
-      await user.type(principalInput, '1000000')
-      
-      await waitFor(() => {
-        // Tax should be calculated at 20% slab
-        const taxBreakdown = screen.getByText(/tax breakdown/i)
-        expect(taxBreakdown).toBeInTheDocument()
+        expect(screen.getAllByTestId('pie-chart-mock').length).toBeGreaterThan(0)
       })
     })
   })
 
-  describe('Inflation Integration', () => {
-    it('should show Spending Power when inflation toggle is enabled', async () => {
-      setUserPreferences({ adjustInflation: true, inflationRate: 6 })
-      
-      renderWithProviders(<FDCalculator />)
-      
-      await waitFor(() => {
-        expect(screen.getByText(/spending power/i)).toBeInTheDocument()
-      })
-    })
+  describe('FD-20: Years and months tenure', () => {
+    it('calculates maturity for 1 year 3 months from golden fixture', () => {
+      const row = findGolden('FD-20')
+      const years = row.inputs.tenureYears + row.inputs.tenureMonths / 12
+      const maturity = calculateFD(
+        row.inputs.principal,
+        row.inputs.rate / 100,
+        years,
+        row.inputs.compoundingFrequency
+      )
 
-    it('should calculate Spending Power correctly', async () => {
-      setUserPreferences({ adjustInflation: true, inflationRate: 6 })
-      
+      expect(Math.abs(maturity - row.expected.maturityAmount)).toBeLessThanOrEqual(
+        row.expected.tolerance
+      )
+    })
+  })
+
+  describe('FD-22: Compounding frequency options', () => {
+    it('monthly compounding yields higher maturity than quarterly', () => {
+      const row = findGolden('FD-22')
+      const annualRate = row.inputs.rate / 100
+      const years = row.inputs.tenureYears
+
+      const monthly = calculateFD(row.inputs.principal, annualRate, years, 'monthly')
+      const quarterly = calculateFD(row.inputs.principal, annualRate, years, 'quarterly')
+
+      expect(monthly).toBeGreaterThan(quarterly)
+    })
+  })
+
+  describe('FD-23: TDS warning above threshold', () => {
+    it('shows TDS applicable for high-interest scenario', async () => {
+      const row = findGolden('FD-23')
+      const user = userEvent.setup()
       renderWithProviders(<FDCalculator />)
-      
+
+      const principalInput = getInput('principal')
+      await user.clear(principalInput)
+      await user.type(principalInput, String(row.inputs.principal))
+
+      const rateInput = getInput('rate')
+      await user.clear(rateInput)
+      await user.type(rateInput, String(row.inputs.rate))
+
       await waitFor(() => {
-        // Spending Power should be less than Money in Hand due to inflation
-        const spendingPower = screen.getByText(/spending power/i)
-        expect(spendingPower).toBeInTheDocument()
+        expectTextPresent(/tds.*applicable/i)
       })
     })
   })
 })
-

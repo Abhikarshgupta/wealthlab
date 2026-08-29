@@ -1,0 +1,49 @@
+{
+  "$schema": "wealthlab-regulatory-v1",
+  "financialYear": "2024-25",
+  "lastReviewed": "2026-07-25",
+  "sources": [
+    "Finance Act 2018 — Section 112A (equity LTCG)",
+    "Budget 2023 — debt mutual fund taxation changes"
+  ],
+  "rules": {
+    "equityAndEquityOriented": {
+      "instruments": ["equity", "sip", "elss", "etf_equity", "reits"],
+      "ltcg": {
+        "rate": 0.10,
+        "exemptionLimit": 100000,
+        "minHoldingYears": 1,
+        "notes": "10% on gains above ₹1 lakh per financial year"
+      },
+      "stcg": {
+        "rate": 0.15,
+        "maxHoldingYears": 1,
+        "notes": "15% if sold within 1 year (equity-oriented)"
+      },
+      "elssLockInYears": 3
+    },
+    "debtAndNonEquity": {
+      "instruments": ["debtMutualFund", "etf_debt", "etf_gold"],
+      "ltcg": {
+        "rate": 0.20,
+        "indexation": true,
+        "minHoldingYears": 3,
+        "notes": "20% with indexation after 3 years (pre-April 2023 units may differ — verify per lot)"
+      },
+      "stcg": {
+        "taxedAs": "income_slab",
+        "maxHoldingYears": 3
+      }
+    },
+    "exemptCapitalGains": {
+      "instruments": ["ppf", "ssy", "sgb_maturity"],
+      "notes": "PPF/SSY EEE; SGB capital gains exempt if held to maturity"
+    },
+    "section54EC": {
+      "instruments": ["bonds54EC"],
+      "maxInvestmentPerFY": 5000000,
+      "lockInYears": 5,
+      "notes": "LTCG on property exempt up to ₹50L investment; interest taxable"
+    }
+  }
+}

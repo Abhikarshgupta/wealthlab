@@ -1,0 +1,202 @@
+[
+  {
+    "id": "ELSS-14",
+    "description": "Golden calculation — ₹5K/month SIP @ 14% for 5 years (default-like)",
+    "pathType": "HP",
+    "tags": ["@regression", "@tax", "@calculator-elss"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 5000,
+      "tenure": 5,
+      "expectedReturn": 14
+    },
+    "expected": {
+      "corpusValue": 436003.67,
+      "totalInvested": 300000,
+      "returnsEarned": 136003.67,
+      "taxAmount": 3600.37,
+      "postTaxAmount": 432403.31,
+      "taxRateLabel": "10% LTCG",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["manual spreadsheet 2026-07-25", "calculateSIPFutureValue formula", "elssSchema defaults"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "ELSS-20",
+    "description": "Minimum ₹500/month SIP at 3-year lock-in boundary",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-elss"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 500,
+      "tenure": 3,
+      "expectedReturn": 14
+    },
+    "expected": {
+      "corpusValue": 22470.53,
+      "totalInvested": 18000,
+      "returnsEarned": 4470.53,
+      "taxAmount": 0,
+      "postTaxAmount": 22470.53,
+      "taxRateLabel": "10% LTCG",
+      "tolerance": 10
+    },
+    "verifiedAgainst": ["elssSchema min amount ₹500", "elssSchema min tenure 3 years"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "ELSS-21",
+    "description": "Lumpsum ₹1.5L at 3-year lock-in — Section 80C limit context",
+    "pathType": "HP",
+    "tags": ["@regression", "@tax", "@calculator-elss"],
+    "inputs": {
+      "investmentType": "lumpsum",
+      "amount": 150000,
+      "tenure": 3,
+      "expectedReturn": 14
+    },
+    "expected": {
+      "corpusValue": 222231.6,
+      "totalInvested": 150000,
+      "returnsEarned": 72231.6,
+      "taxAmount": 0,
+      "postTaxAmount": 222231.6,
+      "taxRateLabel": "10% LTCG",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["calculateCompoundInterest annual compounding", "investmentInfo.elss maxInvestment 80C"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "ELSS-22",
+    "description": "LTCG — 10% tax above ₹1L exemption after 3+ year holding",
+    "pathType": "HP",
+    "tags": ["@tax", "@regression", "@calculator-elss"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 10000,
+      "tenure": 10,
+      "expectedReturn": 14
+    },
+    "expected": {
+      "corpusValue": 2620913.83,
+      "totalInvested": 1200000,
+      "returnsEarned": 1420913.83,
+      "taxAmount": 132091.38,
+      "postTaxAmount": 2488822.44,
+      "taxRateLabel": "10% LTCG",
+      "tolerance": 500
+    },
+    "verifiedAgainst": ["tests/fixtures/regulatory/ltcg-exemptions.json", "manual spreadsheet 2026-07-25"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "ELSS-23",
+    "description": "STCG — 15% on gains when tenure < 3 years (2 years)",
+    "pathType": "BD",
+    "tags": ["@tax", "@edge", "@calculator-elss"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 10000,
+      "tenure": 2,
+      "expectedReturn": 14
+    },
+    "expected": {
+      "corpusValue": 278341.67,
+      "totalInvested": 240000,
+      "returnsEarned": 38341.67,
+      "taxAmount": 5751.25,
+      "postTaxAmount": 272590.42,
+      "taxRateLabel": "15% STCG",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["tests/fixtures/regulatory/ltcg-exemptions.json", "elss 3-year lock-in STCG rule"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "ELSS-13",
+    "description": "Extremely large SIP — ₹1L/month for 10 years",
+    "pathType": "EG",
+    "tags": ["@edge", "@calculator-elss"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 100000,
+      "tenure": 10,
+      "expectedReturn": 14
+    },
+    "expected": {
+      "corpusValue": 26209138.27,
+      "totalInvested": 12000000,
+      "returnsEarned": 14209138.27,
+      "taxAmount": 1410913.83,
+      "postTaxAmount": 24798224.45,
+      "taxRateLabel": "10% LTCG",
+      "tolerance": 5000
+    },
+    "verifiedAgainst": ["manual spreadsheet 2026-07-25"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "ELSS-BD-TENURE-3",
+    "description": "Minimum tenure boundary — 3 years (lock-in)",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-elss"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 5000,
+      "tenure": 3,
+      "expectedReturn": 14
+    },
+    "expected": {
+      "corpusValue": 224705.33,
+      "totalInvested": 180000,
+      "returnsEarned": 44705.33,
+      "taxAmount": 0,
+      "postTaxAmount": 224705.33,
+      "taxRateLabel": "10% LTCG",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["elssSchema min tenure 3 years"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "ELSS-BD-TENURE-50",
+    "description": "Maximum tenure boundary — 50 years",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-elss"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 5000,
+      "tenure": 50,
+      "expectedReturn": 14
+    },
+    "expected": {
+      "corpusValue": 456155035.34,
+      "totalInvested": 3000000,
+      "returnsEarned": 453155035.34,
+      "taxAmount": 45305503.53,
+      "postTaxAmount": 410849531.81,
+      "taxRateLabel": "10% LTCG",
+      "tolerance": 50000
+    },
+    "verifiedAgainst": ["elssSchema max tenure 50 years", "manual spreadsheet 2026-07-25"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  }
+]

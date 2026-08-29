@@ -1,0 +1,186 @@
+[
+  {
+    "id": "FD-14",
+    "description": "Golden calculation — ₹1L @ 7% for 5 years, quarterly compounding",
+    "pathType": "HP",
+    "tags": ["@regression", "@tax", "@calculator-fd"],
+    "inputs": {
+      "principal": 100000,
+      "tenureYears": 5,
+      "tenureMonths": 0,
+      "rate": 7,
+      "compoundingFrequency": "quarterly",
+      "incomeTaxSlab": 0.30
+    },
+    "expected": {
+      "maturityAmount": 141477.82,
+      "interestEarned": 41477.82,
+      "postTaxAmount": 129034.47,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["manual spreadsheet 2026-07-25", "P(1+r/4)^(4n) formula"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "FD-20",
+    "description": "Years + months tenure — 1 year 3 months @ 6.5% quarterly",
+    "pathType": "HP",
+    "tags": ["@regression", "@calculator-fd"],
+    "inputs": {
+      "principal": 100000,
+      "tenureYears": 1,
+      "tenureMonths": 3,
+      "rate": 6.5,
+      "compoundingFrequency": "quarterly"
+    },
+    "expected": {
+      "maturityAmount": 108393.39,
+      "interestEarned": 8393.39,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["manual spreadsheet 2026-07-25", "tenure 1.25 years decimal"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "FD-21",
+    "description": "Legacy tenure format — 24 months converted to 2 years 0 months",
+    "pathType": "HP",
+    "tags": ["@regression", "@calculator-fd"],
+    "inputs": {
+      "principal": 100000,
+      "tenure": 24,
+      "tenureUnit": "months",
+      "rate": 6.5,
+      "compoundingFrequency": "quarterly",
+      "tenureYears": 2,
+      "tenureMonths": 0
+    },
+    "expected": {
+      "maturityAmount": 113763.9,
+      "interestEarned": 13763.9,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["fdTenureUtils.convertLegacyToYearsMonths", "manual spreadsheet 2026-07-25"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "FD-22",
+    "description": "Compounding frequency comparison — monthly vs quarterly vs annual vs cumulative",
+    "pathType": "HP",
+    "tags": ["@regression", "@calculator-fd"],
+    "inputs": {
+      "principal": 100000,
+      "tenureYears": 5,
+      "tenureMonths": 0,
+      "rate": 7,
+      "compoundingFrequency": "monthly"
+    },
+    "expected": {
+      "maturityAmount": 141762.53,
+      "maturityQuarterly": 141477.82,
+      "maturityAnnually": 140255.17,
+      "maturityCumulative": 140255.17,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["manual spreadsheet 2026-07-25", "calculateFD compounding branches"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "FD-08",
+    "description": "Invalid min amount — principal ₹999 below ₹1,000 minimum",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-fd"],
+    "inputs": {
+      "principal": 999,
+      "tenureYears": 1,
+      "tenureMonths": 0,
+      "rate": 6.5,
+      "compoundingFrequency": "quarterly"
+    },
+    "expected": {
+      "validationError": "Minimum principal amount is ₹1,000"
+    },
+    "verifiedAgainst": ["fdSchema.js principal.min(1000)"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "FD-10",
+    "description": "Zero tenure — 0 years 0 months shows validation error",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-fd"],
+    "inputs": {
+      "principal": 100000,
+      "tenureYears": 0,
+      "tenureMonths": 0,
+      "rate": 6.5,
+      "compoundingFrequency": "quarterly"
+    },
+    "expected": {
+      "validationError": "Please enter at least 1 month"
+    },
+    "verifiedAgainst": ["fdTenureUtils.validateYearsMonths"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "FD-23",
+    "description": "TDS warning when annual interest exceeds ₹40,000 threshold",
+    "pathType": "XF",
+    "tags": ["@tax", "@regression", "@calculator-fd"],
+    "inputs": {
+      "principal": 1000000,
+      "tenureYears": 1,
+      "tenureMonths": 0,
+      "rate": 8,
+      "compoundingFrequency": "quarterly",
+      "incomeTaxSlab": 0.30
+    },
+    "expected": {
+      "maturityAmount": 1082432.16,
+      "interestEarned": 82432.16,
+      "annualInterest": 82432.16,
+      "tdsApplicable": true,
+      "tdsThreshold": 40000,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["tests/fixtures/regulatory/tds-thresholds.json", "Section 194A FY2024-25"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "FD-03",
+    "description": "Post-tax Money in Hand at 30% slab — interest taxed per income slab",
+    "pathType": "XF",
+    "tags": ["@tax", "@smoke", "@calculator-fd"],
+    "inputs": {
+      "principal": 100000,
+      "tenureYears": 5,
+      "tenureMonths": 0,
+      "rate": 7,
+      "compoundingFrequency": "quarterly",
+      "incomeTaxSlab": 0.30
+    },
+    "expected": {
+      "maturityAmount": 141477.82,
+      "taxAmount": 12443.35,
+      "postTaxAmount": 129034.47,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["calculateTaxOnWithdrawal interest branch", "manual spreadsheet 2026-07-25"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  }
+]

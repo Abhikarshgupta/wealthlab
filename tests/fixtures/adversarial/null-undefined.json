@@ -1,0 +1,10 @@
+{
+  "description": "Null, undefined, and missing field payloads for utils/hooks",
+  "cases": [
+    { "id": "ADV-NULL-01", "payload": null, "expect": "reject_or_default" },
+    { "id": "ADV-UNDEF-01", "payload": undefined, "expect": "reject_or_default" },
+    { "id": "ADV-EMPTY-01", "payload": {}, "expect": "validation_error" },
+    { "id": "ADV-TYPE-01", "payload": { "principal": "100000" }, "expect": "coerce_or_reject" },
+    { "id": "ADV-NAN-01", "payload": { "principal": "not-a-number" }, "expect": "validation_error" }
+  ]
+}

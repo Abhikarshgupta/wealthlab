@@ -1,14 +1,18 @@
 /**
- * SIP Calculator Tests
- * Tests based on product requirements: LTCG tax rules, ₹1L exemption
+ * SIP Calculator component tests (TASK-W1-SIP T3)
+ * Scenario IDs aligned with tests/TRACEABILITY.md
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { screen, waitFor, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import SIPCalculator from './SIPCalculator'
 import { renderWithProviders, resetUserPreferences, setUserPreferences } from '@/test/utils/testHelpers'
-import { calculateSIP } from '@/utils/calculations'
+import { calculateSIPFutureValue } from '@/utils/calculations'
+import { investmentRates } from '@/constants/investmentRates'
+import goldenCases from '../../../../tests/fixtures/golden/sip.json'
+
+const findGolden = (id) => goldenCases.find((row) => row.id === id)
 
 describe('SIP Calculator', () => {
   beforeEach(() => {
@@ -16,106 +20,95 @@ describe('SIP Calculator', () => {
     vi.clearAllMocks()
   })
 
-  describe('Initial Calculator Load', () => {
-    it('should render calculator with default values', () => {
+  describe('SIP-01: Calculator loads with documented default values', () => {
+    it('renders defaults from schema and investmentRates', () => {
       renderWithProviders(<SIPCalculator />)
-      
+
       expect(screen.getByText('SIP Calculator')).toBeInTheDocument()
-      
-      // Default monthly SIP: ₹10K
-      const sipInput = screen.getByLabelText(/monthly sip|monthly investment/i)
-      expect(sipInput).toBeInTheDocument()
-    })
 
-    it('should display results when valid inputs are provided', async () => {
+      const sipInput = screen.getAllByPlaceholderText('5000')[0]
+      expect(sipInput).toHaveValue(5000)
+
+      const tenureInput = screen.getAllByPlaceholderText('5')[0]
+      expect(tenureInput).toHaveValue(5)
+
+      const returnInput = screen.getAllByPlaceholderText('12')[0]
+      expect(returnInput).toHaveValue(investmentRates.sip.expectedReturn)
+    })
+  })
+
+  describe('SIP-02: Results update in real time', () => {
+    it('shows results panel without Calculate button', async () => {
       renderWithProviders(<SIPCalculator />)
-      
+
       await waitFor(() => {
-        expect(screen.getByText(/results/i)).toBeInTheDocument()
+        expect(screen.getAllByText(/results/i).length).toBeGreaterThan(0)
       })
     })
   })
 
-  describe('Validation', () => {
-    it('should show error for SIP below ₹500', async () => {
-      const user = userEvent.setup()
+  describe('SIP-08 / SIP-09: Validation', () => {
+    it('SIP-08: should show error for SIP below ₹500', async () => {
       renderWithProviders(<SIPCalculator />)
-      
-      const sipInput = screen.getByLabelText(/monthly sip|monthly investment/i)
-      await user.clear(sipInput)
-      await user.type(sipInput, '300')
-      
+
+      const sipInput = screen.getAllByPlaceholderText('5000')[0]
+      fireEvent.change(sipInput, { target: { value: '300' } })
+      fireEvent.blur(sipInput)
+
       await waitFor(() => {
-        expect(screen.getByText(/minimum.*500/i)).toBeInTheDocument()
+        expect(screen.getAllByText(/minimum.*500/i).length).toBeGreaterThan(0)
       })
     })
 
-    it('should validate tenure between 1-50 years', async () => {
-      const user = userEvent.setup()
+    it('SIP-09: should validate tenure between 1-50 years', async () => {
       renderWithProviders(<SIPCalculator />)
-      
-      const tenureInput = screen.getByLabelText(/tenure/i)
-      await user.clear(tenureInput)
-      await user.type(tenureInput, '60')
-      
+
+      const tenureInput = screen.getAllByPlaceholderText('5')[0]
+      fireEvent.change(tenureInput, { target: { value: '60' } })
+      fireEvent.blur(tenureInput)
+
       await waitFor(() => {
-        expect(screen.getByText(/maximum.*50/i)).toBeInTheDocument()
+        expect(screen.getAllByText(/maximum.*50/i).length).toBeGreaterThan(0)
       })
     })
   })
 
-  describe('Step-Up SIP', () => {
+  describe('SIP-21: Step-Up SIP', () => {
     it('should enable step-up percentage when step-up is enabled', async () => {
       const user = userEvent.setup()
       renderWithProviders(<SIPCalculator />)
-      
-      const stepUpToggle = screen.getByLabelText(/step.*up/i)
-      if (stepUpToggle) {
-        await user.click(stepUpToggle)
-        
-        await waitFor(() => {
-          const stepUpPercentageInput = screen.getByLabelText(/step.*up.*percentage/i)
-          expect(stepUpPercentageInput).toBeInTheDocument()
-        })
-      }
+
+      const stepUpToggle = screen.getAllByRole('switch', { checked: false })[0]
+      await user.click(stepUpToggle)
+
+      await waitFor(() => {
+        const stepUpPercentageInput = screen.getAllByPlaceholderText('10')[0]
+        expect(stepUpPercentageInput).toBeInTheDocument()
+      })
     })
   })
 
-  describe('Real-World Calculations', () => {
-    it('should calculate corpus for ₹10K/month @ 12% for 10 years', async () => {
-      const user = userEvent.setup()
-      renderWithProviders(<SIPCalculator />)
-      
-      const sipInput = screen.getByLabelText(/monthly sip|monthly investment/i)
-      await user.clear(sipInput)
-      await user.type(sipInput, '10000')
-      
-      const tenureInput = screen.getByLabelText(/tenure/i)
-      await user.clear(tenureInput)
-      await user.type(tenureInput, '10')
-      
-      const returnInput = screen.getByLabelText(/expected return|cagr/i)
-      await user.clear(returnInput)
-      await user.type(returnInput, '12')
-      
-      await waitFor(() => {
-        // Total invested = 10000 * 12 * 10 = ₹12,00,000
-        // Corpus should be significantly higher due to compounding
-        const corpus = calculateSIP(10000, 0.12, 120)
-        expect(corpus).toBeGreaterThan(1200000)
-      })
+  describe('SIP-14 / SIP-22: Real-World Calculations', () => {
+    it('SIP-14: should calculate corpus for ₹5K/month @ 12% for 5 years', () => {
+      const golden = findGolden('SIP-14')
+      const { inputs, expected } = golden
+      const months = inputs.tenure * 12
+      const corpus = calculateSIPFutureValue(
+        inputs.monthlySIP,
+        inputs.expectedReturn / 100,
+        months
+      )
+
+      expect(Math.abs(corpus - expected.corpusValue)).toBeLessThanOrEqual(expected.tolerance)
     })
 
-    it('should calculate LTCG tax correctly (10% above ₹1L exemption)', async () => {
+    it('SIP-22: should display tax breakdown for LTCG scenario', async () => {
       setUserPreferences({ taxSlab: 0.30 })
-      
       renderWithProviders(<SIPCalculator />)
-      
+
       await waitFor(() => {
-        // For LTCG: 10% tax above ₹1L exemption
-        expect(screen.getByText(/tax breakdown/i)).toBeInTheDocument()
+        expect(screen.getAllByText(/tax breakdown/i).length).toBeGreaterThan(0)
       })
     })
   })
 })
-

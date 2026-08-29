@@ -1,0 +1,19 @@
+[
+  {
+    "id": "PREFIX-NN",
+    "description": "Human-readable case title",
+    "pathType": "HP",
+    "tags": ["@smoke", "@calculator-prefix"],
+    "inputs": {
+      "fieldName": "value"
+    },
+    "expected": {
+      "maturityAmount": 0,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["manual spreadsheet YYYY-MM-DD", "external calculator name"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "YYYY-MM-DD"
+  }
+]

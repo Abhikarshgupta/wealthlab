@@ -15,7 +15,8 @@ import {
   convertYearsMonthsToYears, 
   convertYearsMonthsToMonths,
   normalizeYearsMonths,
-  formatTenureDisplay
+  formatTenureDisplay,
+  validateYearsMonths,
 } from '@/utils/fdTenureUtils'
 
 /**
@@ -59,6 +60,12 @@ const FDCalculator = () => {
   // Normalize months if > 11
   const normalizedTenure = normalizeYearsMonths(tenureYearsNum, tenureMonthsNum)
   const totalYears = convertYearsMonthsToYears(normalizedTenure.years, normalizedTenure.months)
+  const tenureValidation = validateYearsMonths(tenureYearsNum, tenureMonthsNum)
+  const tenureError =
+    errors.tenureMonths?.message ||
+    errors.tenure?.message ||
+    errors.root?.message ||
+    (!tenureValidation.isValid ? tenureValidation.error : undefined)
 
   // Calculate results using custom hook
   const results = useFDCalculator(
@@ -177,7 +184,7 @@ const FDCalculator = () => {
                         setValue('tenureYears', normalized.years, { shouldValidate: true })
                         setValue('tenureMonths', normalized.months, { shouldValidate: true })
                       }}
-                      error={errors.tenureMonths?.message || errors.tenure?.message}
+                      error={tenureError}
                       placeholder="0"
                       min={0}
                       max={11}

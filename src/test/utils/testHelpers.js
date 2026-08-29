@@ -6,6 +6,7 @@
 import { render } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
 import React from 'react'
+import { vi } from 'vitest'
 import useUserPreferencesStore from '@/store/userPreferencesStore'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 
@@ -47,6 +48,45 @@ export const setUserPreferences = ({ inflationRate = 6, adjustInflation = false,
  * Wait for async updates
  */
 export const waitForUpdate = () => new Promise(resolve => setTimeout(resolve, 100))
+
+/**
+ * In-memory localStorage for persistence tests (corpus, prefs)
+ */
+export const mockLocalStorage = () => {
+  const store = new Map()
+  const api = {
+    getItem: (key) => (store.has(key) ? store.get(key) : null),
+    setItem: (key, value) => store.set(key, String(value)),
+    removeItem: (key) => store.delete(key),
+    clear: () => store.clear(),
+    get length() {
+      return store.size
+    },
+    key: (index) => [...store.keys()][index] ?? null,
+  }
+  vi.stubGlobal('localStorage', api)
+  return { store, restore: () => vi.unstubAllGlobals() }
+}
+
+/**
+ * Stub fetch with a response map keyed by URL substring
+ */
+export const mockFetch = (responses = {}) => {
+  const handler = vi.fn(async (input) => {
+    const url = typeof input === 'string' ? input : input.url
+    const entry = Object.entries(responses).find(([key]) => url.includes(key))
+    if (!entry) {
+      return new Response(JSON.stringify({ error: 'not found' }), { status: 404 })
+    }
+    const [, body] = entry
+    return new Response(JSON.stringify(body), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    })
+  })
+  vi.stubGlobal('fetch', handler)
+  return { handler, restore: () => vi.unstubAllGlobals() }
+}
 
 /**
  * Real-world calculation test cases

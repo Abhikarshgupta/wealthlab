@@ -1,0 +1,255 @@
+[
+  {
+    "id": "EQ-14",
+    "description": "Golden calculation — ₹5K/month SIP @ 12% CAGR for 5 years",
+    "pathType": "HP",
+    "tags": ["@regression", "@tax", "@calculator-equity"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 5000,
+      "tenure": 5,
+      "expectedCAGR": 12,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0,
+      "incomeTaxSlab": 0.30
+    },
+    "expected": {
+      "corpusValue": 412431.83,
+      "totalInvested": 300000,
+      "returnsEarned": 112431.83,
+      "taxAmount": 1243.18,
+      "postTaxAmount": 411188.65,
+      "taxRateLabel": "10% LTCG",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["manual spreadsheet 2026-07-25", "calculateSIPFutureValue formula"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "EQ-20-SIP",
+    "description": "SIP mode — ₹5K/month @ 12% for 5 years",
+    "pathType": "HP",
+    "tags": ["@regression", "@calculator-equity"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 5000,
+      "tenure": 5,
+      "expectedCAGR": 12,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "corpusValue": 412431.83,
+      "totalInvested": 300000,
+      "returnsEarned": 112431.83,
+      "taxRateLabel": "10% LTCG",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["EQ-14 parity", "useEquityCalculator SIP branch"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "EQ-20-LUMPSUM",
+    "description": "Lumpsum mode — ₹3L one-time @ 12% for 5 years",
+    "pathType": "HP",
+    "tags": ["@regression", "@calculator-equity"],
+    "inputs": {
+      "investmentType": "lumpsum",
+      "amount": 300000,
+      "tenure": 5,
+      "expectedCAGR": 12,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "corpusValue": 528702.5,
+      "totalInvested": 300000,
+      "returnsEarned": 228702.5,
+      "taxAmount": 12870.25,
+      "postTaxAmount": 515832.25,
+      "taxRateLabel": "10% LTCG",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["calculateCompoundInterest annual compounding", "manual spreadsheet 2026-07-25"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "EQ-21",
+    "description": "Step-up SIP — 10% annual increase, ₹5K/month @ 12% for 5 years",
+    "pathType": "HP",
+    "tags": ["@regression", "@calculator-equity"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 5000,
+      "tenure": 5,
+      "expectedCAGR": 12,
+      "stepUpEnabled": true,
+      "stepUpPercentage": 10
+    },
+    "expected": {
+      "corpusValue": 487411.09,
+      "totalInvested": 366306,
+      "returnsEarned": 121105.09,
+      "taxAmount": 2110.51,
+      "postTaxAmount": 485300.58,
+      "taxRateLabel": "10% LTCG",
+      "tolerance": 100
+    },
+    "verifiedAgainst": ["calculateStepUpSIP month-by-month model", "manual spreadsheet 2026-07-25"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "EQ-22",
+    "description": "LTCG — 10% tax above ₹1L exemption after 1+ year holding",
+    "pathType": "HP",
+    "tags": ["@tax", "@regression", "@calculator-equity"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 10000,
+      "tenure": 10,
+      "expectedCAGR": 12,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "corpusValue": 2323390.76,
+      "totalInvested": 1200000,
+      "returnsEarned": 1123390.76,
+      "taxAmount": 102339.08,
+      "postTaxAmount": 2221051.69,
+      "taxRateLabel": "10% LTCG",
+      "tolerance": 500
+    },
+    "verifiedAgainst": ["tests/fixtures/regulatory/ltcg-exemptions.json", "Section 112A FY2024-25"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "EQ-22-STCG",
+    "description": "STCG — 15% on returns when tenure < 1 year (unit/hook layer; UI tenure min 1 year)",
+    "pathType": "HP",
+    "tags": ["@tax", "@calculator-equity"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 10000,
+      "tenure": 0.5,
+      "expectedCAGR": 12,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "corpusValue": 62135.35,
+      "totalInvested": 60000,
+      "returnsEarned": 2135.35,
+      "taxAmount": 320.3,
+      "postTaxAmount": 61815.05,
+      "taxRateLabel": "15% STCG",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["tests/fixtures/regulatory/ltcg-exemptions.json", "calculateTaxOnWithdrawal STCG branch"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "EQ-08",
+    "description": "Invalid min amount — ₹499 below ₹500 minimum",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-equity"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 499,
+      "tenure": 5,
+      "expectedCAGR": 12,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "validationError": "Minimum investment amount is ₹500"
+    },
+    "verifiedAgainst": ["equitySchema.js amount.min(500)"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "EQ-10",
+    "description": "Zero tenure — validation error, no crash",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-equity"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 5000,
+      "tenure": 0,
+      "expectedCAGR": 12,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "validationError": "Minimum tenure is 1 year"
+    },
+    "verifiedAgainst": ["equitySchema.js tenure.min(1)"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "EQ-13",
+    "description": "Large SIP — ₹1L/month for 10 years without overflow",
+    "pathType": "EG",
+    "tags": ["@edge", "@calculator-equity"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 100000,
+      "tenure": 10,
+      "expectedCAGR": 12,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "corpusValue": 23233907.64,
+      "totalInvested": 12000000,
+      "returnsEarned": 11233907.64,
+      "taxAmount": 1113390.76,
+      "postTaxAmount": 22120516.87,
+      "taxRateLabel": "10% LTCG",
+      "tolerance": 5000
+    },
+    "verifiedAgainst": ["calculateSIPFutureValue at scale", "manual spreadsheet 2026-07-25"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  },
+  {
+    "id": "EQ-BD-TENURE-50",
+    "description": "Maximum tenure boundary — 50 years valid",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-equity"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 5000,
+      "tenure": 50,
+      "expectedCAGR": 12,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "corpusValue": 197244615.48,
+      "totalInvested": 3000000,
+      "tolerance": 50000
+    },
+    "verifiedAgainst": ["equitySchema.js tenure.max(50)", "calculateSIPFutureValue 600 months"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-07-25"
+  }
+]

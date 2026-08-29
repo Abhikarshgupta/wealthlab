@@ -1,0 +1,24 @@
+@wip @calculator-template
+Feature: Calculator template
+  Copy this file to tests/features/calculators/{id}.feature when adding a new instrument.
+  Replace PREFIX, instrument name, and scenario IDs per TESTING_STRATEGY §4.2.
+
+  Background:
+    Given the default tax slab is 30 percent
+    And inflation adjustment is off
+
+  @wip
+  Scenario: PREFIX-01 Calculator loads with documented default values
+    Given I open the PREFIX calculator
+    Then the calculator should show default inputs
+    And the results panel should be visible
+
+  @wip
+  Scenario Outline: PREFIX-14 Golden case from fixture
+    Given I open the PREFIX calculator
+    When I enter calculator inputs from golden "<goldenId>"
+    Then the maturity amount should match golden "<goldenId>" within tolerance
+
+    Examples:
+      | goldenId   |
+      | PREFIX-14  |
