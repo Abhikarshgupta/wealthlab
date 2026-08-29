@@ -1,0 +1,420 @@
+[
+  {
+    "id": "ETF-14",
+    "description": "Golden calculation — ₹5K/month SIP @ 12% CAGR, 0.20% expense ratio, equity ETF, 5 years",
+    "pathType": "HP",
+    "tags": ["@regression", "@tax", "@calculator-etf"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 5000,
+      "etfType": "equity",
+      "tenure": 5,
+      "expectedCAGR": 12,
+      "expenseRatio": 0.2,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0,
+      "incomeTaxSlab": 0.3
+    },
+    "expected": {
+      "corpusValue": 410161.89,
+      "totalInvested": 300000,
+      "returnsEarned": 110161.89,
+      "taxAmount": 0,
+      "postTaxAmount": 410161.89,
+      "taxRateLabel": "12.5% LTCG",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["manual spreadsheet 2026-08-29", "useETFCalculator net rate = CAGR − expense ratio"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "ETF-20-SIP",
+    "description": "SIP mode — ₹5K/month equity ETF @ 12% CAGR, 0.20% expense, 5 years",
+    "pathType": "HP",
+    "tags": ["@regression", "@calculator-etf"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 5000,
+      "etfType": "equity",
+      "tenure": 5,
+      "expectedCAGR": 12,
+      "expenseRatio": 0.2,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "corpusValue": 410161.89,
+      "totalInvested": 300000,
+      "returnsEarned": 110161.89,
+      "taxRateLabel": "12.5% LTCG",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["ETF-14 parity", "useETFCalculator SIP branch"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "ETF-20-LUMPSUM",
+    "description": "Lumpsum mode — ₹3L one-time equity ETF @ 12% CAGR, 0.20% expense, 5 years",
+    "pathType": "HP",
+    "tags": ["@regression", "@calculator-etf"],
+    "inputs": {
+      "investmentType": "lumpsum",
+      "amount": 300000,
+      "etfType": "equity",
+      "tenure": 5,
+      "expectedCAGR": 12,
+      "expenseRatio": 0.2,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "corpusValue": 523998.78,
+      "totalInvested": 300000,
+      "returnsEarned": 223998.78,
+      "taxAmount": 12374.85,
+      "postTaxAmount": 511623.93,
+      "taxRateLabel": "12.5% LTCG",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["calculateCompoundInterest annual compounding", "manual spreadsheet 2026-08-29"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "ETF-21",
+    "description": "Step-up SIP — 10% annual increase, ₹5K/month equity ETF @ 12% CAGR, 0.20% expense, 5 years",
+    "pathType": "HP",
+    "tags": ["@regression", "@calculator-etf"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 5000,
+      "etfType": "equity",
+      "tenure": 5,
+      "expectedCAGR": 12,
+      "expenseRatio": 0.2,
+      "stepUpEnabled": true,
+      "stepUpPercentage": 10
+    },
+    "expected": {
+      "corpusValue": 484990.17,
+      "totalInvested": 366306,
+      "returnsEarned": 118684.17,
+      "taxAmount": 0,
+      "postTaxAmount": 484990.17,
+      "taxRateLabel": "12.5% LTCG",
+      "tolerance": 100
+    },
+    "verifiedAgainst": ["calculateStepUpSIP with net rate 11.8%", "manual spreadsheet 2026-08-29"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "ETF-22",
+    "description": "LTCG — 12.5% tax above ₹1.25L exemption, equity ETF, 10-year ₹10K/month SIP",
+    "pathType": "HP",
+    "tags": ["@tax", "@regression", "@calculator-etf"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 10000,
+      "etfType": "equity",
+      "tenure": 10,
+      "expectedCAGR": 12,
+      "expenseRatio": 0.2,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "corpusValue": 2295919.65,
+      "totalInvested": 1200000,
+      "returnsEarned": 1095919.65,
+      "taxAmount": 121364.96,
+      "postTaxAmount": 2174554.69,
+      "taxRateLabel": "12.5% LTCG",
+      "tolerance": 500
+    },
+    "verifiedAgainst": ["tests/fixtures/regulatory/ltcg-exemptions.json", "Section 112A FY2024-25"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "ETF-22-STCG",
+    "description": "STCG — 20% on returns when tenure < 1 year (unit/hook layer; UI tenure min 1 year)",
+    "pathType": "HP",
+    "tags": ["@tax", "@calculator-etf"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 10000,
+      "etfType": "equity",
+      "tenure": 0.5,
+      "expectedCAGR": 12,
+      "expenseRatio": 0.2,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "corpusValue": 62099.18,
+      "totalInvested": 60000,
+      "returnsEarned": 2099.18,
+      "taxAmount": 419.84,
+      "postTaxAmount": 61679.34,
+      "taxRateLabel": "20% STCG",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["tests/fixtures/regulatory/ltcg-exemptions.json", "calculateTaxOnWithdrawal STCG branch"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "ETF-22-DEBT",
+    "description": "Debt ETF — 20% LTCG with indexation after 3+ years, 5-year ₹10K/month SIP @ 7% CAGR",
+    "pathType": "HP",
+    "tags": ["@tax", "@regression", "@calculator-etf"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 10000,
+      "etfType": "debt",
+      "tenure": 5,
+      "expectedCAGR": 7,
+      "expenseRatio": 0.15,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "corpusValue": 717227.24,
+      "totalInvested": 600000,
+      "returnsEarned": 117227.24,
+      "taxAmount": 0,
+      "postTaxAmount": 717227.24,
+      "taxRateLabel": "20% LTCG (Indexed)",
+      "tolerance": 100
+    },
+    "verifiedAgainst": ["calculateTaxOnWithdrawal debtMutualFund branch", "indexation factor 6% p.a."],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "ETF-22-GOLD",
+    "description": "Gold ETF — 20% LTCG with indexation, ₹5L lumpsum @ 8% CAGR, 0.25% expense, 5 years",
+    "pathType": "HP",
+    "tags": ["@tax", "@regression", "@calculator-etf"],
+    "inputs": {
+      "investmentType": "lumpsum",
+      "amount": 500000,
+      "etfType": "gold",
+      "tenure": 5,
+      "expectedCAGR": 8,
+      "expenseRatio": 0.25,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "corpusValue": 726200.26,
+      "totalInvested": 500000,
+      "returnsEarned": 226200.26,
+      "taxAmount": 11417.49,
+      "postTaxAmount": 714782.76,
+      "taxRateLabel": "20% LTCG (Indexed)",
+      "tolerance": 100
+    },
+    "verifiedAgainst": ["calculateTaxOnWithdrawal debtMutualFund branch (gold ETF)"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "ETF-22-INTL",
+    "description": "International ETF — equity tax rules, ₹5K/month @ 10% CAGR, 0.30% expense, 5 years",
+    "pathType": "HP",
+    "tags": ["@tax", "@regression", "@calculator-etf"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 5000,
+      "etfType": "international",
+      "tenure": 5,
+      "expectedCAGR": 10,
+      "expenseRatio": 0.3,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "corpusValue": 387235.84,
+      "totalInvested": 300000,
+      "returnsEarned": 87235.84,
+      "taxAmount": 0,
+      "postTaxAmount": 387235.84,
+      "taxRateLabel": "12.5% LTCG",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["useETFCalculator international → equity tax branch"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "ETF-23-EXPENSE",
+    "description": "Expense ratio impact — 0.50% expense vs default 0.20% reduces corpus",
+    "pathType": "HP",
+    "tags": ["@regression", "@calculator-etf"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 5000,
+      "etfType": "equity",
+      "tenure": 5,
+      "expectedCAGR": 12,
+      "expenseRatio": 0.5,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "corpusValue": 406785.82,
+      "totalInvested": 300000,
+      "returnsEarned": 106785.82,
+      "taxAmount": 0,
+      "postTaxAmount": 406785.82,
+      "taxRateLabel": "12.5% LTCG",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["net rate = 12% − 0.50% = 11.50%", "lower than ETF-14 corpus 410161.89"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "ETF-23-EXPENSE-LOW",
+    "description": "Lower expense ratio 0.05% yields higher corpus than default 0.20%",
+    "pathType": "HP",
+    "tags": ["@regression", "@calculator-etf"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 5000,
+      "etfType": "equity",
+      "tenure": 5,
+      "expectedCAGR": 12,
+      "expenseRatio": 0.05,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "corpusValue": 411862.9,
+      "totalInvested": 300000,
+      "returnsEarned": 111862.9,
+      "taxAmount": 0,
+      "postTaxAmount": 411862.9,
+      "taxRateLabel": "12.5% LTCG",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["net rate = 12% − 0.05% = 11.95%", "higher than ETF-14 corpus"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "ETF-08",
+    "description": "Invalid min amount — ₹499 below ₹500 minimum",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-etf"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 499,
+      "etfType": "equity",
+      "tenure": 5,
+      "expectedCAGR": 12,
+      "expenseRatio": 0.2,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "validationError": "Minimum investment amount is ₹500"
+    },
+    "verifiedAgainst": ["etfSchema.js amount.min(500)"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "ETF-10",
+    "description": "Zero tenure — validation error, no crash",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-etf"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 5000,
+      "etfType": "equity",
+      "tenure": 0,
+      "expectedCAGR": 12,
+      "expenseRatio": 0.2,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "validationError": "Minimum tenure is 1 year"
+    },
+    "verifiedAgainst": ["etfSchema.js tenure.min(1)"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "ETF-13",
+    "description": "Large SIP — ₹1L/month for 10 years without overflow",
+    "pathType": "EG",
+    "tags": ["@edge", "@calculator-etf"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 100000,
+      "etfType": "equity",
+      "tenure": 10,
+      "expectedCAGR": 12,
+      "expenseRatio": 0.2,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "corpusValue": 22959196.51,
+      "totalInvested": 12000000,
+      "returnsEarned": 10959196.51,
+      "taxAmount": 1354274.56,
+      "postTaxAmount": 21604921.95,
+      "taxRateLabel": "12.5% LTCG",
+      "tolerance": 5000
+    },
+    "verifiedAgainst": ["calculateSIPFutureValue at scale with net rate 11.8%"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "ETF-BD-TENURE-50",
+    "description": "Maximum tenure boundary — 50 years valid",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-etf"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 5000,
+      "etfType": "equity",
+      "tenure": 50,
+      "expectedCAGR": 12,
+      "expenseRatio": 0.2,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "corpusValue": 181599216.89,
+      "totalInvested": 3000000,
+      "tolerance": 50000
+    },
+    "verifiedAgainst": ["etfSchema.js tenure.max(50)", "calculateSIPFutureValue 600 months"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  }
+]

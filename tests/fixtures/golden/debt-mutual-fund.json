@@ -1,0 +1,216 @@
+[
+  {
+    "id": "DMF-14",
+    "description": "Golden SIP — ₹5K/month @ 7.5% for 5 years (indexed LTCG)",
+    "pathType": "HP",
+    "tags": ["@regression", "@tax", "@calculator-debt-mutual-fund"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 5000,
+      "tenure": 5,
+      "fundType": "shortTerm",
+      "expectedReturn": 7.5,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0,
+      "incomeTaxSlab": 0.30
+    },
+    "expected": {
+      "corpusValue": 364902,
+      "totalInvested": 300000,
+      "returnsEarned": 64902,
+      "taxAmount": 0,
+      "postTaxAmount": 364902,
+      "taxRateLabel": "20% LTCG (Indexed)",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["calculateSIPFutureValue", "calculateTaxOnWithdrawal debtMutualFund indexation"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "DMF-20",
+    "description": "Indexation benefit — ₹3L lumpsum @ 7.5% for 5 years (LTCG >3y)",
+    "pathType": "HP",
+    "tags": ["@tax", "@regression", "@calculator-debt-mutual-fund"],
+    "inputs": {
+      "investmentType": "lumpsum",
+      "amount": 300000,
+      "tenure": 5,
+      "fundType": "longTerm",
+      "expectedReturn": 7.5,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0,
+      "incomeTaxSlab": 0.30
+    },
+    "expected": {
+      "corpusValue": 430688.8,
+      "totalInvested": 300000,
+      "returnsEarned": 130688.8,
+      "taxAmount": 5844.22,
+      "postTaxAmount": 424844.57,
+      "taxRateLabel": "20% LTCG (Indexed)",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["tests/fixtures/regulatory/ltcg-exemptions.json", "6% simplified indexation in taxCalculations"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "DMF-21-STCG",
+    "description": "STCG — tenure 2 years taxed at 30% income slab",
+    "pathType": "HP",
+    "tags": ["@tax", "@calculator-debt-mutual-fund"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 5000,
+      "tenure": 2,
+      "fundType": "shortTerm",
+      "expectedReturn": 7.5,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0,
+      "incomeTaxSlab": 0.30
+    },
+    "expected": {
+      "corpusValue": 129840.07,
+      "totalInvested": 120000,
+      "returnsEarned": 9840.07,
+      "taxAmount": 2952.02,
+      "postTaxAmount": 126888.05,
+      "taxRateLabel": "30% slab",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["ltcg-exemptions.json debt STCG income_slab", "tenure < 3 years"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "DMF-21-LTCG",
+    "description": "3-year LTCG boundary — tenure exactly 3 years uses indexation",
+    "pathType": "BD",
+    "tags": ["@tax", "@regression", "@calculator-debt-mutual-fund"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 5000,
+      "tenure": 3,
+      "fundType": "shortTerm",
+      "expectedReturn": 7.5,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0,
+      "incomeTaxSlab": 0.30
+    },
+    "expected": {
+      "corpusValue": 202414.14,
+      "totalInvested": 180000,
+      "returnsEarned": 22414.14,
+      "taxAmount": 0,
+      "postTaxAmount": 202414.14,
+      "taxRateLabel": "20% LTCG (Indexed)",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["minHoldingYears 3 boundary", "ltcg-exemptions.json"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "DMF-22-SIP",
+    "description": "SIP mode — ₹5K/month @ 7.5% for 5 years",
+    "pathType": "HP",
+    "tags": ["@regression", "@calculator-debt-mutual-fund"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 5000,
+      "tenure": 5,
+      "fundType": "shortTerm",
+      "expectedReturn": 7.5,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "corpusValue": 364902,
+      "totalInvested": 300000,
+      "returnsEarned": 64902,
+      "taxRateLabel": "20% LTCG (Indexed)",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["DMF-14 parity", "useDebtMutualFundCalculator SIP branch"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "DMF-22-LUMPSUM",
+    "description": "Lumpsum mode — ₹3L one-time @ 7.5% for 5 years",
+    "pathType": "HP",
+    "tags": ["@regression", "@calculator-debt-mutual-fund"],
+    "inputs": {
+      "investmentType": "lumpsum",
+      "amount": 300000,
+      "tenure": 5,
+      "fundType": "longTerm",
+      "expectedReturn": 7.5,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "corpusValue": 430688.8,
+      "totalInvested": 300000,
+      "returnsEarned": 130688.8,
+      "taxAmount": 5844.22,
+      "postTaxAmount": 424844.57,
+      "taxRateLabel": "20% LTCG (Indexed)",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["calculateCompoundInterest annual compounding", "DMF-20 parity"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "DMF-08",
+    "description": "Invalid min amount — ₹499 below ₹500 minimum",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-debt-mutual-fund"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 499,
+      "tenure": 5,
+      "fundType": "shortTerm",
+      "expectedReturn": 7.5,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "validationError": "Minimum investment amount is ₹500"
+    },
+    "verifiedAgainst": ["debtMutualFundSchema.js amount.min(500)"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "DMF-10",
+    "description": "Zero tenure — validation error, no crash",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-debt-mutual-fund"],
+    "inputs": {
+      "investmentType": "sip",
+      "amount": 5000,
+      "tenure": 0,
+      "fundType": "shortTerm",
+      "expectedReturn": 7.5,
+      "stepUpEnabled": false,
+      "stepUpPercentage": 0
+    },
+    "expected": {
+      "validationError": "Minimum tenure is 1 year"
+    },
+    "verifiedAgainst": ["debtMutualFundSchema.js tenure.min(1)"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  }
+]

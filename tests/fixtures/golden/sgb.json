@@ -1,0 +1,145 @@
+[
+  {
+    "id": "SGB-14",
+    "description": "Standard SGB: 10g @ ₹6500/g, 8% gold appreciation, 8-year tenure",
+    "pathType": "HP",
+    "tags": ["@regression", "@tax", "@calculator-sgb"],
+    "inputs": {
+      "goldAmount": 10,
+      "tenure": 8,
+      "goldAppreciationRate": 8,
+      "goldPricePerGram": 6500
+    },
+    "expected": {
+      "principal": 65000,
+      "maturityAmount": 134603,
+      "goldAppreciatedValue": 120310,
+      "fixedInterestAmount": 14293,
+      "totalReturns": 69603,
+      "postTaxAmount": 134603,
+      "taxAmount": 0,
+      "tolerance": 100
+    },
+    "verifiedAgainst": ["calculateSGB formula", "manual spreadsheet 2026-08-29"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "SGB-14-5y",
+    "description": "5-year exit option: 10g @ ₹6500/g, 8% gold appreciation",
+    "pathType": "HP",
+    "tags": ["@regression", "@calculator-sgb"],
+    "inputs": {
+      "goldAmount": 10,
+      "tenure": 5,
+      "goldAppreciationRate": 8,
+      "goldPricePerGram": 6500
+    },
+    "expected": {
+      "principal": 65000,
+      "maturityAmount": 104104,
+      "goldAppreciatedValue": 95506,
+      "fixedInterestAmount": 8598,
+      "totalReturns": 39104,
+      "tolerance": 100
+    },
+    "verifiedAgainst": ["calculateSGB formula", "5-year exit tenure"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "SGB-20",
+    "description": "2.5% semi-annual fixed interest component isolated (minimal gold appreciation 0.1%)",
+    "pathType": "HP",
+    "tags": ["@regression", "@calculator-sgb"],
+    "inputs": {
+      "goldAmount": 100,
+      "tenure": 8,
+      "goldAppreciationRate": 0.1,
+      "goldPricePerGram": 6500
+    },
+    "expected": {
+      "principal": 650000,
+      "fixedInterestAmount": 142928,
+      "fixedRatePercent": 2.5,
+      "maturityAmount": 798146,
+      "tolerance": 150
+    },
+    "verifiedAgainst": ["calculateSGB semi-annual compounding", "investmentRates.sgb.fixedRate 2.5%"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "SGB-21",
+    "description": "User-adjustable gold appreciation rate at 12% p.a.",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-sgb"],
+    "inputs": {
+      "goldAmount": 10,
+      "tenure": 8,
+      "goldAppreciationRate": 12,
+      "goldPricePerGram": 6500
+    },
+    "expected": {
+      "principal": 65000,
+      "maturityAmount": 175230,
+      "goldAppreciatedValue": 160938,
+      "fixedInterestAmount": 14293,
+      "tolerance": 100
+    },
+    "verifiedAgainst": ["calculateSGB gold appreciation component", "sgbSchema max 100%"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "SGB-23",
+    "description": "Gold API failure — fallback price ₹6500/gram used",
+    "pathType": "DG",
+    "tags": ["@edge", "@calculator-sgb"],
+    "inputs": {
+      "goldAmount": 10,
+      "tenure": 8,
+      "goldAppreciationRate": 8,
+      "goldPricePerGram": 6500,
+      "apiScenario": "failure"
+    },
+    "expected": {
+      "goldPricePerGram": 6500,
+      "isRealTimePrice": false,
+      "maturityAmount": 134603,
+      "tolerance": 100
+    },
+    "verifiedAgainst": ["goldPriceService FALLBACK_GOLD_PRICE_PER_GRAM", "useSGBCalculator fallback path"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "SGB-26",
+    "description": "Tax-free at maturity — capital gains exempt, post-tax equals nominal",
+    "pathType": "HP",
+    "tags": ["@tax", "@regression", "@calculator-sgb"],
+    "inputs": {
+      "goldAmount": 10,
+      "tenure": 8,
+      "goldAppreciationRate": 8,
+      "goldPricePerGram": 6500,
+      "incomeTaxSlab": 0.30
+    },
+    "expected": {
+      "maturityAmount": 134603,
+      "postTaxAmount": 134603,
+      "taxAmount": 0,
+      "taxRateLabel": "Capital Gains Exempt",
+      "tolerance": 100
+    },
+    "verifiedAgainst": ["ltcg-exemptions.json sgb_maturity", "taxCalculations.js sgb conditional"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  }
+]

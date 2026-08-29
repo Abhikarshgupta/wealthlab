@@ -1,0 +1,259 @@
+[
+  {
+    "id": "NPS-14",
+    "description": "Golden calculation — ₹5K/month @ 10.3% weighted return for 10 years (50/30/20 allocation)",
+    "pathType": "HP",
+    "tags": ["@regression", "@tax", "@calculator-nps"],
+    "inputs": {
+      "monthlyContribution": 5000,
+      "tenure": 10,
+      "currentAge": 35,
+      "equityAllocation": 50,
+      "corporateBondsAllocation": 30,
+      "governmentBondsAllocation": 20,
+      "alternativeAllocation": 0,
+      "equityReturn": 12,
+      "corporateBondsReturn": 9,
+      "governmentBondsReturn": 8,
+      "alternativeReturn": 7,
+      "useAgeBasedCaps": false,
+      "withdrawalPercentage": 80
+    },
+    "expected": {
+      "corpusValue": 1050952.47,
+      "totalInvested": 600000,
+      "returnsEarned": 450952.47,
+      "weightedReturn": 10.3,
+      "tolerance": 100
+    },
+    "verifiedAgainst": [
+      "calculateNPSWeightedReturn + calculateNPSFutureValue",
+      "manual spreadsheet 2026-08-29",
+      "investmentRates.nps defaults"
+    ],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "NPS-03",
+    "description": "Post-tax Money in Hand at 30% slab — 60% tax-free / 40% taxable withdrawal",
+    "pathType": "XF",
+    "tags": ["@tax", "@smoke", "@calculator-nps"],
+    "inputs": {
+      "monthlyContribution": 5000,
+      "tenure": 10,
+      "currentAge": 35,
+      "equityAllocation": 50,
+      "corporateBondsAllocation": 30,
+      "governmentBondsAllocation": 20,
+      "alternativeAllocation": 0,
+      "equityReturn": 12,
+      "corporateBondsReturn": 9,
+      "governmentBondsReturn": 8,
+      "alternativeReturn": 7,
+      "useAgeBasedCaps": false,
+      "withdrawalPercentage": 80,
+      "incomeTaxSlab": 0.30
+    },
+    "expected": {
+      "corpusValue": 1050952.47,
+      "totalInvested": 600000,
+      "returnsEarned": 450952.47,
+      "taxAmount": 126114.3,
+      "postTaxAmount": 924838.18,
+      "taxRateLabel": "30% slab (on 40%)",
+      "tolerance": 100
+    },
+    "verifiedAgainst": [
+      "calculateTaxOnWithdrawal nps partial branch",
+      "tests/fixtures/regulatory/tax-slabs-fy2025-26.json defaultEffectiveRate 0.30"
+    ],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "NPS-08",
+    "description": "Invalid min contribution — ₹499 below ₹500 minimum",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-nps"],
+    "inputs": {
+      "monthlyContribution": 499,
+      "tenure": 10,
+      "currentAge": 35,
+      "equityAllocation": 50,
+      "corporateBondsAllocation": 30,
+      "governmentBondsAllocation": 20,
+      "alternativeAllocation": 0
+    },
+    "expected": {
+      "validationError": "Minimum contribution is ₹500"
+    },
+    "verifiedAgainst": ["npsSchema.js monthlyContribution.min(500)"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "NPS-20",
+    "description": "Minimum ₹500/month contribution with valid 100% asset allocation",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-nps"],
+    "inputs": {
+      "monthlyContribution": 500,
+      "tenure": 10,
+      "currentAge": 35,
+      "equityAllocation": 50,
+      "corporateBondsAllocation": 30,
+      "governmentBondsAllocation": 20,
+      "alternativeAllocation": 0,
+      "equityReturn": 12,
+      "corporateBondsReturn": 9,
+      "governmentBondsReturn": 8,
+      "alternativeReturn": 7,
+      "useAgeBasedCaps": false
+    },
+    "expected": {
+      "validation": "accept",
+      "totalAllocation": 100,
+      "corpusValue": 105095.25,
+      "totalInvested": 60000,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["npsSchema min ₹500", "allocation sum 100% custom validation"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "NPS-21",
+    "description": "Weighted return reflects allocation — 40/35/20/5 mix yields 9.9% weighted return",
+    "pathType": "HP",
+    "tags": ["@regression", "@calculator-nps"],
+    "inputs": {
+      "monthlyContribution": 10000,
+      "tenure": 20,
+      "currentAge": 35,
+      "equityAllocation": 40,
+      "corporateBondsAllocation": 35,
+      "governmentBondsAllocation": 20,
+      "alternativeAllocation": 5,
+      "equityReturn": 12,
+      "corporateBondsReturn": 9,
+      "governmentBondsReturn": 8,
+      "alternativeReturn": 7,
+      "useAgeBasedCaps": false
+    },
+    "expected": {
+      "weightedReturn": 9.9,
+      "corpusValue": 7557780.32,
+      "totalInvested": 2400000,
+      "tolerance": 500
+    },
+    "verifiedAgainst": [
+      "calculateNPSWeightedReturn formula",
+      "manual spreadsheet 2026-08-29"
+    ],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "NPS-22",
+    "description": "60% tax-free / 40% taxable on withdrawal at 30% slab",
+    "pathType": "HP",
+    "tags": ["@tax", "@regression", "@calculator-nps"],
+    "inputs": {
+      "monthlyContribution": 5000,
+      "tenure": 10,
+      "currentAge": 35,
+      "equityAllocation": 50,
+      "corporateBondsAllocation": 30,
+      "governmentBondsAllocation": 20,
+      "alternativeAllocation": 0,
+      "equityReturn": 12,
+      "corporateBondsReturn": 9,
+      "governmentBondsReturn": 8,
+      "alternativeReturn": 7,
+      "useAgeBasedCaps": false,
+      "incomeTaxSlab": 0.30
+    },
+    "expected": {
+      "corpusValue": 1050952.47,
+      "taxFreePortion": 630571.48,
+      "taxablePortion": 420380.99,
+      "taxAmount": 126114.3,
+      "postTaxAmount": 924838.18,
+      "taxRule": "60% tax-free, 40% taxable as per income slab",
+      "tolerance": 100
+    },
+    "verifiedAgainst": [
+      "taxCalculations.js nps partial branch",
+      "tests/fixtures/regulatory/tax-slabs-fy2025-26.json"
+    ],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "NPS-24",
+    "description": "Negative return edge case — weighted -3.3% does not produce NaN",
+    "pathType": "EG",
+    "tags": ["@edge", "@calculator-nps"],
+    "inputs": {
+      "monthlyContribution": 5000,
+      "tenure": 10,
+      "currentAge": 35,
+      "equityAllocation": 50,
+      "corporateBondsAllocation": 30,
+      "governmentBondsAllocation": 20,
+      "alternativeAllocation": 0,
+      "equityReturn": -5,
+      "corporateBondsReturn": -2,
+      "governmentBondsReturn": -1,
+      "alternativeReturn": 0,
+      "useAgeBasedCaps": false
+    },
+    "expected": {
+      "weightedReturn": -3.3,
+      "corpusValue": 510234.81,
+      "totalInvested": 600000,
+      "isFinite": true,
+      "tolerance": 100
+    },
+    "verifiedAgainst": ["calculateNPSFutureValue with negative weighted return"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "NPS-13",
+    "description": "Extremely large monthly contribution — ₹1L/month for 25 years",
+    "pathType": "EG",
+    "tags": ["@edge", "@calculator-nps"],
+    "inputs": {
+      "monthlyContribution": 100000,
+      "tenure": 25,
+      "currentAge": 35,
+      "equityAllocation": 50,
+      "corporateBondsAllocation": 30,
+      "governmentBondsAllocation": 20,
+      "alternativeAllocation": 0,
+      "equityReturn": 12,
+      "corporateBondsReturn": 9,
+      "governmentBondsReturn": 8,
+      "alternativeReturn": 7,
+      "useAgeBasedCaps": false
+    },
+    "expected": {
+      "corpusValue": 140862673.1,
+      "totalInvested": 30000000,
+      "tolerance": 50000
+    },
+    "verifiedAgainst": ["NPS slider max ₹1L/month", "manual spreadsheet 2026-08-29"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  }
+]

@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { joiResolver } from '@hookform/resolvers/joi'
 import CalculatorLayout from '@/components/common/Layout/CalculatorLayout'
 import InputField from '@/components/common/InputField/InputField'
@@ -26,7 +26,7 @@ import { getRateLimitStatus } from '@/utils/goldPriceService'
  * - Real-time calculations with results panel, pie chart, and evolution table
  */
 const SGBCalculator = () => {
-  const { register, watch, setValue, formState: { errors } } = useForm({
+  const { register, watch, setValue, control, formState: { errors } } = useForm({
     resolver: joiResolver(sgbSchema),
     defaultValues: {
       goldAmount: 10,
@@ -215,24 +215,38 @@ const SGBCalculator = () => {
                     Tenure
                   </label>
                   <div className="flex items-center space-x-4">
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        {...register('tenure')}
-                        value={5}
-                        className="mr-2"
-                      />
-                      <span className="text-sm text-gray-700 dark:text-gray-300">5 years (Exit Option)</span>
-                    </label>
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        {...register('tenure')}
-                        value={8}
-                        className="mr-2"
-                      />
-                      <span className="text-sm text-gray-700 dark:text-gray-300">8 years (Full Term)</span>
-                    </label>
+                    <Controller
+                      name="tenure"
+                      control={control}
+                      render={({ field }) => (
+                        <>
+                          <label className="flex items-center">
+                            <input
+                              type="radio"
+                              name={field.name}
+                              value={5}
+                              checked={field.value === 5}
+                              onChange={() => field.onChange(5)}
+                              onBlur={field.onBlur}
+                              className="mr-2"
+                            />
+                            <span className="text-sm text-gray-700 dark:text-gray-300">5 years (Exit Option)</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="radio"
+                              name={field.name}
+                              value={8}
+                              checked={field.value === 8}
+                              onChange={() => field.onChange(8)}
+                              onBlur={field.onBlur}
+                              className="mr-2"
+                            />
+                            <span className="text-sm text-gray-700 dark:text-gray-300">8 years (Full Term)</span>
+                          </label>
+                        </>
+                      )}
+                    />
                   </div>
                 </div>
                 <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 mt-2">

@@ -356,3 +356,149 @@ Maps scenario IDs across Gherkin, golden JSON, unit, and integration layers.
 
 **I3 notes (POMIS):** `@smoke` + `@regression` Gherkin targeted green. Step defs in `pomis.steps.js`. Mutation spot-check on `calculatePOMIS` recommended (nightly).
 
+## ETF — Exchange Traded Funds
+
+| ID | Feature | Golden | Unit | Integration | Status | caReviewed |
+|----|---------|--------|------|-------------|--------|------------|
+| ETF-01 | `tests/features/calculators/etf.feature` | — | — | — | done | n/a |
+| ETF-02 | `etf.feature` | — | — | `etf.integration.test.jsx` | done | n/a |
+| ETF-03 | `etf.feature` | `etf.json#ETF-14` | — | `etf.integration.test.jsx` | done | false |
+| ETF-04 | `etf.feature` | — | — | `etf.integration.test.jsx` | done | n/a |
+| ETF-05 | `etf.feature` | — | — | — | done | n/a |
+| ETF-06 | `etf.feature` | — | — | — | done | n/a |
+| ETF-07 | `etf.feature` | — | — | — | done | n/a |
+| ETF-08 | `etf.feature` | `etf.json#ETF-08` | `calculations.etf.test.js` | `etf.integration.test.jsx` | done | n/a |
+| ETF-09 | `etf.feature` | — | `calculations.etf.test.js` | — | done | n/a |
+| ETF-10 | `etf.feature` | `etf.json#ETF-10` | `calculations.etf.test.js` | — | done | n/a |
+| ETF-11 | `etf.feature` | — | — | — | done | n/a |
+| ETF-12 | `etf.feature` | — | — | — | done | n/a |
+| ETF-13 | `etf.feature` | `etf.json#ETF-13` | `calculations.etf.test.js` | — | done | n/a |
+| ETF-14 | `etf.feature` | `etf.json#ETF-14`, `ETF-22` | `calculations.etf.test.js` | `etf.integration.test.jsx` | done | false |
+| ETF-15 | `etf.feature` | — | — | — | done | n/a |
+| ETF-20 | `etf.feature` | `etf.json#ETF-22-*` | `calculations.etf.test.js` | `etf.integration.test.jsx` | done | n/a |
+| ETF-21 | `etf.feature` | `etf.json#ETF-20-*`, `ETF-21` | `calculations.etf.test.js` | `etf.integration.test.jsx` | done | n/a |
+| ETF-22 | `etf.feature` | `etf.json#ETF-23-EXPENSE*` | `calculations.etf.test.js` | `etf.integration.test.jsx` | done | n/a |
+| ETF-23 | `etf.feature` | `etf.json#ETF-22` | `calculations.etf.test.js` | `etf.integration.test.jsx` | done | false |
+| ETF-22-STCG | — | `etf.json#ETF-22-STCG` | `calculations.etf.test.js` | — | done | false |
+| ETF-BD-TENURE-50 | — | `etf.json#ETF-BD-TENURE-50` | `calculations.etf.test.js` | — | done | n/a |
+
+**T1 matrix notes (ETF):** Amount ₹500–₹1L SIP / ₹1Cr lumpsum; tenure 1–50 years; CAGR 0–30% (defaults by type: equity 12%, debt 7%, gold 8%, international 10%); expense ratio 0–2% (default 0.20%); net return = CAGR − expense ratio; tax: equity/international → equity rules (12.5% LTCG above ₹1.25L, 20% STCG); debt/gold → debtMutualFund rules (20% indexed LTCG after 3y, slab STCG).
+
+**I1 notes (ETF):** §8.4 checklist passed — scenario IDs match golden JSON; tolerances documented in `etf.json`; adversarial cases in `calculations.etf.test.js` (min ₹500, expense max 2%, tenure 50, null inputs). LTCG/STCG golden aligned with `tests/fixtures/regulatory/ltcg-exemptions.json` (12.5%/20%, ₹1.25L exemption). `@tax` rows (`ETF-03`, `ETF-14`, `ETF-22`, `ETF-23`, `ETF-22-STCG`): `caReviewed: false` pending CA sign-off. **Gap:** ETF-23-STCG `@wip` skipped in Gherkin — UI tenure min 1 year; STCG covered in unit layer.
+
+**I3 notes (ETF):** `@smoke` + `@regression` Gherkin green (excl. `@wip`). Step defs in `etf.steps.js`. Mutation spot-check on `useETFCalculator` net-rate + expense deduction recommended (nightly).
+
+## DMF — Debt Mutual Fund
+
+| ID | Feature | Golden | Unit | Integration | Status | caReviewed |
+|----|---------|--------|------|-------------|--------|------------|
+| DMF-01 | `tests/features/calculators/debt-mutual-fund.feature` | — | — | — | done | n/a |
+| DMF-02 | `debt-mutual-fund.feature` | — | — | `debt-mutual-fund.integration.test.jsx` | done | n/a |
+| DMF-03 | `debt-mutual-fund.feature` | `debt-mutual-fund.json#DMF-14` | — | `debt-mutual-fund.integration.test.jsx` | done | false |
+| DMF-04 | `debt-mutual-fund.feature` | — | — | — | done | n/a |
+| DMF-05 | `debt-mutual-fund.feature` | — | — | — | done | n/a |
+| DMF-06 | `debt-mutual-fund.feature` | — | — | — | done | n/a |
+| DMF-07 | `debt-mutual-fund.feature` | — | — | — | done | n/a |
+| DMF-08 | `debt-mutual-fund.feature` | `debt-mutual-fund.json#DMF-08` | `calculations.debt-mutual-fund.test.js` | — | done | n/a |
+| DMF-09 | `debt-mutual-fund.feature` | — | `calculations.debt-mutual-fund.test.js` | — | done | n/a |
+| DMF-10 | `debt-mutual-fund.feature` | `debt-mutual-fund.json#DMF-10` | `calculations.debt-mutual-fund.test.js` | — | done | n/a |
+| DMF-11 | `debt-mutual-fund.feature` | — | `calculations.debt-mutual-fund.test.js` | — | done | n/a |
+| DMF-12 | `debt-mutual-fund.feature` | — | — | — | done | n/a |
+| DMF-13 | `debt-mutual-fund.feature` | — | `calculations.debt-mutual-fund.test.js` | — | done | n/a |
+| DMF-14 | `debt-mutual-fund.feature` | `debt-mutual-fund.json#DMF-14`, `DMF-20` | `calculations.debt-mutual-fund.test.js` | `debt-mutual-fund.integration.test.jsx` | done | false |
+| DMF-15 | `debt-mutual-fund.feature` | — | — | — | done | n/a |
+| DMF-20 | `debt-mutual-fund.feature` | `debt-mutual-fund.json#DMF-20` | `calculations.debt-mutual-fund.test.js` | `debt-mutual-fund.integration.test.jsx` | done | false |
+| DMF-21 | `debt-mutual-fund.feature` | `debt-mutual-fund.json#DMF-21-STCG`, `DMF-21-LTCG` | `calculations.debt-mutual-fund.test.js` | `debt-mutual-fund.integration.test.jsx` | done | false |
+| DMF-22 | `debt-mutual-fund.feature` | `debt-mutual-fund.json#DMF-22-SIP`, `DMF-22-LUMPSUM` | `calculations.debt-mutual-fund.test.js` | — | done | n/a |
+
+**I1 notes (DMF):** §8.4 checklist passed — scenario IDs match golden JSON; tolerances documented (`DMF-14` ±50, `DMF-20` ±50). 3-year LTCG boundary (`tenure >= 3` → indexed LTCG; `< 3` → income slab STCG) verified in unit + integration. Indexation uses simplified 6% factor in `taxCalculations.js` (not CII table in tax layer). `@tax` rows reference `ltcg-exemptions.json` — `caReviewed: false` pending CA sign-off.
+
+**I3 notes (DMF):** `@smoke` + `@regression` Gherkin targeted green. Step defs in `debt-mutual-fund.steps.js`. Mutation spot-check on `calculateTaxOnWithdrawal` ltcg_indexed branch recommended (nightly). UI indexation display uses `ciiCalculations` (may differ from tax simplification).
+
+## SGB — Sovereign Gold Bonds
+
+| ID | Feature | Golden | Unit | Integration | Status | caReviewed |
+|----|---------|--------|------|-------------|--------|------------|
+| SGB-01 | `tests/features/calculators/sgb.feature` | — | — | `sgb.integration.test.jsx` | done | n/a |
+| SGB-02 | `sgb.feature` | — | — | `sgb.integration.test.jsx` | done | n/a |
+| SGB-03 | `sgb.feature` | `sgb.json#SGB-14` | — | `sgb.integration.test.jsx` | done | false |
+| SGB-04 | `sgb.feature` | `sgb.json#SGB-26` | — | — | done | false |
+| SGB-05 | `sgb.feature` | `sgb.json#SGB-14` | — | — | done | n/a |
+| SGB-06 | `sgb.feature` | — | `calculations.sgb.test.js` | — | done | n/a |
+| SGB-07 | `sgb.feature` | — | — | — | done | n/a |
+| SGB-08 | `sgb.feature` | — | `calculations.sgb.test.js` | — | done | n/a |
+| SGB-09 | `sgb.feature` | — | `calculations.sgb.test.js` | — | done | n/a |
+| SGB-10 | `sgb.feature` | — | `calculations.sgb.test.js` | — | done | n/a |
+| SGB-11 | `sgb.feature` | — | `calculations.sgb.test.js` | — | done | n/a |
+| SGB-12 | `sgb.feature` | — | — | — | done | n/a |
+| SGB-13 | `sgb.feature` | — | — | — | done | n/a |
+| SGB-14 | `sgb.feature` | `sgb.json#SGB-14`, `SGB-14-5y` | `calculations.sgb.test.js` | `sgb.integration.test.jsx` | done | false |
+| SGB-15 | `sgb.feature` | — | — | — | done | n/a |
+| SGB-20 | `sgb.feature` | `sgb.json#SGB-20` | `calculations.sgb.test.js` | `sgb.integration.test.jsx` | done | n/a |
+| SGB-21 | `sgb.feature` | `sgb.json#SGB-21` | `calculations.sgb.test.js` | — | done | n/a |
+| SGB-22 | `sgb.feature` | — | — | — | reviewed | n/a |
+| SGB-23 | `sgb.feature` | `sgb.json#SGB-23` | `calculations.sgb.test.js` | `sgb.integration.test.jsx` | done | n/a |
+| SGB-25 | `sgb.feature` | — | — | — | done | n/a |
+| SGB-26 | `sgb.feature` | `sgb.json#SGB-26` | `calculations.sgb.test.js` | `sgb.integration.test.jsx` | done | false |
+
+**I1 notes (SGB):** §8.4 checklist passed — scenario IDs match golden JSON; tolerances documented in `sgb.json` (±100 standard, ±150 for SGB-20 large principal). Gold price deterministic via mocked `goldPriceService` at ₹6500/g (FALLBACK). `@tax` rows (`SGB-03`, `SGB-14`, `SGB-26`): capital gains exempt at maturity per `ltcg-exemptions.json` — `caReviewed: false` pending CA sign-off. **Gap:** SGB-24 rate-limit scenario deferred (localStorage-dependent); SGB interest annual tax simplified to zero at withdrawal.
+
+**I3 notes (SGB):** `@smoke` + `@regression` Gherkin green (excl. deferred SGB-24, conditional skip SGB-22 without `VITE_GOLDAPI_KEY`). Step defs in `sgb.steps.js`. Gold API mocked via Playwright route intercept (SGB-22/23/25) and vitest module mock in integration. Mutation spot-check on `calculateSGB` recommended (nightly).
+
+## REIT — Real Estate Investment Trusts
+
+| ID | Feature | Golden | Unit | Integration | Status | caReviewed |
+|----|---------|--------|------|-------------|--------|------------|
+| REIT-01 | `tests/features/calculators/reits.feature` | — | — | `reits.integration.test.jsx` | done | n/a |
+| REIT-02 | `reits.feature` | — | — | `reits.integration.test.jsx` | done | n/a |
+| REIT-03 | `reits.feature` | `reits.json#REIT-03` | `calculations.reits.test.js` | `reits.integration.test.jsx` | done | false |
+| REIT-04 | `reits.feature` | `reits.json#REIT-03` | — | — | done | false |
+| REIT-05 | `reits.feature` | `reits.json#REIT-14` | — | — | done | n/a |
+| REIT-06 | `reits.feature` | — | — | `reits.integration.test.jsx` | done | n/a |
+| REIT-07 | `reits.feature` | — | — | — | done | n/a |
+| REIT-08 | `reits.feature` | `reits.json#REIT-08` | `calculations.reits.test.js` | — | done | n/a |
+| REIT-09 | `reits.feature` | `reits.json#REIT-09` | `calculations.reits.test.js` | — | done | n/a |
+| REIT-10 | `reits.feature` | — | `calculations.reits.test.js` | — | done | n/a |
+| REIT-11 | `reits.feature` | — | — | — | done | n/a |
+| REIT-12 | `reits.feature` | — | — | — | done | n/a |
+| REIT-13 | `reits.feature` | `reits.json#REIT-13` | `calculations.reits.test.js` | — | done | n/a |
+| REIT-14 | `reits.feature` | `reits.json#REIT-14`, `REIT-03` | `calculations.reits.test.js` | `reits.integration.test.jsx` | done | false |
+| REIT-15 | `reits.feature` | — | — | — | done | n/a |
+| REIT-20 | `reits.feature` | `reits.json#REIT-20` | `calculations.reits.test.js` | `reits.integration.test.jsx` | done | n/a |
+| REIT-21 | `reits.feature` | `reits.json#REIT-21-LTCG` | `calculations.reits.test.js` | — | done | false |
+| REIT-21-STCG | — | `reits.json#REIT-21-STCG` | `calculations.reits.test.js` | — | done | false |
+| REIT-BD-MIN | — | `reits.json#REIT-BD-MIN` | `calculations.reits.test.js` | `reits.integration.test.jsx` | done | n/a |
+
+**I1 notes (REIT):** §8.4 checklist passed — scenario IDs match golden JSON; tolerances documented in `reits.json` (±50 standard, ±500 for large corpus, ±5000 for REIT-13). Dividend + appreciation model uses year-wise reinvestment in `useREITsCalculator`; `totalCapitalGain` tracks geometric appreciation on principal only. LTCG/STCG aligned with `tests/fixtures/regulatory/ltcg-exemptions.json` (12.5% / 20%, ₹1.25L exemption). `@tax` rows (`REIT-03`, `REIT-14`, `REIT-21-LTCG`, `REIT-21-STCG`): `caReviewed: false` pending CA sign-off. **Gap:** Annual dividend income tax not modeled at withdrawal (known limitation per `OPEN_ISSUES.md`); withdrawal tax applies to total returns only. **Gap:** REIT-21 STCG `@wip` in Gherkin — UI tenure min 1 year; STCG covered in unit layer.
+
+**I3 notes (REIT):** `@smoke` + `@regression` Gherkin targeted green (excl. `@wip` REIT-21 STCG). Step defs in `reits.steps.js`. Vitest unit/integration green. Mutation spot-check on `useREITsCalculator` / `calculateTaxOnWithdrawal` reits branch recommended (nightly).
+
+## NPS — National Pension System
+
+| ID | Feature | Golden | Unit | Integration | Status | caReviewed |
+|----|---------|--------|------|-------------|--------|------------|
+| NPS-01 | `tests/features/calculators/nps.feature` | — | — | `nps.integration.test.jsx` | done | n/a |
+| NPS-02 | `nps.feature` | — | — | `nps.integration.test.jsx` | done | n/a |
+| NPS-03 | `nps.feature` | `nps.json#NPS-03` | `calculations.nps.test.js` | `nps.integration.test.jsx` | done | false |
+| NPS-04 | `nps.feature` | `nps.json#NPS-03` | — | — | done | false |
+| NPS-05 | `nps.feature` | `nps.json#NPS-14` | — | — | done | n/a |
+| NPS-06 | `nps.feature` | — | `calculations.nps.test.js` | `nps.integration.test.jsx` | done | n/a |
+| NPS-07 | `nps.feature` | — | — | `NPSCalculator.test.jsx` | done | n/a |
+| NPS-08 | `nps.feature` | `nps.json#NPS-08` | `calculations.nps.test.js` | `NPSCalculator.test.jsx` | done | n/a |
+| NPS-09 | `nps.feature` | — | — | `NPSCalculator.test.jsx` | done | n/a |
+| NPS-10 | `nps.feature` | — | — | — | done | n/a |
+| NPS-11 | `nps.feature` | — | `calculations.nps.test.js` | `NPSCalculator.test.jsx` | done | n/a |
+| NPS-12 | `nps.feature` | — | — | — | done | n/a |
+| NPS-13 | `nps.feature` | `nps.json#NPS-13` | `calculations.nps.test.js` | — | done | n/a |
+| NPS-14 | `nps.feature` | `nps.json#NPS-14` | `calculations.nps.test.js` | `nps.integration.test.jsx` | done | false |
+| NPS-15 | `nps.feature` | — | — | `NPSCalculator.test.jsx` | done | n/a |
+| NPS-20 | `nps.feature` | `nps.json#NPS-20` | `calculations.nps.test.js` | `nps.integration.test.jsx` | done | n/a |
+| NPS-21 | `nps.feature` | `nps.json#NPS-21` | `calculations.nps.test.js` | `nps.integration.test.jsx` | done | n/a |
+| NPS-22 | `nps.feature` | `nps.json#NPS-22` | `calculations.nps.test.js` | `NPSCalculator.test.jsx` | done | false |
+| NPS-23 | `nps.feature` | — | — | — | specified | n/a |
+| NPS-24 | `nps.feature` | `nps.json#NPS-24` | `calculations.nps.test.js` | — | done | n/a |
+
+**I1 notes (NPS):** §8.4 checklist passed — scenario IDs match golden JSON; tolerances documented in `nps.json`; adversarial cases in `calculations.nps.test.js` (min ₹500, allocation ≠100%, null/zero inputs, negative returns). `@tax` rows (`NPS-03`, `NPS-14`, `NPS-22`): 60% tax-free / 40% taxable per `taxCalculations.js` partial branch — aligned with `tests/fixtures/regulatory/tax-slabs-fy2025-26.json` defaultEffectiveRate 0.30; `caReviewed: false` pending CA sign-off. **Gap:** NPS-23 Tier 2 `@wip` skipped in runner. Weighted return not displayed in results panel — verified via hook/unit and corpus golden match in Gherkin.
+
+**I3 notes (NPS):** `@smoke` + `@regression` Gherkin green (excl. `@wip` NPS-23). Step defs in `nps.steps.js`. Mutation spot-check on `calculateNPSWeightedReturn` / `calculateNPSFutureValue` / `calculateTaxOnWithdrawal` nps branch recommended (nightly).
+

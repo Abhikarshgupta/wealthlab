@@ -1,0 +1,219 @@
+[
+  {
+    "id": "REIT-14",
+    "description": "Golden calculation — ₹1L @ 7% dividend + 6% appreciation for 5 years (reinvested dividends)",
+    "pathType": "HP",
+    "tags": ["@regression", "@tax", "@calculator-reits"],
+    "inputs": {
+      "investmentAmount": 100000,
+      "dividendYield": 7,
+      "capitalAppreciation": 6,
+      "tenure": 5,
+      "incomeTaxSlab": 0.30
+    },
+    "expected": {
+      "finalValue": 184243.52,
+      "totalDividendIncome": 45361.89,
+      "totalCapitalGain": 33822.56,
+      "totalReturns": 84243.52,
+      "taxAmount": 0,
+      "postTaxAmount": 184243.52,
+      "taxRateLabel": "12.5% LTCG",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["useREITsCalculator year-wise reinvestment model", "manual spreadsheet 2026-08-29"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "REIT-03",
+    "description": "Post-tax Money in Hand at 30% slab — LTCG on withdrawal (dividend tax not modeled at withdrawal)",
+    "pathType": "XF",
+    "tags": ["@tax", "@smoke", "@calculator-reits"],
+    "inputs": {
+      "investmentAmount": 1000000,
+      "dividendYield": 7,
+      "capitalAppreciation": 6,
+      "tenure": 10,
+      "incomeTaxSlab": 0.30
+    },
+    "expected": {
+      "finalValue": 3394567.39,
+      "totalDividendIncome": 1289382.44,
+      "totalCapitalGain": 790847.7,
+      "totalReturns": 2394567.39,
+      "taxAmount": 283695.92,
+      "postTaxAmount": 3110871.47,
+      "taxRateLabel": "12.5% LTCG",
+      "tolerance": 500
+    },
+    "verifiedAgainst": ["calculateTaxOnWithdrawal reits LTCG branch", "tests/fixtures/regulatory/ltcg-exemptions.json"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "REIT-08",
+    "description": "Invalid min amount — ₹999 below ₹1,000 minimum",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-reits"],
+    "inputs": {
+      "investmentAmount": 999,
+      "dividendYield": 7,
+      "capitalAppreciation": 6,
+      "tenure": 5
+    },
+    "expected": {
+      "validationError": "Minimum investment amount is ₹1,000"
+    },
+    "verifiedAgainst": ["reitsSchema.js investmentAmount.min(1000)"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "REIT-20",
+    "description": "Dividend income and capital appreciation tracked separately with reinvestment",
+    "pathType": "HP",
+    "tags": ["@regression", "@calculator-reits"],
+    "inputs": {
+      "investmentAmount": 100000,
+      "dividendYield": 7,
+      "capitalAppreciation": 6,
+      "tenure": 5
+    },
+    "expected": {
+      "finalValue": 184243.52,
+      "totalDividendIncome": 45361.89,
+      "totalCapitalGain": 33822.56,
+      "totalReturns": 84243.52,
+      "evolutionYears": 5,
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["REIT-14 parity", "useREITsCalculator dividend + appreciation branches"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "REIT-21-LTCG",
+    "description": "LTCG 12.5% above ₹1.25L exemption when tenure ≥ 1 year",
+    "pathType": "HP",
+    "tags": ["@tax", "@regression", "@calculator-reits"],
+    "inputs": {
+      "investmentAmount": 1000000,
+      "dividendYield": 7,
+      "capitalAppreciation": 6,
+      "tenure": 10,
+      "incomeTaxSlab": 0.30
+    },
+    "expected": {
+      "finalValue": 3394567.39,
+      "totalReturns": 2394567.39,
+      "taxAmount": 283695.92,
+      "postTaxAmount": 3110871.47,
+      "taxRateLabel": "12.5% LTCG",
+      "tolerance": 500
+    },
+    "verifiedAgainst": ["tests/fixtures/regulatory/ltcg-exemptions.json", "Section 112A FY2024-25"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "REIT-21-STCG",
+    "description": "STCG 20% when tenure < 1 year (unit/hook layer; UI tenure min 1 year)",
+    "pathType": "HP",
+    "tags": ["@tax", "@calculator-reits"],
+    "inputs": {
+      "investmentAmount": 100000,
+      "dividendYield": 7,
+      "capitalAppreciation": 6,
+      "tenure": 0.5
+    },
+    "expected": {
+      "finalValue": 106500,
+      "totalReturns": 6500,
+      "taxAmount": 1300,
+      "postTaxAmount": 105200,
+      "taxRateLabel": "20% STCG",
+      "tolerance": 50
+    },
+    "verifiedAgainst": ["calculateTaxOnWithdrawal reits STCG branch", "tests/fixtures/regulatory/ltcg-exemptions.json"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "REIT-13",
+    "description": "Large investment ₹1Cr for 10 years without overflow",
+    "pathType": "EG",
+    "tags": ["@edge", "@calculator-reits"],
+    "inputs": {
+      "investmentAmount": 10000000,
+      "dividendYield": 7,
+      "capitalAppreciation": 6,
+      "tenure": 10
+    },
+    "expected": {
+      "finalValue": 33945673.9,
+      "totalDividendIncome": 12893824.41,
+      "totalCapitalGain": 7908476.97,
+      "totalReturns": 23945673.9,
+      "taxAmount": 2977584.24,
+      "postTaxAmount": 30968089.66,
+      "taxRateLabel": "12.5% LTCG",
+      "tolerance": 5000
+    },
+    "verifiedAgainst": ["useREITsCalculator at scale", "manual spreadsheet 2026-08-29"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "REIT-BD-MIN",
+    "description": "Minimum ₹1,000 investment accepted at 1-year tenure",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-reits"],
+    "inputs": {
+      "investmentAmount": 1000,
+      "dividendYield": 7,
+      "capitalAppreciation": 6,
+      "tenure": 1
+    },
+    "expected": {
+      "validation": "accept",
+      "finalValue": 1130,
+      "totalReturns": 130,
+      "taxAmount": 0,
+      "postTaxAmount": 1130,
+      "taxRateLabel": "12.5% LTCG",
+      "tolerance": 10
+    },
+    "verifiedAgainst": ["reitsSchema.js investmentAmount.min(1000)", "investmentInfo.reits minInvestment"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "REIT-09",
+    "description": "Maximum tenure boundary — 50 years valid",
+    "pathType": "BD",
+    "tags": ["@edge", "@calculator-reits"],
+    "inputs": {
+      "investmentAmount": 100000,
+      "dividendYield": 7,
+      "capitalAppreciation": 6,
+      "tenure": 50
+    },
+    "expected": {
+      "finalValue": 45073592.52,
+      "tolerance": 50000
+    },
+    "verifiedAgainst": ["reitsSchema.js tenure.max(50)", "useREITsCalculator 50-year loop"],
+    "verifiedBy": "QA",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  }
+]
