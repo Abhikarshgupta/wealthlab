@@ -66,7 +66,7 @@ const Home = () => {
               </div>
 
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 pt-4">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-4 pt-4">
                 <Link
                   to={routes.calculators.index}
                   className={`
@@ -93,6 +93,20 @@ const Home = () => {
                   `}
                 >
                   Try Corpus Simulator
+                </Link>
+                <Link
+                  to={routes.personalInflation}
+                  className={`
+                    inline-flex items-center justify-center px-8 py-4 rounded-lg font-semibold text-lg
+                    transition-all duration-300 hover:scale-105
+                    ${isDark 
+                      ? 'bg-gray-800/50 border-2 border-green-500/40 hover:border-green-400 text-white' 
+                      : 'bg-white/80 border-2 border-green-500/40 hover:border-green-600 text-gray-900'
+                    }
+                    backdrop-blur-sm
+                  `}
+                >
+                  What’s my inflation?
                 </Link>
               </div>
 
@@ -133,6 +147,75 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Personal inflation — compact explainer */}
+      <section className={`relative py-14 md:py-16 ${isDark ? 'bg-gray-900/50' : 'bg-white/50'} backdrop-blur-sm`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 mb-10">
+            <div className="max-w-2xl">
+              <p className={`text-xs font-semibold uppercase tracking-wide mb-2 ${isDark ? 'text-green-400' : 'text-green-600'}`}>
+                Planning rate
+              </p>
+              <h2 className={`text-3xl md:text-4xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                What’s my inflation?
+              </h2>
+              <p className={`text-lg leading-relaxed ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                Published CPI is an average basket. Yours depends on rent, school, and how you live.
+              </p>
+            </div>
+            <Link
+              to={routes.personalInflation}
+              className={`
+                inline-flex items-center justify-center self-start px-6 py-3 rounded-lg font-semibold
+                transition-all duration-300 hover:scale-105 shrink-0
+                ${isDark
+                  ? 'bg-green-500 hover:bg-green-600 text-white shadow-lg shadow-green-500/30'
+                  : 'bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-600/30'
+                }
+              `}
+            >
+              What’s my inflation?
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              {
+                step: '1',
+                title: 'Your mix, not the national average',
+                body: 'Rent, school, and a car change the weights. No rupee budgets.',
+              },
+              {
+                step: '2',
+                title: 'One loud bill is not 12% inflation',
+                body: 'The year is the mix — not the scariest bill.',
+              },
+              {
+                step: '3',
+                title: 'Then use it in calculators',
+                body: 'Apply your estimate, or keep the 6% planning default.',
+              },
+            ].map((item) => (
+              <div
+                key={item.step}
+                className={`
+                  rounded-xl p-6 border
+                  ${isDark ? 'bg-gray-800/80 border-gray-700/50' : 'bg-white/80 border-gray-200/50'}
+                `}
+              >
+                <div className={`text-sm font-semibold mb-2 ${isDark ? 'text-green-400' : 'text-green-600'}`}>
+                  {item.step}
+                </div>
+                <h3 className={`font-semibold text-lg mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {item.title}
+                </h3>
+                <p className={`text-sm leading-relaxed ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                  {item.body}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Features Section - Full Width */}
       <section className={`relative py-20 md:py-32 ${isDark ? 'bg-gray-900/50' : 'bg-white/50'} backdrop-blur-sm`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -155,7 +238,7 @@ const Home = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             <FeatureCard
               title="Investment Calculators"
               description="Calculate returns for PPF, FD, SIP, NPS, NSC, SSY, SCSS, SGB, ELSS, Equity, ETFs, Debt Mutual Funds, REITs, 54EC Bonds, and more with precision and detailed breakdowns"
@@ -176,6 +259,13 @@ const Home = () => {
               route={routes.corpusCalculator}
               icon="🚀"
               delay={0.3}
+            />
+            <FeatureCard
+              title="What’s my inflation?"
+              description="A short interview for your household mix — then one rate you can apply to calculators"
+              route={routes.personalInflation}
+              icon="📉"
+              delay={0.4}
             />
           </div>
         </div>

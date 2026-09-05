@@ -1,0 +1,8 @@
+[
+  { "id": "PI-ADV-NULL", "payload": null },
+  { "id": "PI-ADV-EMPTY", "payload": {} },
+  { "id": "PI-ADV-NAN-OVERLAY", "overlay": { "w": { "rent": "NaN" }, "pi_i_estimate": { "rent": null } } },
+  { "id": "PI-ADV-ORPHAN-RENT", "note": "lived.rent set while roof is own" },
+  { "id": "PI-ADV-WENT-UP-0", "pi": 0 },
+  { "id": "PI-ADV-WENT-UP-26", "pi": 26 }
+]

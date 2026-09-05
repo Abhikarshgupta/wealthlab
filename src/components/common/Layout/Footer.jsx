@@ -77,6 +77,14 @@ const Footer = () => {
                   Corpus Simulator
                 </Link>
               </li>
+              <li>
+                <Link
+                  to={routes.personalInflation}
+                  className="text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 transition-colors"
+                >
+                  What’s my inflation?
+                </Link>
+              </li>
               <li className="text-gray-400 dark:text-gray-500 inline-flex items-center gap-2">
                 Investment Guides
                 <span className="px-1.5 py-0.5 text-xs bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">

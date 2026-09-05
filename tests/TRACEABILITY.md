@@ -502,3 +502,76 @@ Maps scenario IDs across Gherkin, golden JSON, unit, and integration layers.
 
 **I3 notes (NPS):** `@smoke` + `@regression` Gherkin green (excl. `@wip` NPS-23). Step defs in `nps.steps.js`. Mutation spot-check on `calculateNPSWeightedReturn` / `calculateNPSFutureValue` / `calculateTaxOnWithdrawal` nps branch recommended (nightly).
 
+## PI — Personal inflation
+
+**T2–T3 complete** 29 Aug 2026. Spec audit closed in [TEST-SUITE-REVIEW.md](../docs/features/personal-inflation/prd/TEST-SUITE-REVIEW.md). Engine π, overlay store API, and results UI stay **RED** until I2. `caReviewed`: n/a.
+
+| ID | Feature | Golden | Unit | Integration | Status | caReviewed |
+|----|---------|--------|------|-------------|--------|------------|
+| PI-01 | questionnaire | — | — | integration | specified | n/a |
+| PI-02 | system | — | — | integration | specified | n/a |
+| PI-03 | questionnaire | — | geo.test.js | — | specified | n/a |
+| PI-04 | questionnaire | — | — | integration | specified | n/a |
+| PI-05 | questionnaire | — | beats | integration | specified | n/a |
+| PI-06 | questionnaire | — | — | integration | specified | n/a |
+| PI-07 | questionnaire | PI-24 | engine | integration | specified | n/a |
+| PI-08 | — | — | store | integration | specified | n/a |
+| PI-09 | questionnaire | — | beats | integration | specified | n/a |
+| PI-10 | questionnaire | — | beats | integration | specified | n/a |
+| PI-11 | — | — | beats | — | unit | n/a |
+| PI-12 | questionnaire | — | — | integration | specified | n/a |
+| PI-13 | — | — | beats + store | — | unit | n/a |
+| PI-14 | system | — | store | — | specified | n/a |
+| PI-20 | engine | #PI-20 | engine | — | fixtured RED | n/a |
+| PI-21 | — | — | engine | — | unit RED | n/a |
+| PI-22 | engine | #PI-22 | engine | — | fixtured RED | n/a |
+| PI-23 | engine + results | #PI-23 | engine | integration RED | fixtured | n/a |
+| PI-24 | engine | #PI-24 | engine | — | fixtured RED | n/a |
+| PI-25 | — | — | engine | — | unit RED | n/a |
+| PI-26 | — | triggers | engine | — | unit RED | n/a |
+| PI-27 | — | #PI-27 | engine | — | unit RED | n/a |
+| PI-28 | — | #PI-28 | engine | — | fixtured RED | n/a |
+| PI-29 | — | — | engine | — | unit RED | n/a |
+| PI-30 | — | — | engine | — | unit RED | n/a |
+| PI-31 | — | — | engine | — | unit RED | n/a |
+| PI-32 | — | — | engine | — | unit RED | n/a |
+| PI-33 | — | cartesian | engine | — | unit RED | n/a |
+| PI-34 | — | — | engine | — | unit RED | n/a |
+| PI-35 | — | — | engine | — | unit RED | n/a |
+| PI-40 | — | #PI-40 | engine | — | unit RED | n/a |
+| PI-41 | — | overlay rates | engine | — | unit RED | n/a |
+| PI-42 | — | #PI-42 | engine | — | fixtured RED | n/a |
+| PI-43 | — | — | engine | — | unit RED | n/a |
+| PI-44 | — | — | engine | — | unit RED | n/a |
+| PI-45 | — | — | engine | — | unit RED | n/a |
+| PI-46 | — | — | engine | — | unit RED | n/a |
+| PI-47 | — | — | engine | — | unit RED | n/a |
+| PI-48 | — | — | engine | — | unit RED | n/a |
+| PI-49 | — | 10368 mix | engine | — | unit RED | n/a |
+| PI-50 | — | — | engine | — | unit RED | n/a |
+| PI-60 | results | #PI-23 | — | integration RED | specified | n/a |
+| PI-61 | results | — | — | integration RED | specified | n/a |
+| PI-62 | results | — | — | integration RED | specified | n/a |
+| PI-63 | results | — | — | integration + Gherkin | specified | n/a |
+| PI-64 | results | — | — | integration RED | specified | n/a |
+| PI-65 | results outline | PI-20/23 | — | integration RED | specified | n/a |
+| PI-66 | results | — | — | integration | specified | n/a |
+| PI-67 | results | — | — | — | gherkin | n/a |
+| PI-68 | results | — | — | integration | specified | n/a |
+| PI-69 | — | #PI-69 | engine | — | unit RED | n/a |
+| PI-80 | results | #PI-23 | engine | integration RED | specified | n/a |
+| PI-81 | results | — | — | integration | specified | n/a |
+| PI-82 | results | — | engine | integration RED | specified | n/a |
+| PI-83 | — | — | engine | integration RED | specified | n/a |
+| PI-SYS-01 | system | — | store | — | unit | n/a |
+| PI-SYS-02 | system | — | store | — | gherkin | n/a |
+| PI-SYS-03 | — | — | store | — | contract RED | n/a |
+| PI-SYS-04 | — | — | store | — | unit | n/a |
+| PI-SYS-05 | — | — | store | — | unit | n/a |
+| PI-SYS-06 | system | — | — | integration | specified | n/a |
+| PI-SYS-07 | system | — | — | integration | specified | n/a |
+| PI-SYS-08 | system | — | — | — | gherkin | n/a |
+| PI-ADV-* | — | adversarial.json | engine | — | unit RED | n/a |
+
+**Notes:** Interview specs (PI-01–14, PI-SYS-06/07, PI-66/68) may pass today. Engine (`personalInflation.engine.test.js`), results hero/apply (PI-60+), overlay store (`PI-SYS-03`) intentionally fail until I2.
+

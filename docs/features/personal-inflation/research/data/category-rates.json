@@ -1,0 +1,52 @@
+{
+  "vintage": "2026-08-29",
+  "primaryMonth": "2026-07",
+  "primaryMonthStatus": "provisional",
+  "engineRule": "officialWeighted uses mospi_default only. naive_mean is UI/research, never unlabeled MoSPI.",
+  "categories": [
+    {
+      "id": "headline",
+      "label": "Headline CPI",
+      "mospi_default": { "series": "CPI Combined general", "yoy": 4.45, "unit": "%", "geo": "All-India Combined" },
+      "prints": [
+        { "yoy": 4.45, "label": "CPI Combined Jul 2026 P", "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2298247" },
+        { "yoy": 3.96, "label": "CPI Urban Jul 2026 P", "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2298247" },
+        { "yoy": 4.84, "label": "CPI Rural Jul 2026 P", "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2298247" },
+        { "yoy": 4.38, "label": "CPI Combined Jun 2026 P", "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2284125" },
+        { "yoy": 9.78, "label": "WPI All commodities Jul 2026 P (not household)", "url": "https://eaindustry.nic.in/press_release/press_release_202608.pdf" }
+      ]
+    },
+    {
+      "id": "tomato",
+      "label": "Tomato",
+      "mospi_default": { "series": "CPI item Tomato Combined", "yoy": -4.59, "unit": "%", "geo": "All-India Combined", "weight": 0.4961 },
+      "prints": [
+        { "yoy": -4.59, "label": "CPI Tomato Jul 2026 P (was +31.92 in Jun)", "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2298247" },
+        { "yoy": 31.92, "label": "CPI Tomato Jun 2026 P", "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2284125" }
+      ]
+    },
+    {
+      "id": "rent",
+      "label": "Actual rents (04.1)",
+      "mospi_default": { "series": "CPI 04.1 Combined", "yoy": 2.11, "unit": "%", "geo": "All-India Combined" },
+      "prints": [
+        { "yoy": 2.11, "label": "CPI 04.1 Combined Jul 2026 P", "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2298247" },
+        { "yoy": 1.96, "label": "CPI 04.1 Urban Jul 2026 P", "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2298247" },
+        { "yoy": 2.22, "label": "CPI Housing division Combined Jul 2026 P", "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2298247" },
+        { "yoy": 3.6, "label": "RBI House Price Index All-India YoY Q1 2026-27 (sale prices, not rent)", "url": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=63436" },
+        { "yoy": 12, "label": "Portal sample Bengaluru 2BHK asking-rent YoY ~8–15% (not MoSPI); midpoint 12 used only as lived default seed", "url": "https://www.nestriqo.com/blog/rental-price-trends-in-bangalore" }
+      ]
+    },
+    {
+      "id": "petrol",
+      "label": "Petrol / running a vehicle",
+      "mospi_default": { "series": "CPI 07.2 Operation of personal transport Combined", "yoy": 7.36, "unit": "%", "geo": "All-India Combined", "note": "Petrol/diesel/LPG in CPI priced as of 15th of month; item-level petrol not in press highlight table" },
+      "prints": [
+        { "yoy": 7.36, "label": "CPI 07.2 Combined Jul 2026 P", "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2298247" },
+        { "yoy": 4.43, "label": "CPI Transport division Combined Jul 2026 P", "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2298247" },
+        { "yoy": 32.4, "label": "WPI Mineral oils Jul 2026 P (wholesale petroleum products, not pump CPI)", "url": "https://eaindustry.nic.in/press_release/press_release_202608.pdf" },
+        { "yoy": 20.05, "label": "WPI Fuel and power Jul 2026 P", "url": "https://eaindustry.nic.in/press_release/press_release_202608.pdf" }
+      ]
+    }
+  ]
+}

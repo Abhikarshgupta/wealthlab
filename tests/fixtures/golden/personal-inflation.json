@@ -1,0 +1,334 @@
+[
+  {
+    "id": "PI-20",
+    "description": "Quiet owner cash COLI — no Chapter 2 tilts, no lived jumps",
+    "pathType": "HP",
+    "tags": ["@smoke", "@regression", "@personal-inflation"],
+    "inputs": {
+      "geo": { "cityId": "bangalore", "stateUt": "Karnataka" },
+      "roof": "own_no_emi",
+      "who": { "school": "none", "coaching": false, "elder": false, "help": false, "pet": false },
+      "commute": "mix",
+      "dining": "home",
+      "cam": "no",
+      "care": "public_esi",
+      "premRetail": false,
+      "premJump": [],
+      "lived": {
+        "rent": null,
+        "cam": null,
+        "schoolFees": null,
+        "coachingFees": null,
+        "elderCare": null,
+        "helpCosts": null,
+        "motorPrem": null
+      }
+    },
+    "expected": {
+      "pi_official_weighted": 4.2689,
+      "pi_your_estimate": 4.2689,
+      "display": 4.3,
+      "w": {
+        "food": 34,
+        "rent": 0,
+        "dwelling": 4,
+        "utilities": 8,
+        "help": 2,
+        "health_care": 6,
+        "health_prem": 0,
+        "motor_run": 6,
+        "passenger": 4,
+        "vehicles": 0,
+        "education": 5,
+        "restaurants": 4,
+        "residual": 27,
+        "jewellery": 0,
+        "motor_prem": 0
+      },
+      "contrast": { "combined": 4.45, "allIndiaUrban": 3.96, "stateUrbanHeadline": 4.37 },
+      "vintageMonth": "2026-07",
+      "tolerance": 0.06
+    },
+    "verifiedAgainst": ["engine PRD §4.2 owner_cash × §5 Urban YoY, 29 Aug 2026"],
+    "verifiedBy": "T1 arithmetic",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "PI-22",
+    "description": "Quiet renter sitting lease — both books use 04.1 1.96",
+    "pathType": "HP",
+    "tags": ["@smoke", "@personal-inflation"],
+    "inputs": {
+      "geo": { "cityId": "lucknow", "stateUt": "Uttar Pradesh" },
+      "roof": "rent",
+      "who": { "school": "none", "coaching": false, "elder": false, "help": false, "pet": false },
+      "commute": "mix",
+      "dining": "home",
+      "cam": "no",
+      "care": "public_esi",
+      "premRetail": false,
+      "premJump": [],
+      "lived": {
+        "rent": "usual",
+        "cam": null,
+        "schoolFees": null,
+        "coachingFees": null,
+        "elderCare": null,
+        "helpCosts": null,
+        "motorPrem": null
+      }
+    },
+    "expected": {
+      "pi_official_weighted": 3.5076,
+      "pi_your_estimate": 3.5076,
+      "display": 3.5,
+      "w": {
+        "food": 30,
+        "rent": 32,
+        "dwelling": 4,
+        "utilities": 7,
+        "help": 2,
+        "health_care": 5,
+        "health_prem": 0,
+        "motor_run": 3,
+        "passenger": 6,
+        "vehicles": 0,
+        "education": 4,
+        "restaurants": 4,
+        "residual": 3,
+        "jewellery": 0,
+        "motor_prem": 0
+      },
+      "pi_i_official_rent": 1.96,
+      "pi_i_estimate_rent": 1.96,
+      "contrast": { "combined": 4.45, "allIndiaUrban": 3.96, "stateUrbanHeadline": 3.62 },
+      "tolerance": 0.06
+    },
+    "verifiedAgainst": ["engine PRD §4.3 renter × §5"],
+    "verifiedBy": "T1 arithmetic",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "PI-23",
+    "description": "Quiet renter lease reset — official frozen, estimate rent line 12",
+    "pathType": "HP",
+    "tags": ["@smoke", "@regression", "@personal-inflation"],
+    "inputs": {
+      "geo": { "cityId": "lucknow", "stateUt": "Uttar Pradesh" },
+      "roof": "rent",
+      "who": { "school": "none", "coaching": false, "elder": false, "help": false, "pet": false },
+      "commute": "mix",
+      "dining": "home",
+      "cam": "no",
+      "care": "public_esi",
+      "premRetail": false,
+      "premJump": [],
+      "lived": {
+        "rent": "jumped",
+        "cam": null,
+        "schoolFees": null,
+        "coachingFees": null,
+        "elderCare": null,
+        "helpCosts": null,
+        "motorPrem": null
+      }
+    },
+    "expected": {
+      "pi_official_weighted": 3.5076,
+      "pi_your_estimate": 6.7204,
+      "display": 6.7,
+      "pi_i_official_rent": 1.96,
+      "pi_i_estimate_rent": 12,
+      "tolerance": 0.06
+    },
+    "verifiedAgainst": ["engine PRD §7 rent seed 12; 32pp × (12−1.96)"],
+    "verifiedBy": "T1 arithmetic",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "PI-24",
+    "description": "EMI mix identical to own_no_emi quiet owner",
+    "pathType": "HP",
+    "tags": ["@regression", "@personal-inflation"],
+    "inputs": {
+      "geo": { "cityId": "bangalore", "stateUt": "Karnataka" },
+      "roof": "emi",
+      "who": { "school": "none", "coaching": false, "elder": false, "help": false, "pet": false },
+      "commute": "mix",
+      "dining": "home",
+      "cam": "no",
+      "care": "public_esi",
+      "premRetail": false,
+      "premJump": [],
+      "lived": {
+        "rent": null,
+        "cam": null,
+        "schoolFees": null,
+        "coachingFees": null,
+        "elderCare": null,
+        "helpCosts": null,
+        "motorPrem": null
+      }
+    },
+    "expected": {
+      "cloneOf": "PI-20",
+      "tolerance": 0.06
+    },
+    "verifiedAgainst": ["engine PRD §11.1 emi identical to own_no_emi"],
+    "verifiedBy": "T1",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "PI-28",
+    "description": "premRetail with empty premJump does not change official-weighted",
+    "pathType": "XF",
+    "tags": ["@regression", "@personal-inflation"],
+    "inputs": {
+      "geo": { "cityId": "bangalore", "stateUt": "Karnataka" },
+      "roof": "own_no_emi",
+      "who": { "school": "none", "coaching": false, "elder": false, "help": false, "pet": false },
+      "commute": "mix",
+      "dining": "home",
+      "cam": "no",
+      "care": "public_esi",
+      "premRetail": true,
+      "premJump": [],
+      "lived": {
+        "rent": null,
+        "cam": null,
+        "schoolFees": null,
+        "coachingFees": null,
+        "elderCare": null,
+        "helpCosts": null,
+        "motorPrem": null
+      }
+    },
+    "expected": {
+      "pi_official_weighted": 4.2689,
+      "pi_your_estimate": 4.2689,
+      "health_prem_w": 0,
+      "tolerance": 0.06
+    },
+    "verifiedAgainst": ["engine PRD §7 premRetail empty jump"],
+    "verifiedBy": "T1",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "PI-42",
+    "description": "Jewellery and vehicle purchase weights stay 0 on both SIP books",
+    "pathType": "XF",
+    "tags": ["@regression", "@personal-inflation"],
+    "inputs": { "ref": "PI-20" },
+    "expected": {
+      "jewellery": 0,
+      "vehicles": 0,
+      "tolerance": 0.0001
+    },
+    "verifiedAgainst": ["engine PRD §2, §11.1"],
+    "verifiedBy": "T1",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "PI-40",
+    "description": "Overlay rent share 32 → 40; residual absorbs; flags unchanged",
+    "pathType": "HP",
+    "tags": ["@overlay", "@regression", "@personal-inflation"],
+    "inputs": { "ref": "PI-23" },
+    "overlay": { "w": { "rent": 40 } },
+    "expected": {
+      "w_rent": 40,
+      "sum_w": 100,
+      "flags_applied_rent": "jumped",
+      "pi_i_official_rent": 1.96,
+      "pi_moves": true,
+      "tolerance": 0.06
+    },
+    "verifiedAgainst": ["engine PRD §9 overlay mix"],
+    "verifiedBy": "T3 contract",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "PI-69",
+    "description": "Lucknow renter reset + school jumped — results PRD §5 first-paint band",
+    "pathType": "HP",
+    "tags": ["@smoke", "@regression", "@personal-inflation"],
+    "inputs": {
+      "geo": { "cityId": "lucknow", "stateUt": "Uttar Pradesh" },
+      "roof": "rent",
+      "who": { "school": "1", "coaching": false, "elder": false, "help": false, "pet": false },
+      "commute": "mix",
+      "dining": "home",
+      "cam": "no",
+      "care": "public_esi",
+      "premRetail": false,
+      "premJump": [],
+      "lived": {
+        "rent": "jumped",
+        "cam": null,
+        "schoolFees": "jumped",
+        "coachingFees": null,
+        "elderCare": null,
+        "helpCosts": null,
+        "motorPrem": null
+      }
+    },
+    "expected": {
+      "pi_official_weighted": 3.51,
+      "pi_your_estimate": 6.80,
+      "display": 6.8,
+      "pi_i_estimate_rent": 12,
+      "pi_i_estimate_education": 8,
+      "pi_i_official_rent": 1.96,
+      "pi_i_official_education": 4.17,
+      "tolerance": 0.15,
+      "note": "Band ~6–8%; exact π after education +4pp renorm in I2 spreadsheet"
+    },
+    "verifiedAgainst": ["results PRD §5", "engine PRD §6 school_1 +4"],
+    "verifiedBy": "T3 contract — tolerance wide until I2 freeze",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  },
+  {
+    "id": "PI-27",
+    "description": "School 2plus + coaching before clamp; education cap 22",
+    "pathType": "BD",
+    "tags": ["@edge", "@personal-inflation"],
+    "inputs": {
+      "geo": { "cityId": "bangalore", "stateUt": "Karnataka" },
+      "roof": "own_no_emi",
+      "who": { "school": "2plus", "coaching": true, "elder": false, "help": false, "pet": false },
+      "commute": "mix",
+      "dining": "home",
+      "cam": "no",
+      "care": "public_esi",
+      "premRetail": false,
+      "premJump": [],
+      "lived": {
+        "rent": null,
+        "cam": null,
+        "schoolFees": "usual",
+        "coachingFees": "usual",
+        "elderCare": null,
+        "helpCosts": null,
+        "motorPrem": null
+      }
+    },
+    "expected": {
+      "education_w_max": 22,
+      "jewellery_w": 0,
+      "sum_w": 100,
+      "tolerance": 0.05
+    },
+    "verifiedAgainst": ["engine PRD §8.1 education max 22"],
+    "verifiedBy": "T3 contract",
+    "caReviewed": false,
+    "lastVerified": "2026-08-29"
+  }
+]

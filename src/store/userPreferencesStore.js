@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { DEFAULT_INFLATION_RATES } from '@/constants/inflationRates'
+import { DEFAULT_INFLATION_RATES, roundInflationPct } from '@/constants/inflationRates'
 
 const useUserPreferencesStore = create(
   persist(
@@ -31,7 +31,10 @@ const useUserPreferencesStore = create(
 
       // Actions
       setDefaultInflationRate: (rate) => {
-        set({ defaultInflationRate: rate, lastInflationRateChange: Date.now() })
+        set({
+          defaultInflationRate: roundInflationPct(rate),
+          lastInflationRateChange: Date.now(),
+        })
       },
       setCurrencyFormat: (format) => set({ currencyFormat: format }),
       setNumberFormat: (format) => set({ numberFormat: format }),
@@ -72,6 +75,16 @@ const useUserPreferencesStore = create(
     }),
     {
       name: 'user-preferences-storage',
+      merge: (persisted, current) => {
+        const saved = persisted && typeof persisted === 'object' ? persisted : {}
+        return {
+          ...current,
+          ...saved,
+          defaultInflationRate: roundInflationPct(
+            saved.defaultInflationRate ?? current.defaultInflationRate
+          ),
+        }
+      },
       partialize: (state) => ({
         defaultInflationRate: state.defaultInflationRate,
         adjustInflation: state.adjustInflation,
