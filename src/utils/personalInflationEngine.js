@@ -377,18 +377,6 @@ const clampMix = (w, roof, warnings, hasPet = false, protect = []) => {
     if (extra < 0) w.residual = Math.min(resMax, (w.residual || 0) + -extra)
   } else {
     const locked = new Set(['jewellery', 'vehicles', ...(isRenter(roof) ? [] : ['rent'])])
-    let s = sumW(w)
-    if (Math.abs(s - 100) > 0.0001 && s > 0) {
-      const scaleKeys = ACCOUNT_IDS.filter((id) => !locked.has(id))
-      const scaleSum = scaleKeys.reduce((n, id) => n + w[id], 0)
-      if (scaleSum > 0) {
-        const target = 100 - [...locked].reduce((n, id) => n + w[id], 0)
-        scaleKeys.forEach((id) => {
-          w[id] = (w[id] / scaleSum) * target
-        })
-      }
-    }
-
     const extra = sumW(w) - 100
     if (extra > 0.0001) {
       const room = Math.max(0, resMax - w.residual)
@@ -404,7 +392,7 @@ const clampMix = (w, roof, warnings, hasPet = false, protect = []) => {
       }
     }
 
-    s = sumW(w)
+    let s = sumW(w)
     if (Math.abs(s - 100) > 0.0001 && s > 0) {
       const scaleKeys = ACCOUNT_IDS.filter((id) => !locked.has(id))
       const scaleSum = scaleKeys.reduce((n, id) => n + w[id], 0)
@@ -443,16 +431,14 @@ const clampMix = (w, roof, warnings, hasPet = false, protect = []) => {
 
   toIntegerShares(w, roof, hasPet)
 
-  drift = sumW(w) - 100
-  if (drift > 0) {
-    dumpFrom(w, drift, roof, isOverlay ? protect : [])
-  } else if (drift < 0) {
-    w.residual = Math.min(resMax, Math.max(0, (w.residual || 0) - drift))
+  const balanceDrift = () => {
+    const drift = sumW(w) - 100
+    if (drift === 0) return
+    if (isOverlay && drift > 0) dumpFrom(w, drift, roof, protect)
+    else w.residual = Math.max(0, Math.min(resMax, (w.residual || 0) - drift))
   }
-  drift = sumW(w) - 100
-  if (drift !== 0) {
-    w.residual = Math.max(0, Math.min(resMax, (w.residual || 0) - drift))
-  }
+
+  balanceDrift()
 
   w.jewellery = 0
   w.vehicles = 0
@@ -462,9 +448,7 @@ const clampMix = (w, roof, warnings, hasPet = false, protect = []) => {
     w[id] = Math.max(0, Math.round(w[id] || 0))
   })
 
-  drift = sumW(w) - 100
-  if (drift > 0) dumpFrom(w, drift, roof, isOverlay ? protect : [])
-  else if (drift < 0) w.residual = Math.min(resMax, Math.max(0, (w.residual || 0) - drift))
+  balanceDrift()
 }
 
 const repairLived = (persona) => {

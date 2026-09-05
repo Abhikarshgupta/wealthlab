@@ -1,0 +1,314 @@
+﻿node.exe : (node:24792) [DEP0174] DeprecationWarning: Calling promisify on a function that returns a Promise is likely 
+a mistake.
+At C:\Users\abg71\AppData\Roaming\npm\npm.ps1:24 char:5
++     & "node$exe"  "$basedir/node_modules/npm/bin/npm-cli.js" $args
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ((node:24792) [D...kely a mistake.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+(Use `node --trace-deprecation ...` to show where the warning was created)
+
+> wealth-mngr@0.0.0 test:gherkin:smoke
+> bddgen && playwright test --grep @smoke
+
+[WebServer] (node:27252) [DEP0174] DeprecationWarning: Calling promisify on a function that returns a Promise is 
+likely a mistake.
+[WebServer] (Use `node --trace-deprecation ...` to show where the warning was created)
+[WebServer] [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline 
+data, please update: `npm i baseline-browser-mapping@latest -D`
+
+Running 163 tests using 6 workers
+
+[WebServer] Browserslist: browsers data (caniuse-lite) is 10 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+(node:30276) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:7272) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:13380) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:33084) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:23964) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:10436) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok   6 [chromium] ΓÇ║ .features-gen\tests\features\app\smoke.feature.spec.js:6:3 ΓÇ║ Application navigation ΓÇ║ NAV-01 Home loads with hero and CTA to calculators @smoke @app @regression (1.6s)
+  ok   3 [chromium] ΓÇ║ .features-gen\tests\features\calculators\54ec.feature.spec.js:11:3 ΓÇ║ 54EC Bonds Calculator ΓÇ║ 54EC-01 Calculator loads with documented default values @smoke @regression @tax @calculator-54ec (3.0s)
+  ok   2 [chromium] ΓÇ║ .features-gen\tests\features\calculators\54ec.feature.spec.js:20:3 ΓÇ║ 54EC Bonds Calculator ΓÇ║ 54EC-02 Results update in real time without Calculate button @smoke @regression @tax @calculator-54ec (3.3s)
+  ok   7 [chromium] ΓÇ║ .features-gen\tests\features\calculators\54ec.feature.spec.js:46:3 ΓÇ║ 54EC Bonds Calculator ΓÇ║ 54EC-06 Evolution table shows year-wise breakdown @smoke @regression @tax @calculator-54ec (2.4s)
+  x    5 [chromium] ΓÇ║ .features-gen\tests\features\calculators\54ec.feature.spec.js:39:3 ΓÇ║ 54EC Bonds Calculator ΓÇ║ 54EC-05 Inflation toggle affects spending power when ON @smoke @regression @tax @calculator-54ec (4.7s)
+  ok   4 [chromium] ΓÇ║ .features-gen\tests\features\calculators\54ec.feature.spec.js:32:3 ΓÇ║ 54EC Bonds Calculator ΓÇ║ 54EC-04 Tax breakdown visible with rule explanation @smoke @regression @tax @calculator-54ec (5.0s)
+  ok   1 [chromium] ΓÇ║ .features-gen\tests\features\calculators\54ec.feature.spec.js:26:3 ΓÇ║ 54EC Bonds Calculator ΓÇ║ 54EC-03 Results panel shows Money in Hand (post-tax) @smoke @regression @tax @calculator-54ec (5.1s)
+  ok   8 [chromium] ΓÇ║ .features-gen\tests\features\calculators\54ec.feature.spec.js:51:3 ΓÇ║ 54EC Bonds Calculator ΓÇ║ 54EC-07 Info panel shows current rate and last updated @smoke @regression @tax @calculator-54ec (2.1s)
+(node:26008) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  12 [chromium] ΓÇ║ .features-gen\tests\features\calculators\54ec.feature.spec.js:83:3 ΓÇ║ 54EC Bonds Calculator ΓÇ║ 54EC-12 Non-numeric input rejected @smoke @regression @tax @calculator-54ec @edge (2.1s)
+  ok  11 [chromium] ΓÇ║ .features-gen\tests\features\calculators\54ec.feature.spec.js:77:3 ΓÇ║ 54EC Bonds Calculator ΓÇ║ 54EC-11 Negative input rejected or clamped @smoke @regression @tax @calculator-54ec @edge (2.4s)
+  ok  13 [chromium] ΓÇ║ .features-gen\tests\features\calculators\54ec.feature.spec.js:89:3 ΓÇ║ 54EC Bonds Calculator ΓÇ║ 54EC-13 Extremely large capital gain handled without overflow @smoke @regression @tax @calculator-54ec @edge (2.4s)
+  ok  16 [chromium] ΓÇ║ .features-gen\tests\features\calculators\54ec.feature.spec.js:107:3 ΓÇ║ 54EC Bonds Calculator ΓÇ║ 54EC-15 Pie chart renders investment breakdown @smoke @regression @tax @calculator-54ec @edge (1.9s)
+  ok  17 [chromium] ΓÇ║ .features-gen\tests\features\calculators\54ec.feature.spec.js:112:3 ΓÇ║ 54EC Bonds Calculator ΓÇ║ 54EC-20 Fixed 5-year lock-in is displayed @smoke @regression @tax @calculator-54ec @edge (1.9s)
+  ok  14 [chromium] ΓÇ║ .features-gen\tests\features\calculators\54ec.feature.spec.js:70:3 ΓÇ║ 54EC Bonds Calculator ΓÇ║ 54EC-10 Zero or empty input does not crash @smoke @regression @tax @calculator-54ec @edge (2.3s)
+  x   15 [chromium] ΓÇ║ .features-gen\tests\features\calculators\54ec.feature.spec.js:98:5 ΓÇ║ 54EC Bonds Calculator ΓÇ║ 54EC-14 Golden calculation matches reference value ΓÇ║ Example #1 @smoke @regression @tax @calculator-54ec (2.8s)
+  x    9 [chromium] ΓÇ║ .features-gen\tests\features\calculators\54ec.feature.spec.js:57:3 ΓÇ║ 54EC Bonds Calculator ΓÇ║ 54EC-08 Invalid min amount shows inline validation error @smoke @regression @tax @calculator-54ec @edge (7.4s)
+(node:31164) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:13952) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x   10 [chromium] ΓÇ║ .features-gen\tests\features\calculators\54ec.feature.spec.js:63:3 ΓÇ║ 54EC Bonds Calculator ΓÇ║ 54EC-09 Investment exceeding capital gain shows validation error @smoke @regression @tax @calculator-54ec @edge (7.6s)
+  ok  20 [chromium] ΓÇ║ .features-gen\tests\features\calculators\elss.feature.spec.js:12:3 ΓÇ║ ELSS Calculator ΓÇ║ ELSS-01 Calculator loads with documented default values @smoke @regression @tax @calculator-elss (2.1s)
+  ok  18 [chromium] ΓÇ║ .features-gen\tests\features\calculators\54ec.feature.spec.js:118:3 ΓÇ║ 54EC Bonds Calculator ΓÇ║ 54EC-21 Capital gains exemption on qualifying reinvestment @smoke @regression @tax @calculator-54ec (2.9s)
+  ok  19 [chromium] ΓÇ║ .features-gen\tests\features\calculators\54ec.feature.spec.js:125:3 ΓÇ║ 54EC Bonds Calculator ΓÇ║ 54EC-22 Interest taxable at income slab @smoke @regression @tax @calculator-54ec (3.9s)
+(node:26412) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  23 [chromium] ΓÇ║ .features-gen\tests\features\calculators\elss.feature.spec.js:40:3 ΓÇ║ ELSS Calculator ΓÇ║ ELSS-06 Evolution table shows year-wise breakdown @smoke @regression @tax @calculator-elss (2.3s)
+  ok  22 [chromium] ΓÇ║ .features-gen\tests\features\calculators\elss.feature.spec.js:34:3 ΓÇ║ ELSS Calculator ΓÇ║ ELSS-05 Inflation toggle affects spending power when ON @smoke @regression @tax @calculator-elss (3.0s)
+  ok  25 [chromium] ΓÇ║ .features-gen\tests\features\calculators\elss.feature.spec.js:45:3 ΓÇ║ ELSS Calculator ΓÇ║ ELSS-07 Info panel shows current rate and last updated @smoke @regression @tax @calculator-elss (2.4s)
+  ok  21 [chromium] ΓÇ║ .features-gen\tests\features\calculators\elss.feature.spec.js:19:3 ΓÇ║ ELSS Calculator ΓÇ║ ELSS-02 Results update in real time without Calculate button @smoke @regression @tax @calculator-elss (2.6s)
+  ok  26 [chromium] ΓÇ║ .features-gen\tests\features\calculators\elss.feature.spec.js:50:3 ΓÇ║ ELSS Calculator ΓÇ║ ELSS-08 Invalid min amount shows inline validation error @smoke @regression @tax @calculator-elss @edge (2.9s)
+  ok  27 [chromium] ΓÇ║ .features-gen\tests\features\calculators\elss.feature.spec.js:55:3 ΓÇ║ ELSS Calculator ΓÇ║ ELSS-09 Invalid min tenure shows lock-in validation error @smoke @regression @tax @calculator-elss @edge (2.6s)
+  ok  24 [chromium] ΓÇ║ .features-gen\tests\features\calculators\elss.feature.spec.js:24:3 ΓÇ║ ELSS Calculator ΓÇ║ ELSS-03 Results panel shows Money in Hand post-tax @smoke @regression @tax @calculator-elss (2.8s)
+  ok  29 [chromium] ΓÇ║ .features-gen\tests\features\calculators\elss.feature.spec.js:60:3 ΓÇ║ ELSS Calculator ΓÇ║ ELSS-10 Zero or empty input does not crash @smoke @regression @tax @calculator-elss @edge (2.5s)
+  ok  30 [chromium] ΓÇ║ .features-gen\tests\features\calculators\elss.feature.spec.js:66:3 ΓÇ║ ELSS Calculator ΓÇ║ ELSS-11 Negative input rejected or clamped @smoke @regression @tax @calculator-elss @edge (2.6s)
+  ok  31 [chromium] ΓÇ║ .features-gen\tests\features\calculators\elss.feature.spec.js:71:3 ΓÇ║ ELSS Calculator ΓÇ║ ELSS-12 Non-numeric input rejected @smoke @regression @tax @calculator-elss @edge (2.6s)
+  ok  32 [chromium] ΓÇ║ .features-gen\tests\features\calculators\elss.feature.spec.js:76:3 ΓÇ║ ELSS Calculator ΓÇ║ ELSS-13 Extremely large value handled without overflow @smoke @regression @tax @calculator-elss @edge (3.4s)
+  ok  35 [chromium] ΓÇ║ .features-gen\tests\features\calculators\elss.feature.spec.js:98:3 ΓÇ║ ELSS Calculator ΓÇ║ ELSS-15 Pie chart renders or graceful fallback @smoke @regression @tax @calculator-elss @edge (2.4s)
+  ok  33 [chromium] ΓÇ║ .features-gen\tests\features\calculators\elss.feature.spec.js:84:5 ΓÇ║ ELSS Calculator ΓÇ║ ELSS-14 Golden calculation matches reference value ΓÇ║ Example #1 @smoke @regression @tax @calculator-elss (4.1s)
+  ok  34 [chromium] ΓÇ║ .features-gen\tests\features\calculators\elss.feature.spec.js:90:5 ΓÇ║ ELSS Calculator ΓÇ║ ELSS-14 Golden calculation matches reference value ΓÇ║ Example #2 @smoke @regression @tax @calculator-elss (3.9s)
+  ok  28 [chromium] ΓÇ║ .features-gen\tests\features\calculators\elss.feature.spec.js:29:3 ΓÇ║ ELSS Calculator ΓÇ║ ELSS-04 Tax breakdown visible with rule explanation @smoke @regression @tax @calculator-elss (4.0s)
+  ok  36 [chromium] ΓÇ║ .features-gen\tests\features\calculators\elss.feature.spec.js:102:3 ΓÇ║ ELSS Calculator ΓÇ║ ELSS-20 Three-year lock-in enforced at minimum tenure @smoke @regression @tax @calculator-elss @edge (3.4s)
+  ok  37 [chromium] ΓÇ║ .features-gen\tests\features\calculators\elss.feature.spec.js:109:3 ΓÇ║ ELSS Calculator ΓÇ║ ELSS-21 Section 80C benefit shown in info panel @smoke @regression @tax @calculator-elss (2.6s)
+  -   39 [chromium] ΓÇ║ .features-gen\tests\features\calculators\elss.feature.spec.js:121:3 ΓÇ║ ELSS Calculator ΓÇ║ ELSS-23 STCG when tenure less than 3 years @smoke @regression @tax @calculator-elss @edge @known-bug
+  ok  38 [chromium] ΓÇ║ .features-gen\tests\features\calculators\elss.feature.spec.js:114:3 ΓÇ║ ELSS Calculator ΓÇ║ ELSS-22 LTCG 10% above Γé╣1L exemption after 3+ years @smoke @regression @tax @calculator-elss (3.3s)
+  ok  41 [chromium] ΓÇ║ .features-gen\tests\features\calculators\elss.feature.spec.js:136:3 ΓÇ║ ELSS Calculator ΓÇ║ ELSS-25 Maximum tenure boundary accepted @smoke @regression @tax @calculator-elss @edge (3.6s)
+  ok  42 [chromium] ΓÇ║ .features-gen\tests\features\calculators\equity.feature.spec.js:12:3 ΓÇ║ Equity Calculator ΓÇ║ EQ-01 Calculator loads with documented default values @calculator-equity @smoke @regression (2.5s)
+  ok  40 [chromium] ΓÇ║ .features-gen\tests\features\calculators\elss.feature.spec.js:129:3 ΓÇ║ ELSS Calculator ΓÇ║ ELSS-24 Lumpsum investment mode reflected in results @smoke @regression @tax @calculator-elss (3.9s)
+  ok  43 [chromium] ΓÇ║ .features-gen\tests\features\calculators\equity.feature.spec.js:19:3 ΓÇ║ Equity Calculator ΓÇ║ EQ-02 Results update in real time without Calculate button @calculator-equity @smoke @regression (2.9s)
+  ok  44 [chromium] ΓÇ║ .features-gen\tests\features\calculators\equity.feature.spec.js:24:3 ΓÇ║ Equity Calculator ΓÇ║ EQ-03 Results panel shows Money in Hand post-tax @calculator-equity @smoke @tax @regression (2.7s)
+  ok  45 [chromium] ΓÇ║ .features-gen\tests\features\calculators\equity.feature.spec.js:40:3 ΓÇ║ Equity Calculator ΓÇ║ EQ-06 Evolution table shows year-wise breakdown @calculator-equity @smoke @regression (2.7s)
+  ok  46 [chromium] ΓÇ║ .features-gen\tests\features\calculators\equity.feature.spec.js:125:3 ΓÇ║ Equity Calculator ΓÇ║ EQ-23 Risk warning displayed @calculator-equity @smoke @regression (2.4s)
+  ok  47 [chromium] ΓÇ║ .features-gen\tests\features\calculators\equity.feature.spec.js:45:3 ΓÇ║ Equity Calculator ΓÇ║ EQ-07 Info panel shows expected return rate @calculator-equity @smoke @regression (2.5s)
+  ok  48 [chromium] ΓÇ║ .features-gen\tests\features\calculators\fd.feature.spec.js:12:3 ΓÇ║ Fixed Deposit Calculator ΓÇ║ FD-01 Calculator loads with documented default values @calculator-fd @smoke (2.5s)
+  ok  52 [chromium] ΓÇ║ .features-gen\tests\features\calculators\fd.feature.spec.js:49:3 ΓÇ║ Fixed Deposit Calculator ΓÇ║ FD-07 Info panel shows current rate and last updated @calculator-fd @smoke (2.1s)
+  ok  49 [chromium] ΓÇ║ .features-gen\tests\features\calculators\fd.feature.spec.js:20:3 ΓÇ║ Fixed Deposit Calculator ΓÇ║ FD-02 Results update in real time without Calculate button @calculator-fd @smoke (3.8s)
+  ok  53 [chromium] ΓÇ║ .features-gen\tests\features\calculators\nsc.feature.spec.js:11:3 ΓÇ║ NSC Calculator ΓÇ║ NSC-01 Calculator loads with documented default values @smoke @regression @tax @calculator-nsc (2.1s)
+  ok  54 [chromium] ΓÇ║ .features-gen\tests\features\calculators\nsc.feature.spec.js:19:3 ΓÇ║ NSC Calculator ΓÇ║ NSC-02 Results update in real time without Calculate button @smoke @regression @tax @calculator-nsc (3.2s)
+  ok  51 [chromium] ΓÇ║ .features-gen\tests\features\calculators\fd.feature.spec.js:44:3 ΓÇ║ Fixed Deposit Calculator ΓÇ║ FD-06 Evolution table shows year-wise breakdown @calculator-fd @smoke (4.7s)
+  ok  50 [chromium] ΓÇ║ .features-gen\tests\features\calculators\fd.feature.spec.js:26:3 ΓÇ║ Fixed Deposit Calculator ΓÇ║ FD-03 Results panel shows Money in Hand post-tax @calculator-fd @smoke @tax (5.2s)
+  ok  58 [chromium] ΓÇ║ .features-gen\tests\features\calculators\nsc.feature.spec.js:45:3 ΓÇ║ NSC Calculator ΓÇ║ NSC-06 Evolution table shows year-wise breakdown @smoke @regression @tax @calculator-nsc (2.4s)
+  ok  55 [chromium] ΓÇ║ .features-gen\tests\features\calculators\nsc.feature.spec.js:25:3 ΓÇ║ NSC Calculator ΓÇ║ NSC-03 Results panel shows Money in Hand (post-tax) @smoke @regression @tax @calculator-nsc (3.8s)
+  ok  59 [chromium] ΓÇ║ .features-gen\tests\features\calculators\nsc.feature.spec.js:50:3 ΓÇ║ NSC Calculator ΓÇ║ NSC-07 Info panel shows current rate and last updated @smoke @regression @tax @calculator-nsc (2.4s)
+  ok  56 [chromium] ΓÇ║ .features-gen\tests\features\calculators\nsc.feature.spec.js:31:3 ΓÇ║ NSC Calculator ΓÇ║ NSC-04 Tax breakdown visible with rule explanation @smoke @regression @tax @calculator-nsc (4.0s)
+  ok  57 [chromium] ΓÇ║ .features-gen\tests\features\calculators\nsc.feature.spec.js:38:3 ΓÇ║ NSC Calculator ΓÇ║ NSC-05 Inflation toggle affects spending power when ON @smoke @regression @tax @calculator-nsc (4.1s)
+  ok  60 [chromium] ΓÇ║ .features-gen\tests\features\calculators\nsc.feature.spec.js:56:3 ΓÇ║ NSC Calculator ΓÇ║ NSC-08 Invalid min amount shows inline validation error @smoke @regression @tax @calculator-nsc @edge (2.7s)
+  ok  62 [chromium] ΓÇ║ .features-gen\tests\features\calculators\nsc.feature.spec.js:68:3 ΓÇ║ NSC Calculator ΓÇ║ NSC-10 Zero or empty input does not crash @smoke @regression @tax @calculator-nsc @edge (2.7s)
+  ok  63 [chromium] ΓÇ║ .features-gen\tests\features\calculators\nsc.feature.spec.js:75:3 ΓÇ║ NSC Calculator ΓÇ║ NSC-11 Negative input rejected or clamped @smoke @regression @tax @calculator-nsc @edge (2.6s)
+  ok  61 [chromium] ΓÇ║ .features-gen\tests\features\calculators\nsc.feature.spec.js:62:3 ΓÇ║ NSC Calculator ΓÇ║ NSC-09 Invalid max amount shows inline validation error @smoke @regression @tax @calculator-nsc @edge (2.9s)
+  ok  64 [chromium] ΓÇ║ .features-gen\tests\features\calculators\nsc.feature.spec.js:81:3 ΓÇ║ NSC Calculator ΓÇ║ NSC-12 Non-numeric input rejected @smoke @regression @tax @calculator-nsc @edge (2.7s)
+  ok  65 [chromium] ΓÇ║ .features-gen\tests\features\calculators\nsc.feature.spec.js:87:3 ΓÇ║ NSC Calculator ΓÇ║ NSC-13 Extremely large value handled without overflow @smoke @regression @tax @calculator-nsc @edge (2.8s)
+  ok  66 [chromium] ΓÇ║ .features-gen\tests\features\calculators\nsc.feature.spec.js:95:5 ΓÇ║ NSC Calculator ΓÇ║ NSC-14 Golden calculation matches reference value ΓÇ║ Example #1 @smoke @regression @tax @calculator-nsc (3.3s)
+  ok  68 [chromium] ΓÇ║ .features-gen\tests\features\calculators\nsc.feature.spec.js:108:3 ΓÇ║ NSC Calculator ΓÇ║ NSC-20 Fixed 5-year tenure is locked @smoke @regression @tax @calculator-nsc @edge (2.4s)
+  ok  67 [chromium] ΓÇ║ .features-gen\tests\features\calculators\nsc.feature.spec.js:103:3 ΓÇ║ NSC Calculator ΓÇ║ NSC-15 Pie chart renders investment breakdown @smoke @regression @tax @calculator-nsc @edge (2.5s)
+  ok  69 [chromium] ΓÇ║ .features-gen\tests\features\calculators\nsc.feature.spec.js:114:3 ΓÇ║ NSC Calculator ΓÇ║ NSC-21 Section 80C deduction noted in info panel @smoke @regression @tax @calculator-nsc (2.7s)
+  -   71 [chromium] ΓÇ║ .features-gen\tests\features\calculators\nsc.feature.spec.js:127:3 ΓÇ║ NSC Calculator ΓÇ║ NSC-25 Premature encashment not yet implemented @smoke @regression @tax @calculator-nsc @wip
+  ok  72 [chromium] ΓÇ║ .features-gen\tests\features\calculators\pomis.feature.spec.js:11:3 ΓÇ║ POMIS Calculator ΓÇ║ POMIS-01 Calculator loads with documented default values @smoke @regression @tax @calculator-pomis (2.0s)
+  ok  70 [chromium] ΓÇ║ .features-gen\tests\features\calculators\nsc.feature.spec.js:119:3 ΓÇ║ NSC Calculator ΓÇ║ NSC-22 Interest taxable and paid at maturity @smoke @regression @tax @calculator-nsc (4.4s)
+  ok  73 [chromium] ΓÇ║ .features-gen\tests\features\calculators\pomis.feature.spec.js:19:3 ΓÇ║ POMIS Calculator ΓÇ║ POMIS-02 Results update in real time without Calculate button @smoke @regression @tax @calculator-pomis (2.3s)
+  ok  74 [chromium] ΓÇ║ .features-gen\tests\features\calculators\pomis.feature.spec.js:25:3 ΓÇ║ POMIS Calculator ΓÇ║ POMIS-03 Results panel shows Money in Hand (post-tax) @smoke @regression @tax @calculator-pomis (4.2s)
+  ok  78 [chromium] ΓÇ║ .features-gen\tests\features\calculators\pomis.feature.spec.js:51:3 ΓÇ║ POMIS Calculator ΓÇ║ POMIS-07 Info panel shows current rate and last updated @smoke @regression @tax @calculator-pomis (2.5s)
+  ok  75 [chromium] ΓÇ║ .features-gen\tests\features\calculators\pomis.feature.spec.js:31:3 ΓÇ║ POMIS Calculator ΓÇ║ POMIS-04 Tax breakdown visible with rule explanation @smoke @regression @tax @calculator-pomis (4.3s)
+  ok  76 [chromium] ΓÇ║ .features-gen\tests\features\calculators\pomis.feature.spec.js:38:3 ΓÇ║ POMIS Calculator ΓÇ║ POMIS-05 Inflation toggle affects spending power when ON @smoke @regression @tax @calculator-pomis (4.1s)
+  ok  77 [chromium] ΓÇ║ .features-gen\tests\features\calculators\pomis.feature.spec.js:45:3 ΓÇ║ POMIS Calculator ΓÇ║ POMIS-06 Evolution table shows year-wise breakdown @smoke @regression @tax @calculator-pomis (3.9s)
+  ok  79 [chromium] ΓÇ║ .features-gen\tests\features\calculators\pomis.feature.spec.js:57:3 ΓÇ║ POMIS Calculator ΓÇ║ POMIS-08 Invalid min amount shows inline validation error @smoke @regression @tax @calculator-pomis @edge (2.7s)
+  ok  81 [chromium] ΓÇ║ .features-gen\tests\features\calculators\pomis.feature.spec.js:69:3 ΓÇ║ POMIS Calculator ΓÇ║ POMIS-10 Zero or empty input does not crash @smoke @regression @tax @calculator-pomis @edge (2.1s)
+  ok  80 [chromium] ΓÇ║ .features-gen\tests\features\calculators\pomis.feature.spec.js:63:3 ΓÇ║ POMIS Calculator ΓÇ║ POMIS-09 Invalid max amount for single account shows error or empty state @smoke @regression @tax @calculator-pomis @edge (2.6s)
+  ok  82 [chromium] ΓÇ║ .features-gen\tests\features\calculators\pomis.feature.spec.js:76:3 ΓÇ║ POMIS Calculator ΓÇ║ POMIS-11 Negative input rejected or clamped @smoke @regression @tax @calculator-pomis @edge (2.7s)
+  ok  83 [chromium] ΓÇ║ .features-gen\tests\features\calculators\pomis.feature.spec.js:82:3 ΓÇ║ POMIS Calculator ΓÇ║ POMIS-12 Non-numeric input rejected @smoke @regression @tax @calculator-pomis @edge (2.7s)
+  ok  84 [chromium] ΓÇ║ .features-gen\tests\features\calculators\pomis.feature.spec.js:88:3 ΓÇ║ POMIS Calculator ΓÇ║ POMIS-13 Extremely large joint investment handled without overflow @smoke @regression @tax @calculator-pomis @edge (3.0s)
+  ok  87 [chromium] ΓÇ║ .features-gen\tests\features\calculators\pomis.feature.spec.js:111:3 ΓÇ║ POMIS Calculator ΓÇ║ POMIS-20 Fixed 5-year tenure is locked @smoke @regression @tax @calculator-pomis (2.3s)
+  ok  86 [chromium] ΓÇ║ .features-gen\tests\features\calculators\pomis.feature.spec.js:106:3 ΓÇ║ POMIS Calculator ΓÇ║ POMIS-15 Pie chart renders investment breakdown @smoke @regression @tax @calculator-pomis @edge (2.4s)
+  ok  85 [chromium] ΓÇ║ .features-gen\tests\features\calculators\pomis.feature.spec.js:97:5 ΓÇ║ POMIS Calculator ΓÇ║ POMIS-14 Golden calculation matches reference value ΓÇ║ Example #1 @smoke @regression @tax @calculator-pomis (4.2s)
+  ok  88 [chromium] ΓÇ║ .features-gen\tests\features\calculators\pomis.feature.spec.js:117:3 ΓÇ║ POMIS Calculator ΓÇ║ POMIS-21 Monthly interest payout displayed prominently @smoke @regression @tax @calculator-pomis (3.7s)
+  ok  91 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ppf.feature.spec.js:19:3 ΓÇ║ PPF Calculator ΓÇ║ PPF-02 Results update in real time without Calculate button @smoke @regression @tax @calculator-ppf (2.4s)
+  ok  92 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ppf.feature.spec.js:11:3 ΓÇ║ PPF Calculator ΓÇ║ PPF-01 Calculator loads with documented default values @smoke @regression @tax @calculator-ppf (2.5s)
+  ok  93 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ppf.feature.spec.js:25:3 ΓÇ║ PPF Calculator ΓÇ║ PPF-03 Results panel shows Money in Hand (post-tax) @smoke @regression @tax @calculator-ppf (2.5s)
+  ok  90 [chromium] ΓÇ║ .features-gen\tests\features\calculators\pomis.feature.spec.js:132:3 ΓÇ║ POMIS Calculator ΓÇ║ POMIS-TDS TDS warning when annual interest exceeds threshold @smoke @regression @tax @calculator-pomis (4.2s)
+  ok  89 [chromium] ΓÇ║ .features-gen\tests\features\calculators\pomis.feature.spec.js:123:3 ΓÇ║ POMIS Calculator ΓÇ║ POMIS-22 Max investment limit enforced by account type @smoke @regression @tax @calculator-pomis @edge (4.6s)
+  ok  94 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ppf.feature.spec.js:30:3 ΓÇ║ PPF Calculator ΓÇ║ PPF-04 Tax breakdown visible with rule explanation @smoke @regression @tax @calculator-ppf (2.5s)
+  ok  96 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ppf.feature.spec.js:43:3 ΓÇ║ PPF Calculator ΓÇ║ PPF-06 Evolution table shows year-wise breakdown @smoke @regression @tax @calculator-ppf (2.5s)
+  ok  97 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ppf.feature.spec.js:48:3 ΓÇ║ PPF Calculator ΓÇ║ PPF-07 Info panel shows current rate and last updated @smoke @regression @tax @calculator-ppf (2.5s)
+  ok  98 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ppf.feature.spec.js:54:3 ΓÇ║ PPF Calculator ΓÇ║ PPF-08 Invalid min amount shows inline validation error @smoke @regression @tax @calculator-ppf @edge (2.7s)
+  ok  99 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ppf.feature.spec.js:60:3 ΓÇ║ PPF Calculator ΓÇ║ PPF-09 Invalid max amount shows inline validation error @smoke @regression @tax @calculator-ppf @edge (2.8s)
+  ok  95 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ppf.feature.spec.js:36:3 ΓÇ║ PPF Calculator ΓÇ║ PPF-05 Inflation toggle affects spending power when ON @smoke @regression @tax @calculator-ppf (4.0s)
+  ok 100 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ppf.feature.spec.js:66:3 ΓÇ║ PPF Calculator ΓÇ║ PPF-10 Zero or empty input does not crash @smoke @regression @tax @calculator-ppf @edge (2.4s)
+  ok 101 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ppf.feature.spec.js:73:3 ΓÇ║ PPF Calculator ΓÇ║ PPF-11 Negative input rejected or clamped @smoke @regression @tax @calculator-ppf @edge (2.6s)
+  ok 102 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ppf.feature.spec.js:79:3 ΓÇ║ PPF Calculator ΓÇ║ PPF-12 Non-numeric input rejected @smoke @regression @tax @calculator-ppf @edge (2.6s)
+  ok 103 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ppf.feature.spec.js:85:3 ΓÇ║ PPF Calculator ΓÇ║ PPF-13 Extremely large value handled without overflow @smoke @regression @tax @calculator-ppf @edge (2.8s)
+  ok 106 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ppf.feature.spec.js:109:3 ΓÇ║ PPF Calculator ΓÇ║ PPF-15 Pie chart renders investment breakdown @smoke @regression @tax @calculator-ppf @edge (2.3s)
+  ok 104 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ppf.feature.spec.js:93:5 ΓÇ║ PPF Calculator ΓÇ║ PPF-14 Golden calculation matches reference value ΓÇ║ Example #1 @smoke @regression @tax @calculator-ppf (3.7s)
+  ok 105 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ppf.feature.spec.js:100:5 ΓÇ║ PPF Calculator ΓÇ║ PPF-14 Golden calculation matches reference value ΓÇ║ Example #2 @smoke @regression @tax @calculator-ppf (3.8s)
+  ok 107 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ppf.feature.spec.js:114:3 ΓÇ║ PPF Calculator ΓÇ║ PPF-20 Yearly investment capped at 1.5 lakh validation @smoke @regression @tax @calculator-ppf @edge (3.2s)
+  ok 108 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ppf.feature.spec.js:122:3 ΓÇ║ PPF Calculator ΓÇ║ PPF-21 Minimum 500 per year validation @smoke @regression @tax @calculator-ppf @edge (3.1s)
+  ok 110 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ppf.feature.spec.js:137:3 ΓÇ║ PPF Calculator ΓÇ║ PPF-23 Fifteen-year default tenure @smoke @regression @tax @calculator-ppf (2.3s)
+  -  112 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ppf.feature.spec.js:150:3 ΓÇ║ PPF Calculator ΓÇ║ PPF-25 Partial withdrawal and loan not yet implemented @smoke @regression @tax @calculator-ppf @wip @known-bug
+  ok 113 [chromium] ΓÇ║ .features-gen\tests\features\calculators\rd.feature.spec.js:12:3 ΓÇ║ Recurring Deposit Calculator ΓÇ║ RD-01 Calculator loads with documented default values @calculator-rd @smoke (2.0s)
+  ok 111 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ppf.feature.spec.js:143:3 ΓÇ║ PPF Calculator ΓÇ║ PPF-24 Maturity is tax-free EEE post-tax equals nominal @smoke @regression @tax @calculator-ppf (3.7s)
+  ok 109 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ppf.feature.spec.js:130:3 ΓÇ║ PPF Calculator ΓÇ║ PPF-22 Step-up yearly increase reflected in maturity @smoke @regression @tax @calculator-ppf (4.8s)
+  ok 114 [chromium] ΓÇ║ .features-gen\tests\features\calculators\rd.feature.spec.js:20:3 ΓÇ║ Recurring Deposit Calculator ΓÇ║ RD-02 Results update in real time without Calculate button @calculator-rd @smoke (2.9s)
+  ok 117 [chromium] ΓÇ║ .features-gen\tests\features\calculators\rd.feature.spec.js:49:3 ΓÇ║ Recurring Deposit Calculator ΓÇ║ RD-07 Info panel shows current rate and last updated @calculator-rd @smoke (2.4s)
+  ok 118 [chromium] ΓÇ║ .features-gen\tests\features\calculators\scss.feature.spec.js:11:3 ΓÇ║ SCSS Calculator ΓÇ║ SCSS-01 Calculator loads with documented default values @smoke @regression @tax @calculator-scss (2.4s)
+  ok 115 [chromium] ΓÇ║ .features-gen\tests\features\calculators\rd.feature.spec.js:26:3 ΓÇ║ Recurring Deposit Calculator ΓÇ║ RD-03 Results panel shows Money in Hand post-tax @calculator-rd @smoke @tax (4.5s)
+  ok 119 [chromium] ΓÇ║ .features-gen\tests\features\calculators\scss.feature.spec.js:20:3 ΓÇ║ SCSS Calculator ΓÇ║ SCSS-02 Results update in real time without Calculate button @smoke @regression @tax @calculator-scss (2.8s)
+  ok 116 [chromium] ΓÇ║ .features-gen\tests\features\calculators\rd.feature.spec.js:44:3 ΓÇ║ Recurring Deposit Calculator ΓÇ║ RD-06 Evolution table shows year-wise breakdown @calculator-rd @smoke (4.7s)
+  ok 123 [chromium] ΓÇ║ .features-gen\tests\features\calculators\scss.feature.spec.js:46:3 ΓÇ║ SCSS Calculator ΓÇ║ SCSS-06 Evolution table shows year-wise breakdown @smoke @regression @tax @calculator-scss (2.3s)
+  ok 120 [chromium] ΓÇ║ .features-gen\tests\features\calculators\scss.feature.spec.js:26:3 ΓÇ║ SCSS Calculator ΓÇ║ SCSS-03 Results panel shows Money in Hand (post-tax) @smoke @regression @tax @calculator-scss (4.6s)
+  ok 124 [chromium] ΓÇ║ .features-gen\tests\features\calculators\scss.feature.spec.js:51:3 ΓÇ║ SCSS Calculator ΓÇ║ SCSS-07 Info panel shows current rate and last updated @smoke @regression @tax @calculator-scss (2.2s)
+  ok 125 [chromium] ΓÇ║ .features-gen\tests\features\calculators\scss.feature.spec.js:57:3 ΓÇ║ SCSS Calculator ΓÇ║ SCSS-08 Invalid min amount shows inline validation error @smoke @regression @tax @calculator-scss @edge (2.5s)
+  ok 121 [chromium] ΓÇ║ .features-gen\tests\features\calculators\scss.feature.spec.js:32:3 ΓÇ║ SCSS Calculator ΓÇ║ SCSS-04 Tax breakdown visible with rule explanation @smoke @regression @tax @calculator-scss (4.7s)
+  ok 122 [chromium] ΓÇ║ .features-gen\tests\features\calculators\scss.feature.spec.js:39:3 ΓÇ║ SCSS Calculator ΓÇ║ SCSS-05 Inflation toggle affects spending power when ON @smoke @regression @tax @calculator-scss (4.7s)
+  ok 127 [chromium] ΓÇ║ .features-gen\tests\features\calculators\scss.feature.spec.js:69:3 ΓÇ║ SCSS Calculator ΓÇ║ SCSS-10 Zero or empty input does not crash @smoke @regression @tax @calculator-scss @edge (2.6s)
+  ok 128 [chromium] ΓÇ║ .features-gen\tests\features\calculators\scss.feature.spec.js:76:3 ΓÇ║ SCSS Calculator ΓÇ║ SCSS-11 Negative input rejected or clamped @smoke @regression @tax @calculator-scss @edge (2.7s)
+  ok 126 [chromium] ΓÇ║ .features-gen\tests\features\calculators\scss.feature.spec.js:63:3 ΓÇ║ SCSS Calculator ΓÇ║ SCSS-09 Invalid max amount shows inline validation error @smoke @regression @tax @calculator-scss @edge (2.9s)
+  ok 129 [chromium] ΓÇ║ .features-gen\tests\features\calculators\scss.feature.spec.js:82:3 ΓÇ║ SCSS Calculator ΓÇ║ SCSS-12 Non-numeric input rejected @smoke @regression @tax @calculator-scss @edge (2.5s)
+  ok 130 [chromium] ΓÇ║ .features-gen\tests\features\calculators\scss.feature.spec.js:88:3 ΓÇ║ SCSS Calculator ΓÇ║ SCSS-13 Extremely large value handled without overflow @smoke @regression @tax @calculator-scss @edge (2.9s)
+  ok 133 [chromium] ΓÇ║ .features-gen\tests\features\calculators\scss.feature.spec.js:112:3 ΓÇ║ SCSS Calculator ΓÇ║ SCSS-15 Pie chart renders investment breakdown @smoke @regression @tax @calculator-scss @edge (2.5s)
+  ok 134 [chromium] ΓÇ║ .features-gen\tests\features\calculators\scss.feature.spec.js:117:3 ΓÇ║ SCSS Calculator ΓÇ║ SCSS-20 Age 60+ validation for senior eligibility @smoke @regression @tax @calculator-scss @edge (3.2s)
+  ok 131 [chromium] ΓÇ║ .features-gen\tests\features\calculators\scss.feature.spec.js:96:5 ΓÇ║ SCSS Calculator ΓÇ║ SCSS-14 Golden calculation matches reference value ΓÇ║ Example #1 @smoke @regression @tax @calculator-scss (4.1s)
+  ok 132 [chromium] ΓÇ║ .features-gen\tests\features\calculators\scss.feature.spec.js:103:5 ΓÇ║ SCSS Calculator ΓÇ║ SCSS-14 Golden calculation matches reference value ΓÇ║ Example #2 @smoke @regression @tax @calculator-scss (4.1s)
+  ok 135 [chromium] ΓÇ║ .features-gen\tests\features\calculators\scss.feature.spec.js:125:3 ΓÇ║ SCSS Calculator ΓÇ║ SCSS-21 Maximum principal capped at 30 lakh @smoke @regression @tax @calculator-scss @edge (3.4s)
+  ok 139 [chromium] ΓÇ║ .features-gen\tests\features\calculators\sip.feature.spec.js:12:3 ΓÇ║ SIP Calculator ΓÇ║ SIP-01 Calculator loads with documented default values @calculator-sip @smoke @regression (2.0s)
+  ok 136 [chromium] ΓÇ║ .features-gen\tests\features\calculators\scss.feature.spec.js:133:3 ΓÇ║ SCSS Calculator ΓÇ║ SCSS-22 Quarterly interest payout displayed in results @smoke @regression @tax @calculator-scss (3.8s)
+  -  138 [chromium] ΓÇ║ .features-gen\tests\features\calculators\scss.feature.spec.js:147:3 ΓÇ║ SCSS Calculator ΓÇ║ SCSS-25 Premature closure not yet implemented @smoke @regression @tax @calculator-scss @wip
+  ok 140 [chromium] ΓÇ║ .features-gen\tests\features\calculators\sip.feature.spec.js:18:3 ΓÇ║ SIP Calculator ΓÇ║ SIP-02 Results update in real time without Calculate button @calculator-sip @smoke @regression (2.9s)
+  ok 141 [chromium] ΓÇ║ .features-gen\tests\features\calculators\sip.feature.spec.js:23:3 ΓÇ║ SIP Calculator ΓÇ║ SIP-03 Results panel shows Money in Hand post-tax @calculator-sip @smoke @tax @regression (2.4s)
+  ok 137 [chromium] ΓÇ║ .features-gen\tests\features\calculators\scss.feature.spec.js:140:3 ΓÇ║ SCSS Calculator ΓÇ║ SCSS-23 TDS on interest above threshold @smoke @regression @tax @calculator-scss (5.0s)
+  ok 143 [chromium] ΓÇ║ .features-gen\tests\features\calculators\sip.feature.spec.js:44:3 ΓÇ║ SIP Calculator ΓÇ║ SIP-07 Info panel shows current rate and last updated @calculator-sip @smoke @regression (2.4s)
+  ok 142 [chromium] ΓÇ║ .features-gen\tests\features\calculators\sip.feature.spec.js:39:3 ΓÇ║ SIP Calculator ΓÇ║ SIP-06 Evolution table shows year-wise breakdown @calculator-sip @smoke @regression (2.6s)
+  ok 144 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ssy.feature.spec.js:11:3 ΓÇ║ SSY Calculator ΓÇ║ SSY-01 Calculator loads with documented default values @smoke @regression @tax @calculator-ssy (2.5s)
+  ok 146 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ssy.feature.spec.js:25:3 ΓÇ║ SSY Calculator ΓÇ║ SSY-03 Results panel shows Money in Hand (post-tax) @smoke @regression @tax @calculator-ssy (2.4s)
+  ok 145 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ssy.feature.spec.js:19:3 ΓÇ║ SSY Calculator ΓÇ║ SSY-02 Results update in real time without Calculate button @smoke @regression @tax @calculator-ssy (2.8s)
+  ok 147 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ssy.feature.spec.js:30:3 ΓÇ║ SSY Calculator ΓÇ║ SSY-04 Tax breakdown visible with rule explanation @smoke @regression @tax @calculator-ssy (2.4s)
+  ok 149 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ssy.feature.spec.js:43:3 ΓÇ║ SSY Calculator ΓÇ║ SSY-06 Evolution table shows year-wise breakdown @smoke @regression @tax @calculator-ssy (2.5s)
+  ok 150 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ssy.feature.spec.js:48:3 ΓÇ║ SSY Calculator ΓÇ║ SSY-07 Info panel shows current rate and last updated @smoke @regression @tax @calculator-ssy (2.5s)
+  ok 148 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ssy.feature.spec.js:36:3 ΓÇ║ SSY Calculator ΓÇ║ SSY-05 Inflation toggle affects spending power when ON @smoke @regression @tax @calculator-ssy (3.7s)
+  ok 151 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ssy.feature.spec.js:54:3 ΓÇ║ SSY Calculator ΓÇ║ SSY-08 Invalid min amount shows inline validation error @smoke @regression @tax @calculator-ssy @edge (2.7s)
+  ok 152 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ssy.feature.spec.js:60:3 ΓÇ║ SSY Calculator ΓÇ║ SSY-09 Invalid max amount shows inline validation error @smoke @regression @tax @calculator-ssy @edge (2.7s)
+  ok 153 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ssy.feature.spec.js:66:3 ΓÇ║ SSY Calculator ΓÇ║ SSY-10 Zero or empty input does not crash @smoke @regression @tax @calculator-ssy @edge (2.6s)
+  ok 154 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ssy.feature.spec.js:73:3 ΓÇ║ SSY Calculator ΓÇ║ SSY-11 Negative input rejected or clamped @smoke @regression @tax @calculator-ssy @edge (2.8s)
+  ok 155 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ssy.feature.spec.js:79:3 ΓÇ║ SSY Calculator ΓÇ║ SSY-12 Non-numeric input rejected @smoke @regression @tax @calculator-ssy @edge (2.8s)
+  ok 156 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ssy.feature.spec.js:85:3 ΓÇ║ SSY Calculator ΓÇ║ SSY-13 Extremely large value handled without overflow @smoke @regression @tax @calculator-ssy @edge (2.7s)
+  ok 159 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ssy.feature.spec.js:109:3 ΓÇ║ SSY Calculator ΓÇ║ SSY-15 Pie chart renders investment breakdown @smoke @regression @tax @calculator-ssy @edge (2.3s)
+  ok 157 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ssy.feature.spec.js:93:5 ΓÇ║ SSY Calculator ΓÇ║ SSY-14 Golden calculation matches reference value ΓÇ║ Example #1 @smoke @regression @tax @calculator-ssy (4.2s)
+  ok 158 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ssy.feature.spec.js:100:5 ΓÇ║ SSY Calculator ΓÇ║ SSY-14 Golden calculation matches reference value ΓÇ║ Example #2 @smoke @regression @tax @calculator-ssy (4.0s)
+  ok 160 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ssy.feature.spec.js:114:3 ΓÇ║ SSY Calculator ΓÇ║ SSY-20 Girl child age below 10 validation @smoke @regression @tax @calculator-ssy @edge (3.5s)
+  ok 161 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ssy.feature.spec.js:122:3 ΓÇ║ SSY Calculator ΓÇ║ SSY-21 Yearly investment capped at 1.5 lakh validation @smoke @regression @tax @calculator-ssy @edge (3.4s)
+  ok 162 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ssy.feature.spec.js:130:3 ΓÇ║ SSY Calculator ΓÇ║ SSY-22 Twenty-one year maturity from account opening for newborn @smoke @regression @tax @calculator-ssy (3.1s)
+  ok 163 [chromium] ΓÇ║ .features-gen\tests\features\calculators\ssy.feature.spec.js:139:3 ΓÇ║ SSY Calculator ΓÇ║ SSY-23 Maturity is tax-free EEE post-tax equals nominal @smoke @regression @tax @calculator-ssy (3.4s)
+
+
+  1) [chromium] ΓÇ║ .features-gen\tests\features\calculators\54ec.feature.spec.js:39:3 ΓÇ║ 54EC Bonds Calculator ΓÇ║ 54EC-05 Inflation toggle affects spending power when ON @smoke @regression @tax @calculator-54ec ΓÇ║ Then the 54EC spending power should be less than money in hand 
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < 1225764
+    Received:   1225764
+
+       at ..\tests\step-definitions\54ec.steps.js:186
+
+      184 |   const amounts = (text.match(/Γé╣[\d,]+/g) ?? []).map(parseIndianCurrency)
+      185 |   expect(amounts.length).toBeGreaterThan(0)
+    > 186 |   expect(Math.max(...amounts)).toBeLessThan(moneyInHand)
+          |                                ^
+      187 | })
+      188 |
+      189 | Then('the 54EC evolution table should show 5 year rows', async ({ page }) => {
+        at Object.<anonymous> (C:\Projects\wealthlab\tests\step-definitions\54ec.steps.js:186:32)
+        at C:\Projects\wealthlab\.features-gen\tests\features\calculators\54ec.feature.spec.js:43:5
+
+    Error Context: test-results\tests-features-calculators-21ee2-ects-spending-power-when-ON-chromium\error-context.md
+
+  2) [chromium] ΓÇ║ .features-gen\tests\features\calculators\54ec.feature.spec.js:57:3 ΓÇ║ 54EC Bonds Calculator ΓÇ║ 54EC-08 Invalid min amount shows inline validation error @smoke @regression @tax @calculator-54ec @edge ΓÇ║ Then I should see 54EC validation error containing "Minimum investment amount is" 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText(/Minimum investment amount is/i).first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByText(/Minimum investment amount is/i).first()
+
+
+       at ..\tests\step-definitions\54ec.steps.js:204
+
+      202 |
+      203 | Then('I should see 54EC validation error containing {string}', async ({ page }, fragment) => {
+    > 204 |   await expect(page.getByText(new RegExp(fragment, 'i')).first()).toBeVisible()
+          |                                                                   ^
+      205 | })
+      206 |
+      207 | Then('the 54EC calculator should not crash', async ({ page }) => {
+        at Object.<anonymous> (C:\Projects\wealthlab\tests\step-definitions\54ec.steps.js:204:67)
+        at C:\Projects\wealthlab\.features-gen\tests\features\calculators\54ec.feature.spec.js:60:5
+
+    Error Context: test-results\tests-features-calculators-45423-ows-inline-validation-error-chromium\error-context.md
+
+  3) [chromium] ΓÇ║ .features-gen\tests\features\calculators\54ec.feature.spec.js:63:3 ΓÇ║ 54EC Bonds Calculator ΓÇ║ 54EC-09 Investment exceeding capital gain shows validation error @smoke @regression @tax @calculator-54ec @edge ΓÇ║ Then I should see 54EC validation error containing "cannot exceed capital gain" 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText(/cannot exceed capital gain/i).first()
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for getByText(/cannot exceed capital gain/i).first()
+
+
+       at ..\tests\step-definitions\54ec.steps.js:204
+
+      202 |
+      203 | Then('I should see 54EC validation error containing {string}', async ({ page }, fragment) => {
+    > 204 |   await expect(page.getByText(new RegExp(fragment, 'i')).first()).toBeVisible()
+          |                                                                   ^
+      205 | })
+      206 |
+      207 | Then('the 54EC calculator should not crash', async ({ page }) => {
+        at Object.<anonymous> (C:\Projects\wealthlab\tests\step-definitions\54ec.steps.js:204:67)
+        at C:\Projects\wealthlab\.features-gen\tests\features\calculators\54ec.feature.spec.js:67:5
+
+    Error Context: test-results\tests-features-calculators-e47d4-gain-shows-validation-error-chromium\error-context.md
+
+  4) [chromium] ΓÇ║ .features-gen\tests\features\calculators\54ec.feature.spec.js:98:5 ΓÇ║ 54EC Bonds Calculator ΓÇ║ 54EC-14 Golden calculation matches reference value ΓÇ║ Example #1 @smoke @regression @tax @calculator-54ec ΓÇ║ And the 54EC tax saved should match golden "54EC-14" within tolerance 
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 50
+    Received:    800000
+
+       at ..\tests\step-definitions\54ec.steps.js:131
+
+      129 |     const taxSaved = amounts.find((value) => Math.abs(value - row.expected.taxSaved) < 1000000)
+      130 |     expect(taxSaved).toBeDefined()
+    > 131 |     expect(Math.abs(taxSaved - row.expected.taxSaved)).toBeLessThanOrEqual(row.expected.tolerance)
+          |                                                        ^
+      132 |   }
+      133 | )
+      134 |
+        at Object.<anonymous> (C:\Projects\wealthlab\tests\step-definitions\54ec.steps.js:131:56)
+        at C:\Projects\wealthlab\.features-gen\tests\features\calculators\54ec.feature.spec.js:102:7
+
+    Error Context: test-results\tests-features-calculators-0bbe3-s-reference-value-Example-1-chromium\error-context.md
+
+  4 failed
+    [chromium] ΓÇ║ .features-gen\tests\features\calculators\54ec.feature.spec.js:39:3 ΓÇ║ 54EC Bonds Calculator ΓÇ║ 54EC-05 Inflation toggle affects spending power when ON @smoke @regression @tax @calculator-54ec 
+    [chromium] ΓÇ║ .features-gen\tests\features\calculators\54ec.feature.spec.js:57:3 ΓÇ║ 54EC Bonds Calculator ΓÇ║ 54EC-08 Invalid min amount shows inline validation error @smoke @regression @tax @calculator-54ec @edge 
+    [chromium] ΓÇ║ .features-gen\tests\features\calculators\54ec.feature.spec.js:63:3 ΓÇ║ 54EC Bonds Calculator ΓÇ║ 54EC-09 Investment exceeding capital gain shows validation error @smoke @regression @tax @calculator-54ec @edge 
+    [chromium] ΓÇ║ .features-gen\tests\features\calculators\54ec.feature.spec.js:98:5 ΓÇ║ 54EC Bonds Calculator ΓÇ║ 54EC-14 Golden calculation matches reference value ΓÇ║ Example #1 @smoke @regression @tax @calculator-54ec 
+  4 skipped
+  155 passed (1.6m)
