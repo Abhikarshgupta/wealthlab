@@ -1,0 +1,38 @@
+﻿node.exe : (node:34204) [DEP0174] DeprecationWarning: Calling promisify on a function that returns a Promise is likely 
+a mistake.
+At C:\Users\abg71\AppData\Roaming\npm\npm.ps1:24 char:5
++     & "node$exe"  "$basedir/node_modules/npm/bin/npm-cli.js" $args
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ((node:34204) [D...kely a mistake.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+(Use `node --trace-deprecation ...` to show where the warning was created)
+
+> wealth-mngr@0.0.0 test
+> vitest "src/components/calculators/FDCalculator/FDCalculator.test.jsx"
+
+
+ RUN  v3.2.4 C:/Projects/wealthlab
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please 
+update: `npm i baseline-browser-mapping@latest -D`
+Browserslist: browsers data (caniuse-lite) is 9 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ Γ£ô src/components/calculators/FDCalculator/FDCalculator.test.jsx (18 tests) 17671ms
+   Γ£ô FD Calculator > FD-01: Calculator loads with documented default values > renders defaults from schema and investmentRates  775ms
+   Γ£ô FD Calculator > FD-06: Evolution table year-wise breakdown > shows year rows for default 1-year tenure  961ms
+   Γ£ô FD Calculator > FD-08: Invalid min amount validation > shows error for principal below Γé╣1,000  1013ms
+   Γ£ô FD Calculator > FD-09: Invalid max amount validation > accepts very large principal within slider max  4567ms
+   Γ£ô FD Calculator > FD-10: Zero tenure validation > shows error when years and months are both zero  1243ms
+   Γ£ô FD Calculator > FD-11: Negative principal rejected > shows validation when principal is negative  538ms
+   Γ£ô FD Calculator > FD-12: Non-numeric input rejected > clears invalid principal to zero and hides results  795ms
+   Γ£ô FD Calculator > FD-13: Extremely large value handled > renders results for Γé╣1 crore principal  1507ms
+   Γ£ô FD Calculator > FD-14: Golden calculation matches reference > matches golden maturity for Γé╣1L @ 7% 5 years quarterly  2518ms
+   Γ£ô FD Calculator > FD-23: TDS warning above threshold > shows TDS applicable for high-interest scenario  2351ms
+
+ Test Files  1 passed (1)
+      Tests  18 passed (18)
+   Start at  21:23:28
+   Duration  34.83s (transform 2.73s, setup 1.67s, collect 5.21s, tests 17.67s, environment 5.10s, prepare 1.45s)
+

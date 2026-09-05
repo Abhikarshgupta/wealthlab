@@ -1,0 +1,57 @@
+﻿node.exe : (node:32100) [DEP0174] DeprecationWarning: Calling promisify on a function that returns a Promise is likely 
+a mistake.
+At C:\Users\abg71\AppData\Roaming\npm\npm.ps1:24 char:5
++     & "node$exe"  "$basedir/node_modules/npm/bin/npm-cli.js" $args
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ((node:32100) [D...kely a mistake.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+(Use `node --trace-deprecation ...` to show where the warning was created)
+
+> wealth-mngr@0.0.0 test
+> vitest "src/__unit__/calculations.fd.test.js" "src/__unit__/calculations.sip.test.js" "src/__unit__/calculations.ppf.test.js" "src/__integration__/calculators/fd.integration.test.jsx" "src/__integration__/calculators/sip.integration.test.jsx" "src/__integration__/calculators/ppf.integration.test.jsx" "src/components/calculators/FDCalculator/FDCalculator.test.jsx" "src/components/calculators/SIPCalculator/SIPCalculator.test.jsx" "src/components/calculators/PPFCalculator/PPFCalculator.test.jsx"
+
+
+ RUN  v3.2.4 C:/Projects/wealthlab
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please 
+update: `npm i baseline-browser-mapping@latest -D`
+Browserslist: browsers data (caniuse-lite) is 9 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ Γ£ô src/__unit__/calculations.ppf.test.js (12 tests) 18ms
+ Γ£ô src/__unit__/calculations.fd.test.js (13 tests) 14ms
+ Γ£ô src/__unit__/calculations.sip.test.js (22 tests) 22ms
+ Γ£ô src/__integration__/calculators/sip.integration.test.jsx (5 tests) 869ms
+   Γ£ô SIP Calculator integration > SIP-03: hook post-tax amount matches golden fixture  426ms
+ Γ£ô src/components/calculators/SIPCalculator/SIPCalculator.test.jsx (7 tests) 1556ms
+   Γ£ô SIP Calculator > SIP-01: Calculator loads with documented default values > renders defaults from schema and investmentRates  418ms
+   Γ£ô SIP Calculator > SIP-08 / SIP-09: Validation > SIP-09: should validate tenure between 1-50 years  349ms
+   Γ£ô SIP Calculator > SIP-21: Step-Up SIP > should enable step-up percentage when step-up is enabled  321ms
+ Γ£ô src/__integration__/calculators/ppf.integration.test.jsx (5 tests) 1718ms
+   Γ£ô PPF Calculator integration > PPF-01: loads with documented default values  475ms
+   Γ£ô PPF Calculator integration > PPF-02: results update in real time when yearly investment changes  918ms
+ Γ£ô src/__integration__/calculators/fd.integration.test.jsx (5 tests) 2533ms
+   Γ£ô FD Calculator integration > FD-03: Results panel shows Money in Hand post-tax from golden fixture  435ms
+   Γ£ô FD Calculator integration > FD-06: evolution table renders year-wise rows in DOM  1057ms
+   Γ£ô FD Calculator integration > FD-23: TDS warning shown when annual interest exceeds threshold  995ms
+ Γ£ô src/components/calculators/PPFCalculator/PPFCalculator.test.jsx (10 tests) 3116ms
+   Γ£ô PPF Calculator > PPF-01 ΓÇö Initial Calculator Load > PPF-01: should render calculator with documented default values  429ms
+   Γ£ô PPF Calculator > PPF-08 / PPF-21 ΓÇö Minimum Investment Validation > PPF-21: should accept minimum investment of Γé╣500  612ms
+   Γ£ô PPF Calculator > PPF-08 / PPF-21 ΓÇö Minimum Investment Validation > PPF-08: should validate minimum investment of Γé╣500  406ms
+   Γ£ô PPF Calculator > PPF-09 / PPF-20 ΓÇö Maximum Investment Validation > PPF-20: should accept maximum investment of Γé╣1.5L per year  619ms
+   Γ£ô PPF Calculator > PPF-09 / PPF-20 ΓÇö Maximum Investment Validation > PPF-09: should validate maximum investment of Γé╣1.5L per year  427ms
+ Γ£ô src/components/calculators/FDCalculator/FDCalculator.test.jsx (18 tests) 4212ms
+   Γ£ô FD Calculator > FD-01: Calculator loads with documented default values > renders defaults from schema and investmentRates  411ms
+   Γ£ô FD Calculator > FD-08: Invalid min amount validation > shows error for principal below Γé╣1,000  441ms
+   Γ£ô FD Calculator > FD-09: Invalid max amount validation > accepts very large principal within slider max  687ms
+   Γ£ô FD Calculator > FD-10: Zero tenure validation > shows error when years and months are both zero  357ms
+   Γ£ô FD Calculator > FD-13: Extremely large value handled > renders results for Γé╣1 crore principal  443ms
+   Γ£ô FD Calculator > FD-14: Golden calculation matches reference > matches golden maturity for Γé╣1L @ 7% 5 years quarterly  518ms
+   Γ£ô FD Calculator > FD-23: TDS warning above threshold > shows TDS applicable for high-interest scenario  316ms
+
+ Test Files  9 passed (9)
+      Tests  97 passed (97)
+   Start at  21:24:21
+   Duration  9.46s (transform 1.49s, setup 4.75s, collect 9.90s, tests 14.06s, environment 19.25s, prepare 2.53s)
+
