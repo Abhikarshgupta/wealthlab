@@ -9,6 +9,7 @@ const Home = lazy(() => import('@/pages/Home/Home'))
 const CalculatorPage = lazy(() => import('@/pages/calculators/CalculatorPage'))
 const GoalPlanningPage = lazy(() => import('@/pages/GoalPlanningPage/GoalPlanningPage'))
 const CorpusCalculatorPage = lazy(() => import('@/pages/CorpusCalculatorPage/CorpusCalculatorPage'))
+const PersonalInflationPage = lazy(() => import('@/pages/PersonalInflationPage/PersonalInflationPage'))
 const PrivacyPolicy = lazy(() => import('@/pages/Legal/PrivacyPolicy'))
 const TermsOfService = lazy(() => import('@/pages/Legal/TermsOfService'))
 const Disclaimer = lazy(() => import('@/pages/Legal/Disclaimer'))
@@ -39,6 +40,7 @@ const AppRoutes = () => {
           <Route path={routes.calculators.bonds54EC} element={<CalculatorPage calculatorType="bonds54EC" />} />
           <Route path={routes.goalPlanning} element={<GoalPlanningPage />} />
           <Route path={routes.corpusCalculator} element={<CorpusCalculatorPage />} />
+          <Route path={routes.personalInflation} element={<PersonalInflationPage />} />
           <Route path={routes.legal.privacy} element={<PrivacyPolicy />} />
           <Route path={routes.legal.terms} element={<TermsOfService />} />
           <Route path={routes.legal.disclaimer} element={<Disclaimer />} />

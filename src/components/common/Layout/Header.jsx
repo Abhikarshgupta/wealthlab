@@ -58,6 +58,12 @@ const Header = () => {
             >
               Corpus Simulator
             </Link>
+            <Link
+              to={routes.personalInflation}
+              className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+            >
+              My inflation
+            </Link>
           </nav>
 
           {/* Right side controls */}

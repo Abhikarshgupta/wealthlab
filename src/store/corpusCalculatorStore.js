@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { roundInflationPct } from '@/constants/inflationRates'
 
 // Load initial state from localStorage if available
 const loadPersistedState = () => {
@@ -37,6 +38,11 @@ const defaultState = {
 }
 
 const persistedState = loadPersistedState()
+if (persistedState?.settings?.generalInflationRate != null) {
+  persistedState.settings.generalInflationRate = roundInflationPct(
+    persistedState.settings.generalInflationRate
+  )
+}
 // Merge persisted state with defaults to ensure all required fields exist
 const initialState = persistedState ? {
   ...persistedState,
@@ -100,10 +106,14 @@ const useCorpusCalculatorStore = create((set, get) => ({
   },
   
   updateSettings: (settings) => {
+    const next = { ...settings }
+    if (next.generalInflationRate != null) {
+      next.generalInflationRate = roundInflationPct(next.generalInflationRate)
+    }
     set((state) => ({
       settings: {
         ...state.settings,
-        ...settings,
+        ...next,
       },
     }))
     get().persistState()

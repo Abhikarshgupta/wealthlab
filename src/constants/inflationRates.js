@@ -77,5 +77,12 @@ export const getInflationRateAsPercentage = (rateDecimal) => {
   return rateDecimal * 100
 }
 
+/** Keep the global inflation setting at one decimal (6.7204 → 6.7). */
+export const roundInflationPct = (rate) => {
+  const n = Number(rate)
+  if (!Number.isFinite(n)) return DEFAULT_INFLATION_RATES.general
+  return Math.round(n * 10) / 10
+}
+
 export default DEFAULT_INFLATION_RATES
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import useUserPreferencesStore from '@/store/userPreferencesStore'
 import InflationOverlay from './InflationOverlay'
 import NotificationToast from './NotificationToast'
@@ -14,7 +14,6 @@ const InflationToggle = () => {
     defaultInflationRate,
     inflationToggleClicks,
     inflationOverlayDismissed,
-    lastInflationRateChange,
     setAdjustInflation,
   } = useUserPreferencesStore()
 
@@ -58,17 +57,6 @@ const InflationToggle = () => {
     e.stopPropagation()
     setShowRatePopover(!showRatePopover)
   }
-
-  // Show notification when rate changes
-  useEffect(() => {
-    if (lastInflationRateChange && adjustInflation) {
-      const timeSinceChange = Date.now() - lastInflationRateChange
-      // Show notification if rate changed in last 2 seconds
-      if (timeSinceChange < 2000) {
-        setShowNotification(true)
-      }
-    }
-  }, [lastInflationRateChange, adjustInflation])
 
   return (
     <>

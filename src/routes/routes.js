@@ -21,6 +21,7 @@ export const routes = {
   },
   goalPlanning: '/goal-planning',
   corpusCalculator: '/corpus-calculator',
+  personalInflation: '/personal-inflation',
   legal: {
     privacy: '/privacy-policy',
     terms: '/terms-of-service',
